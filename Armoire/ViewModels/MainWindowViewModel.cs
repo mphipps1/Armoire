@@ -1,9 +1,10 @@
-﻿namespace Armoire.ViewModels
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+
+namespace Armoire.ViewModels
 {
     public partial class MainWindowViewModel : ViewModelBase
     {
-#pragma warning disable CA1822 // Mark members as static
-        public string Greeting => "Welcome to Avalonia!";
-#pragma warning restore CA1822 // Mark members as static
+        [ObservableProperty]
+        private string _heading = "Welcome to Armoire!";
     }
 }
