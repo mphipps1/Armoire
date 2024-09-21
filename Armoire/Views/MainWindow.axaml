@@ -2,6 +2,7 @@
     x:Class="Armoire.Views.MainWindow"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModels="clr-namespace:Armoire.ViewModels"
@@ -16,15 +17,56 @@
     <Design.DataContext>
         <!--
             This only sets the DataContext for the previewer in an IDE,
-            to set the actual DataContext for runtime, set the DataContext property in code 
-			(look at App.axaml.cs)
+            to set the actual DataContext for runtime, set the DataContext property in code
+            (look at App.axaml.cs)
         -->
         <viewModels:MainWindowViewModel />
     </Design.DataContext>
 
-    <TextBlock
-        HorizontalAlignment="Center"
-        VerticalAlignment="Center"
-        Text="{Binding Heading}" />
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <StackPanel
+            Grid.Column="0"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Spacing="20">
+            <TextBlock Text="{Binding HeadingDock}" />
+            <Button>
+                <Button.Content>
+                    <StackPanel>
+                        <avalonia:MaterialIcon Kind="Tray" />
+                        <TextBlock Text="Drawer 1" />
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+            <Button>
+                <Button.Content>
+                    <StackPanel>
+                        <avalonia:MaterialIcon Kind="Tray" />
+                        <TextBlock Text="Drawer 2" />
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+        </StackPanel>
+        <StackPanel
+            Grid.Column="1"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Spacing="20">
+            <TextBlock Text="{Binding HeadingMain}" />
+        </StackPanel>
+        <StackPanel
+            Grid.Column="2"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Spacing="20">
+            <TextBlock Text="{Binding HeadingDockAlt}" />
+        </StackPanel>
+    </Grid>
 
 </Window>
