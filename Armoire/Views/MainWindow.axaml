@@ -24,34 +24,27 @@
     </Design.DataContext>
 
 
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
+    <Grid x:Name="Root" ColumnDefinitions="*,*,*">
         <StackPanel
             Grid.Column="0"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             Spacing="20">
             <TextBlock Text="{Binding HeadingDock}" />
-            <Button>
-                <Button.Content>
-                    <StackPanel>
-                        <avalonia:MaterialIcon Kind="Tray" />
-                        <TextBlock Text="Drawer 1" />
-                    </StackPanel>
-                </Button.Content>
-            </Button>
-            <Button>
-                <Button.Content>
-                    <StackPanel>
-                        <avalonia:MaterialIcon Kind="Tray" />
-                        <TextBlock Text="Drawer 2" />
-                    </StackPanel>
-                </Button.Content>
-            </Button>
+            <ItemsControl ItemsSource="{Binding Drawers}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="vm:DrawerViewModel">
+                        <Button Margin="10">
+                            <Button.Content>
+                                <StackPanel>
+                                    <avalonia:MaterialIcon Kind="Tray" />
+                                    <TextBlock Text="{Binding Content}" />
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
         </StackPanel>
         <StackPanel
             Grid.Column="1"
@@ -59,6 +52,7 @@
             VerticalAlignment="Center"
             Spacing="20">
             <TextBlock Text="{Binding HeadingMain}" />
+            <Button Command="{Binding HandleAddClickCommand}" Content="Add Drawer" />
         </StackPanel>
         <StackPanel
             Grid.Column="2"
