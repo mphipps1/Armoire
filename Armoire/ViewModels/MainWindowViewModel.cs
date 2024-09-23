@@ -9,6 +9,8 @@ namespace Armoire.ViewModels
 {
     public partial class MainWindowViewModel : ViewModelBase
     {
+        private int _drawerCount = 0;
+
         public ObservableCollection<DrawerViewModel> Drawers { get; } = [];
 
         [ObservableProperty]
@@ -26,12 +28,12 @@ namespace Armoire.ViewModels
         private async Task HandleAddClick()
         {
             await Task.Delay(TimeSpan.FromSeconds(3));
+            Drawers.Add(new DrawerViewModel() { Content = $"hi{_drawerCount++}" });
         }
 
         public MainWindowViewModel()
         {
             Drawers.Add(new DrawerViewModel() { Content = "hi" });
-            Drawers.Add(new DrawerViewModel() { Content = "hi2" });
         }
     }
 }

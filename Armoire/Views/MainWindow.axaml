@@ -41,6 +41,9 @@
                                     <TextBlock Text="{Binding Content}" />
                                 </StackPanel>
                             </Button.Content>
+                            <Button.Flyout>
+                                <Flyout>Drawer Contents</Flyout>
+                            </Button.Flyout>
                         </Button>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
