@@ -31,9 +31,9 @@
             VerticalAlignment="Center"
             Spacing="20">
             <TextBlock Text="{Binding HeadingDock}" />
-            <ItemsControl ItemsSource="{Binding Drawers}">
+            <ItemsControl ItemsSource="{Binding DrawerContents}">
                 <ItemsControl.ItemTemplate>
-                    <DataTemplate DataType="vm:DrawerViewModel">
+                    <DataTemplate DataType="vm:DrawerButtonViewModel">
                         <Button Margin="10">
                             <Button.Content>
                                 <StackPanel>

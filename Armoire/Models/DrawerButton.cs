@@ -1,6 +1,6 @@
 ﻿namespace Armoire.Models;
 
-public class Drawer
+public class DrawerButton
 {
     public string? Content { get; set; }
 }
