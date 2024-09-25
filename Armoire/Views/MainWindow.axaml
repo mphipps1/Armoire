@@ -25,34 +25,30 @@
 
 
     <Grid x:Name="Root" ColumnDefinitions="*,*,*">
-		<Border
-			BorderThickness="5"
-			BorderBrush="Green"  
-            CornerRadius="10" 
-			Background="LightGray"
-			>
-			<StackPanel
-				Grid.Column="0"
-				HorizontalAlignment="Center"
-				VerticalAlignment="Center"
-				Spacing="20">
-				<TextBlock Text="{Binding HeadingDock}" />
-				<ItemsControl ItemsSource="{Binding Drawers}">
-					<ItemsControl.ItemTemplate>
-						<DataTemplate DataType="vm:DrawerViewModel">
-							<Button Margin="10">
-								<Button.Content>
-									<StackPanel>
-										<avalonia:MaterialIcon Kind="Tray" />
-										<TextBlock Text="{Binding Content}" />
-									</StackPanel>
-								</Button.Content>
-							</Button>
-						</DataTemplate>
-					</ItemsControl.ItemTemplate>
-				</ItemsControl>
-			</StackPanel>
-		</Border>
+        <StackPanel
+            Grid.Column="0"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Spacing="20">
+            <TextBlock Text="{Binding HeadingDock}" />
+            <ItemsControl ItemsSource="{Binding DrawerContents}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="vm:DrawerContentsViewModel">
+                        <Button Margin="10">
+                            <Button.Content>
+                                <StackPanel>
+                                    <avalonia:MaterialIcon Kind="Tray" />
+                                    <TextBlock Text="{Binding Content}" />
+                                </StackPanel>
+                            </Button.Content>
+                            <Button.Flyout>
+                                <Flyout>Drawer Contents</Flyout>
+                            </Button.Flyout>
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
         <StackPanel
             Grid.Column="1"
             HorizontalAlignment="Center"
