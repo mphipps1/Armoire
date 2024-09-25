@@ -33,7 +33,7 @@
             <TextBlock Text="{Binding HeadingDock}" />
             <ItemsControl ItemsSource="{Binding DrawerContents}">
                 <ItemsControl.ItemTemplate>
-                    <DataTemplate DataType="vm:DrawerButtonViewModel">
+                    <DataTemplate DataType="vm:DrawerContentsViewModel">
                         <Button Margin="10">
                             <Button.Content>
                                 <StackPanel>

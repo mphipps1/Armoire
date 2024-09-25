@@ -3,15 +3,15 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Armoire.ViewModels;
 
-public partial class DrawerButtonViewModel : ViewModelBase
+public partial class DrawerContentsViewModel : ViewModelBase
 {
     [ObservableProperty]
     private string? _content;
 
-    public DrawerButtonViewModel(DrawerButton drawerButton)
+    public DrawerContentsViewModel(DrawerButton drawerButton)
     {
         Content = drawerButton.Content;
     }
 
-    public DrawerButtonViewModel() { }
+    public DrawerContentsViewModel() { }
 }
