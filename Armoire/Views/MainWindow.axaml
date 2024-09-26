@@ -28,12 +28,7 @@
         <dialogHostAvalonia:DialogHost.DialogContent>
             <!--  put your dialog content here  -->
 
-    <Grid ShowGridLines="True">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
+    <Grid ShowGridLines="True" ColumnDefinitions="200,200,200">
         <StackPanel
             Grid.Column="0"
             HorizontalAlignment="Center"
@@ -96,19 +91,7 @@
                 Spacing="20">
                 <TextBlock Text="{Binding HeadingMain}" />
                 <Button Command="{Binding HandleAddClickCommand}" Content="Add Drawer" />
-                <Button>
-                    <Button.Content>
-                        <StackPanel>
-                            <TextBlock Text="test" />
-                        </StackPanel>
-                    </Button.Content>
-                    <Button.Flyout>
-                        <Flyout>
-                            Hi
-                        </Flyout>
-                    </Button.Flyout>
-                </Button>
-                <Button Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=dialogHostAvalonia:DialogHost}, Path=OpenDialogCommand}" Content="hi" />
+                <Button Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=dialogHostAvalonia:DialogHost}, Path=OpenDialogCommand}" Content="SQLite" />
             </StackPanel>
             <StackPanel
                 Grid.Column="2"

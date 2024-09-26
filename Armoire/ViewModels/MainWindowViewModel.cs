@@ -37,7 +37,7 @@ namespace Armoire.ViewModels
         private string _textDialogCol2 = "Log:";
 
         [ObservableProperty]
-        [NotifyCanExecuteChangedFor(nameof(HandleAddClickCommand))]
+        [NotifyCanExecuteChangedFor(nameof(HandleDbAddClickCommand))]
         private string? _username;
 
         [ObservableProperty]
@@ -87,7 +87,7 @@ namespace Armoire.ViewModels
 
         private bool CanAddToDb() => !string.IsNullOrEmpty(Username);
 
-        [RelayCommand]
+        [RelayCommand(CanExecute = nameof(CanAddToDb))]
         private async Task HandleDbAddClick()
         {
             await Task.Delay(TimeSpan.FromSeconds(3));
