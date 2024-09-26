@@ -26,39 +26,7 @@
 
     <dialogHostAvalonia:DialogHost CloseOnClickAway="True">
         <dialogHostAvalonia:DialogHost.DialogContent>
-            <!--  put your dialog content here  -->
-            <Grid ColumnDefinitions="200,200,200" ShowGridLines="True">
-                <StackPanel
-                    Grid.Column="0"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Spacing="20">
-                    <TextBlock Text="{Binding HeadingDialogCol0}" />
-                    <TextBlock Margin="0,5">Name:</TextBlock>
-                    <TextBox
-                        BorderThickness="2"
-                        Text="{Binding Username}"
-                        Watermark="Enter your name" />
-                    <Button Command="{Binding HandleDbAddClickCommand}" Content="Add" />
-                </StackPanel>
-                <StackPanel
-                    Grid.Column="1"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Spacing="20">
-                    <TextBlock Text="{Binding HeadingDialogCol1}" />
-                    <Button Command="{Binding HandleDbReadClickCommand}" Content="Read" />
-                    <TextBlock Text="{Binding TextDialogCol1}" />
-                </StackPanel>
-                <StackPanel
-                    Grid.Column="2"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Spacing="20">
-                    <TextBlock Text="{Binding HeadingDialogCol2}" />
-                    <TextBlock Text="{Binding TextDialogCol2}" />
-                </StackPanel>
-            </Grid>
+            <viewModels:SqlDialogViewModel />
         </dialogHostAvalonia:DialogHost.DialogContent>
         <!--  put the content over which the dialog is shown here (e.g. your main window grid)  -->
         <Grid x:Name="Root" ColumnDefinitions="*,*,*">
@@ -93,7 +61,7 @@
                 Spacing="20">
                 <TextBlock Text="{Binding HeadingMain}" />
                 <Button Command="{Binding HandleAddClickCommand}" Content="Add Drawer" />
-                <Button Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=dialogHostAvalonia:DialogHost}, Path=OpenDialogCommand}" Content="SQLite" />
+                <Button Command="{Binding OpenSqlDialogCommand}" Content="Sqlite" />
             </StackPanel>
             <StackPanel
                 Grid.Column="2"
