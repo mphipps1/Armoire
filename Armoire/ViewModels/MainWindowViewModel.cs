@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Threading.Tasks;
 using Armoire.Utils;
-using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Data.Sqlite;
@@ -15,7 +15,11 @@ namespace Armoire.ViewModels
 
         private const string DbTableName = "user";
 
-        private const string DbPath = "hello.db";
+        public static string DbPath { get; } =
+            Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                "armoire_sets.db"
+            );
 
         public ObservableCollection<DrawerContentsViewModel> DrawerContents { get; } = [];
 
