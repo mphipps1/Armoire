@@ -26,6 +26,9 @@
     <PackageReference Include="Material.Avalonia.Dialogs" Version="3.7.4" />
     <PackageReference Include="Material.Icons.Avalonia" Version="2.1.10" />
     <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="8.0.8" />
+    <PackageReference Include="SQLite" Version="3.13.0" />
+    <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="2.1.9" />
+    <PackageReference Include="SQLitePCLRaw.core" Version="2.1.9" />
   </ItemGroup>
 
   <ItemGroup>
