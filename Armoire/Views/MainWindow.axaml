@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dialogHostAvalonia="clr-namespace:DialogHostAvalonia;assembly=DialogHost.Avalonia"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModels="clr-namespace:Armoire.ViewModels"
     xmlns:vm="using:Armoire.ViewModels"
@@ -23,47 +24,65 @@
         <viewModels:MainWindowViewModel />
     </Design.DataContext>
 
-
-    <Grid x:Name="Root" ColumnDefinitions="*,*,*">
-        <StackPanel
-            Grid.Column="0"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            Spacing="20">
-            <TextBlock Text="{Binding HeadingDock}" />
-            <ItemsControl ItemsSource="{Binding DrawerContents}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate DataType="vm:DrawerContentsViewModel">
-                        <Button Margin="10">
-                            <Button.Content>
-                                <StackPanel>
-                                    <avalonia:MaterialIcon Kind="Tray" />
-                                    <TextBlock Text="{Binding Content}" />
-                                </StackPanel>
-                            </Button.Content>
-                            <Button.Flyout>
-                                <Flyout>Drawer Contents</Flyout>
-                            </Button.Flyout>
-                        </Button>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </StackPanel>
-        <StackPanel
-            Grid.Column="1"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            Spacing="20">
-            <TextBlock Text="{Binding HeadingMain}" />
-            <Button Command="{Binding HandleAddClickCommand}" Content="Add Drawer" />
-        </StackPanel>
-        <StackPanel
-            Grid.Column="2"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            Spacing="20">
-            <TextBlock Text="{Binding HeadingDockAlt}" />
-        </StackPanel>
-    </Grid>
-
+    <dialogHostAvalonia:DialogHost CloseOnClickAway="True">
+        <dialogHostAvalonia:DialogHost.DialogContent>
+            <!--  put your dialog content here  -->
+            <TextBlock Text="test" />
+        </dialogHostAvalonia:DialogHost.DialogContent>
+        <!--  put the content over which the dialog is shown here (e.g. your main window grid)  -->
+        <Grid x:Name="Root" ColumnDefinitions="*,*,*">
+            <StackPanel
+                Grid.Column="0"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Spacing="20">
+                <TextBlock Text="{Binding HeadingDock}" />
+                <ItemsControl ItemsSource="{Binding DrawerContents}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="vm:DrawerContentsViewModel">
+                            <Button Margin="10">
+                                <Button.Content>
+                                    <StackPanel>
+                                        <avalonia:MaterialIcon Kind="Tray" />
+                                        <TextBlock Text="{Binding Content}" />
+                                    </StackPanel>
+                                </Button.Content>
+                                <Button.Flyout>
+                                    <Flyout>Drawer Contents</Flyout>
+                                </Button.Flyout>
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+            <StackPanel
+                Grid.Column="1"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Spacing="20">
+                <TextBlock Text="{Binding HeadingMain}" />
+                <Button Command="{Binding HandleAddClickCommand}" Content="Add Drawer" />
+                <Button>
+                    <Button.Content>
+                        <StackPanel>
+                            <TextBlock Text="test" />
+                        </StackPanel>
+                    </Button.Content>
+                    <Button.Flyout>
+                        <Flyout>
+                            Hi
+                        </Flyout>
+                    </Button.Flyout>
+                </Button>
+                <Button Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=dialogHostAvalonia:DialogHost}, Path=OpenDialogCommand}" Content="hi" />
+            </StackPanel>
+            <StackPanel
+                Grid.Column="2"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Spacing="20">
+                <TextBlock Text="{Binding HeadingDockAlt}" />
+            </StackPanel>
+        </Grid>
+    </dialogHostAvalonia:DialogHost>
 </Window>

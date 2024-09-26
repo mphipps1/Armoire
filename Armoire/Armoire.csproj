@@ -20,9 +20,15 @@
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.1.0" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
+    <PackageReference Include="DialogHost.Avalonia" Version="0.8.1" />
     <PackageReference Include="Material.Avalonia" Version="3.7.4" />
     <PackageReference Include="Material.Avalonia.DataGrid" Version="3.7.4" />
     <PackageReference Include="Material.Avalonia.Dialogs" Version="3.7.4" />
     <PackageReference Include="Material.Icons.Avalonia" Version="2.1.10" />
+    <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="8.0.8" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Utils\" />
   </ItemGroup>
 </Project>

@@ -11,6 +11,8 @@ namespace Armoire.ViewModels
     {
         private int _drawerCount = 0;
 
+        private const string DbPath = "hello.db";
+
         public ObservableCollection<DrawerContentsViewModel> DrawerContents { get; } = [];
 
         [ObservableProperty]
