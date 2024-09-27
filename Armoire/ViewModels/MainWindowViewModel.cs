@@ -15,7 +15,7 @@ namespace Armoire.ViewModels
     {
         private int _drawerCount = 0;
 
-        public ObservableCollection<DrawerContentsViewModel> DrawerContents { get; } = [];
+        public ObservableCollection<ContentsUnitViewModel> DrawerContents { get; } = [];
 
         [ObservableProperty]
         private string _headingMain = "Welcome to Armoire!";
@@ -31,13 +31,16 @@ namespace Armoire.ViewModels
         [RelayCommand(CanExecute = nameof(CanAddDrawer))]
         private async Task HandleAddClick()
         {
-            await Task.Delay(TimeSpan.FromSeconds(3));
-            DrawerContents.Add(new DrawerContentsViewModel() { Content = $"hi{_drawerCount++}" });
+            await Task.Delay(TimeSpan.FromSeconds(1));
+            DrawerContents.Add(
+                new ContentsUnitViewModel(new DrawerAsContents($"{_drawerCount++}"))
+            );
         }
 
         public MainWindowViewModel()
         {
-            DrawerContents.Add(new DrawerContentsViewModel() { Content = "hi" });
+            DrawerContents.Add(new ContentsUnitViewModel(new DrawerAsContents("0")));
+            DrawerContents.Add(new ContentsUnitViewModel(new Widget("database", null)));
         }
 
         [RelayCommand]

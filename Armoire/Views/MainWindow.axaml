@@ -38,12 +38,12 @@
                 <TextBlock Text="{Binding HeadingDock}" />
                 <ItemsControl ItemsSource="{Binding DrawerContents}">
                     <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="vm:DrawerContentsViewModel">
+                        <DataTemplate DataType="vm:ContentsUnitViewModel">
                             <Button Margin="10">
                                 <Button.Content>
-                                    <StackPanel>
-                                        <avalonia:MaterialIcon Kind="Tray" />
-                                        <TextBlock Text="{Binding Content}" />
+                                    <StackPanel HorizontalAlignment="Center">
+                                        <avalonia:MaterialIcon Kind="{Binding IconKind}" Width="50" Height="50" />
+                                        <TextBlock Text="{Binding Name}" TextAlignment="Center" />
                                     </StackPanel>
                                 </Button.Content>
                                 <Button.Flyout>

@@ -7,13 +7,22 @@ using System.Threading.Tasks;
 
 namespace Armoire.Models
 {
-    public class Item
+    public class Item : IContentsUnit
     {
-        public string path { get; set; }
+        public string Path { get; set; }
 
         public void Execute()
         {
-            System.Diagnostics.Process.Start(path);
+            System.Diagnostics.Process.Start(Path);
         }
+
+        public Item(string name, string path)
+        {
+            Name = name;
+            Path = path;
+        }
+
+        public string Name { get; set; }
+        public string? IconPath { get; set; }
     }
 }
