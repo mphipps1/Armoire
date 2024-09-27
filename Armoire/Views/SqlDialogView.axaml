@@ -27,7 +27,7 @@
             <TextBox
                 BorderThickness="2"
                 Text="{Binding ValueToAdd2}"
-                Watermark="Enter your name" />
+                Watermark="Enter your age" />
             <Button Command="{Binding HandleDbAddClickCommand}" Content="Add" />
         </StackPanel>
         <StackPanel
