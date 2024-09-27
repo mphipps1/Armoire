@@ -1,9 +1,17 @@
-﻿using Microsoft.Data.Sqlite;
+﻿using System;
+using System.IO;
+using Microsoft.Data.Sqlite;
 
 namespace Armoire.Utils;
 
 public class SqlUtils
 {
+    public static string DbPath { get; } =
+        Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+            "armoire_sets.db"
+        );
+
     // https://stackoverflow.com/a/67144114/16458003
     public static bool TableAlreadyExists(SqliteConnection openConnection, string tableName)
     {

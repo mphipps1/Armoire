@@ -1,141 +1,68 @@
 ﻿using System;
-using System.IO;
 using System.Threading.Tasks;
-using Armoire.Utils;
+using Armoire.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.Data.Sqlite;
 
 namespace Armoire.ViewModels;
 
 public partial class SqlDialogViewModel : ViewModelBase
 {
-    public SqlDialogViewModel()
+    public SqlDialogViewModel() { }
+
+    public SqlDialogViewModel(ISqlDialog sqlDialogModel)
     {
-        SQLitePCL.Batteries.Init();
-        using var connection = new SqliteConnection("Data Source=" + DbPath);
-        connection.Open();
-        if (SqlUtils.TableAlreadyExists(connection, DbTableName))
-            return;
-
-        var command = connection.CreateCommand();
-        command.CommandText = """
-
-                        CREATE TABLE user (
-                            id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-                            name TEXT NOT NULL
-                        );
-
-                        INSERT INTO user
-                        VALUES (1, 'Brice'),
-                               (2, 'Alexander'),
-                               (3, 'Nate');
-                        
-            """;
-        command.ExecuteNonQuery();
-        connection.Close();
+        _model = sqlDialogModel;
+        _heading0 = sqlDialogModel.Heading0;
+        _heading1 = sqlDialogModel.Heading1;
+        _heading2 = sqlDialogModel.Heading2;
+        _body1 = sqlDialogModel.Body1;
+        _body2 = sqlDialogModel.Body2;
     }
 
-    private const string DbTableName = "user";
-
-    public static string DbPath { get; } =
-        Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-            "armoire_sets.db"
-        );
-
-    private long _dbLastRowId;
+    private readonly ISqlDialog _model;
 
     [ObservableProperty]
-    private string _headingDialogCol0 = "Add To Database";
+    private string _heading0;
 
     [ObservableProperty]
-    private string _headingDialogCol1 = "Read From Database";
+    private string _heading1;
 
     [ObservableProperty]
-    private string _headingDialogCol2 = "Log";
+    private string _heading2;
 
     [ObservableProperty]
-    private string _textDialogCol1 = "Database Contents:";
+    private string _body1;
 
     [ObservableProperty]
-    private string _textDialogCol2 = "Log:";
+    private string _body2;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(HandleDbAddClickCommand))]
-    private string? _username;
+    private string? _valueToAdd1;
 
-    private bool CanAddToDb() => !string.IsNullOrEmpty(Username);
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(HandleDbAddClickCommand))]
+    private string? _valueToAdd2;
+
+    private bool CanAddToDb() =>
+        !string.IsNullOrEmpty(ValueToAdd1) && !string.IsNullOrEmpty(ValueToAdd2);
 
     [RelayCommand(CanExecute = nameof(CanAddToDb))]
     private async Task HandleDbAddClick()
     {
-        await Task.Delay(TimeSpan.FromSeconds(3));
-        AddToDb();
+        await Task.Delay(TimeSpan.FromSeconds(1));
+        _model.ValueToAdd1 = ValueToAdd1;
+        _model.ValueToAdd2 = ValueToAdd2;
+        _model.AddToDb();
+        Body2 = _model.Body2;
     }
 
     [RelayCommand]
     private void HandleDbReadClick()
     {
-        ReadFromDb();
-    }
-
-    private void AppendToTextColumn2(string text)
-    {
-        TextDialogCol2 += $"\n{text}";
-    }
-
-    private void AppendToTextColumn1(string text)
-    {
-        TextDialogCol1 += $"\n{text}";
-    }
-
-    private void AddToDb()
-    {
-        using var connection = new SqliteConnection($"Data Source={DbPath}");
-        connection.Open();
-
-        var command = connection.CreateCommand();
-        command.CommandText =
-            @"
-            INSERT INTO user (name)
-            VALUES ($name)
-            ";
-        command.Parameters.AddWithValue("$name", Username);
-        command.ExecuteNonQuery();
-        AppendToTextColumn2($"user with name {Username} inserted into {DbTableName}.");
-
-        command.CommandText =
-            @"
-            SELECT last_insert_rowid()
-            ";
-        _dbLastRowId = (long)(command.ExecuteScalar() ?? 0);
-        AppendToTextColumn2($"`_dbLastRowId` set to {_dbLastRowId}.");
-        connection.Close();
-    }
-
-    private void ReadFromDb()
-    {
-        using var connection = new SqliteConnection($"Data Source={DbPath}");
-        connection.Open();
-
-        var command = connection.CreateCommand();
-        command.CommandText =
-            @"
-            SELECT name
-            FROM user
-            WHERE id = $id
-            ";
-        command.Parameters.AddWithValue("$id", _dbLastRowId);
-
-        using var reader = command.ExecuteReader();
-        while (reader.Read())
-        {
-            var name = reader.GetString(0);
-
-            AppendToTextColumn1($"Hi, {name}!");
-            AppendToTextColumn2($"Read {name} from db.");
-        }
-        connection.Close();
+        _model.ReadFromDb();
+        Body1 = _model.Body1;
+        Body2 = _model.Body2;
     }
 }

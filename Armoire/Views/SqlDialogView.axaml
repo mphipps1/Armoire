@@ -18,11 +18,15 @@
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             Spacing="20">
-            <TextBlock Text="{Binding HeadingDialogCol0}" />
+            <TextBlock Text="{Binding Heading0}" />
             <TextBlock Margin="0,5">Name:</TextBlock>
             <TextBox
                 BorderThickness="2"
-                Text="{Binding Username}"
+                Text="{Binding ValueToAdd1}"
+                Watermark="Enter your name" />
+            <TextBox
+                BorderThickness="2"
+                Text="{Binding ValueToAdd2}"
                 Watermark="Enter your name" />
             <Button Command="{Binding HandleDbAddClickCommand}" Content="Add" />
         </StackPanel>
@@ -31,17 +35,17 @@
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             Spacing="20">
-            <TextBlock Text="{Binding HeadingDialogCol1}" />
+            <TextBlock Text="{Binding Heading1}" />
             <Button Command="{Binding HandleDbReadClickCommand}" Content="Read" />
-            <TextBlock Text="{Binding TextDialogCol1}" />
+            <TextBlock Text="{Binding Body1}" />
         </StackPanel>
         <StackPanel
             Grid.Column="2"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             Spacing="20">
-            <TextBlock Text="{Binding HeadingDialogCol2}" />
-            <TextBlock Text="{Binding TextDialogCol2}" />
+            <TextBlock Text="{Binding Heading2}" />
+            <TextBlock Text="{Binding Body2}" TextWrapping="WrapWithOverflow" />
         </StackPanel>
     </Grid>
 </UserControl>

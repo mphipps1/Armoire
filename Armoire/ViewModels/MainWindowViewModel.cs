@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading.Tasks;
+using Armoire.Models;
 using Armoire.Utils;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -42,7 +43,7 @@ namespace Armoire.ViewModels
         [RelayCommand]
         public void OpenSqlDialog()
         {
-            DialogHost.Show(new SqlDialogViewModel());
+            DialogHost.Show(new SqlDialogViewModel(new SqlDialog()));
         }
     }
 }
