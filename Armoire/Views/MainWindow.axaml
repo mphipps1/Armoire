@@ -40,6 +40,26 @@
                     VerticalAlignment="Center"
                     Spacing="20">
                     <TextBlock Text="{Binding HeadingDock}" />
+                    <Grid ColumnDefinitions="*,*,*">
+                        <Button Grid.Column="0" Margin="7, 0">
+                            <avalonia:MaterialIcon
+                                Width="20"
+                                Height="20"
+                                Kind="PackageVariantClosedPlus" />
+                        </Button>
+                        <Button Grid.Column="1" Margin="7, 0">
+                            <avalonia:MaterialIcon
+                                Width="20"
+                                Height="20"
+                                Kind="OctagramPlus" />
+                        </Button>
+                        <Button Grid.Column="2" Margin="7, 0">
+                            <avalonia:MaterialIcon
+                                Width="20"
+                                Height="20"
+                                Kind="Database" />
+                        </Button>
+                    </Grid>
                     <ItemsControl ItemsSource="{Binding DrawerContents}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate DataType="vm:ContentsUnitViewModel">
