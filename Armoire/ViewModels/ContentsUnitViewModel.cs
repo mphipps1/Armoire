@@ -1,5 +1,6 @@
 ﻿using Armoire.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
+using System.Windows.Input;
 
 namespace Armoire.ViewModels;
 
@@ -27,4 +28,9 @@ public partial class ContentsUnitViewModel : ViewModelBase
     }
 
     public ContentsUnitViewModel() { }
+
+    public void OnItemClick()
+    {
+
+    }
 }

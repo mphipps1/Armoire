@@ -20,6 +20,7 @@ public partial class SqlDialogViewModel : ViewModelBase
         _body2 = sqlDialogModel.Body2;
     }
 
+
     private readonly ISqlDialog _model;
 
     [ObservableProperty]

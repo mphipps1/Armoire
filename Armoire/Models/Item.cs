@@ -16,12 +16,13 @@ namespace Armoire.Models
             System.Diagnostics.Process.Start(Path);
         }
 
-        public Item(string name, string path)
+        public Item(string name, string path, string parentDrawer)
         {
             Name = name;
             Path = path;
+            ParentDrawer = parentDrawer;
         }
-
+        public string ParentDrawer { get; set; }
         public string Name { get; set; }
         public string? IconPath { get; set; }
     }

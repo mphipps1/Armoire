@@ -32,6 +32,7 @@ namespace Armoire.ViewModels
         private async Task HandleAddClick()
         {
             await Task.Delay(TimeSpan.FromSeconds(1));
+            //await DialogHost.Show(new NewEntryPopUpViewModel());
             DrawerContents.Add(
                 new ContentsUnitViewModel(new DrawerAsContents($"drawer {++_drawerCount}"))
             );
@@ -41,6 +42,7 @@ namespace Armoire.ViewModels
         {
             DrawerContents.Add(new ContentsUnitViewModel(new Widget("database", null)));
             DrawerContents.Add(new ContentsUnitViewModel(new DrawerAsContents("drawer 0")));
+            DrawerContents.Add(new ContentsUnitViewModel(new Item("Paint", "C:\\WINDOWS\\system32\\mspaint.exe", "0")));
         }
 
         [RelayCommand]
@@ -62,6 +64,9 @@ namespace Armoire.ViewModels
                         new SqlDialogViewModel(new SqlDialog()),
                         dialogIdentifier: "Sql"
                     );
+                    break;
+                case Item:
+                    ((Item)vm.Model).Execute();
                     break;
             }
         }

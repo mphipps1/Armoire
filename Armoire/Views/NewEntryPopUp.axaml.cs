@@ -2,11 +2,11 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
-namespace Armoire;
+namespace Armoire.Views;
 
-public partial class UserControl1 : UserControl
+public partial class NewEntryPopUp : UserControl
 {
-    public UserControl1()
+    public NewEntryPopUp()
     {
         InitializeComponent();
     }

@@ -84,6 +84,7 @@
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                 </StackPanel>
+				
                 <StackPanel
                     Grid.Column="1"
                     HorizontalAlignment="Center"
