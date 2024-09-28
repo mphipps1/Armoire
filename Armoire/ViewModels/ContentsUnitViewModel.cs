@@ -11,6 +11,8 @@ public partial class ContentsUnitViewModel : ViewModelBase
     [ObservableProperty]
     private string? _iconKind;
 
+    public IContentsUnit Model { get; set; }
+
     public ContentsUnitViewModel(IContentsUnit contentsUnit)
     {
         Name = contentsUnit.Name;
@@ -21,6 +23,7 @@ public partial class ContentsUnitViewModel : ViewModelBase
             Item => "Pyramid",
             _ => "Rectangle"
         };
+        Model = contentsUnit;
     }
 
     public ContentsUnitViewModel() { }

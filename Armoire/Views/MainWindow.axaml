@@ -24,52 +24,63 @@
         <viewModels:MainWindowViewModel />
     </Design.DataContext>
 
-    <dialogHostAvalonia:DialogHost CloseOnClickAway="True">
+    <dialogHostAvalonia:DialogHost CloseOnClickAway="True" Identifier="Sql">
         <dialogHostAvalonia:DialogHost.DialogContent>
             <viewModels:SqlDialogViewModel />
         </dialogHostAvalonia:DialogHost.DialogContent>
         <!--  put the content over which the dialog is shown here (e.g. your main window grid)  -->
-        <Grid x:Name="Root" ColumnDefinitions="*,*,*">
-            <StackPanel
-                Grid.Column="0"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Spacing="20">
-                <TextBlock Text="{Binding HeadingDock}" />
-                <ItemsControl ItemsSource="{Binding DrawerContents}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="vm:ContentsUnitViewModel">
-                            <Button Margin="10">
-                                <Button.Content>
-                                    <StackPanel HorizontalAlignment="Center">
-                                        <avalonia:MaterialIcon Kind="{Binding IconKind}" Width="50" Height="50" />
-                                        <TextBlock Text="{Binding Name}" TextAlignment="Center" />
-                                    </StackPanel>
-                                </Button.Content>
-                                <Button.Flyout>
-                                    <Flyout>Drawer Contents</Flyout>
-                                </Button.Flyout>
-                            </Button>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </StackPanel>
-            <StackPanel
-                Grid.Column="1"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Spacing="20">
-                <TextBlock Text="{Binding HeadingMain}" />
-                <Button Command="{Binding HandleAddClickCommand}" Content="Add Drawer" />
-                <Button Command="{Binding OpenSqlDialogCommand}" Content="Sqlite" />
-            </StackPanel>
-            <StackPanel
-                Grid.Column="2"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Spacing="20">
-                <TextBlock Text="{Binding HeadingDockAlt}" />
-            </StackPanel>
-        </Grid>
+        <dialogHostAvalonia:DialogHost CloseOnClickAway="True" Identifier="Drawer">
+            <dialogHostAvalonia:DialogHost.DialogContent>
+                <viewModels:DrawerDialogViewModel />
+            </dialogHostAvalonia:DialogHost.DialogContent>
+            <Grid x:Name="Root" ColumnDefinitions="*,*,*">
+                <StackPanel
+                    Grid.Column="0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Spacing="20">
+                    <TextBlock Text="{Binding HeadingDock}" />
+                    <ItemsControl ItemsSource="{Binding DrawerContents}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="vm:ContentsUnitViewModel">
+                                <Button
+                                    Margin="10"
+                                    Command="{Binding #Root.((vm:MainWindowViewModel)DataContext).OpenDialogCommand, FallbackValue=.}"
+                                    CommandParameter="{Binding .}">
+                                    <Button.Content>
+                                        <StackPanel HorizontalAlignment="Center">
+                                            <avalonia:MaterialIcon
+                                                Width="50"
+                                                Height="50"
+                                                Kind="{Binding IconKind}" />
+                                            <TextBlock Text="{Binding Name}" TextAlignment="Center" />
+                                        </StackPanel>
+                                    </Button.Content>
+                                    <Button.Flyout>
+                                        <Flyout>Drawer Contents</Flyout>
+                                    </Button.Flyout>
+                                </Button>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+                <StackPanel
+                    Grid.Column="1"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Spacing="20">
+                    <TextBlock Text="{Binding HeadingMain}" />
+                    <Button Command="{Binding HandleAddClickCommand}" Content="Add Drawer" />
+                    <Button Command="{Binding OpenSqlDialogCommand}" Content="Sqlite" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Column="2"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Spacing="20">
+                    <TextBlock Text="{Binding HeadingDockAlt}" />
+                </StackPanel>
+            </Grid>
+        </dialogHostAvalonia:DialogHost>
     </dialogHostAvalonia:DialogHost>
 </Window>

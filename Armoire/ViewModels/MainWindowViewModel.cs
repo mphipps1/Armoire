@@ -13,7 +13,7 @@ namespace Armoire.ViewModels
 {
     public partial class MainWindowViewModel : ViewModelBase
     {
-        private int _drawerCount = 0;
+        private int _drawerCount;
 
         public ObservableCollection<ContentsUnitViewModel> DrawerContents { get; } = [];
 
@@ -33,20 +33,43 @@ namespace Armoire.ViewModels
         {
             await Task.Delay(TimeSpan.FromSeconds(1));
             DrawerContents.Add(
-                new ContentsUnitViewModel(new DrawerAsContents($"{_drawerCount++}"))
+                new ContentsUnitViewModel(new DrawerAsContents($"drawer {++_drawerCount}"))
             );
         }
 
         public MainWindowViewModel()
         {
-            DrawerContents.Add(new ContentsUnitViewModel(new DrawerAsContents("0")));
             DrawerContents.Add(new ContentsUnitViewModel(new Widget("database", null)));
+            DrawerContents.Add(new ContentsUnitViewModel(new DrawerAsContents("drawer 0")));
         }
 
         [RelayCommand]
         public void OpenSqlDialog()
         {
-            DialogHost.Show(new SqlDialogViewModel(new SqlDialog()));
+            DialogHost.Show(new SqlDialogViewModel(new SqlDialog()), dialogIdentifier: "Sql");
+        }
+
+        [RelayCommand]
+        public void OpenDialog(ContentsUnitViewModel vm)
+        {
+            switch (vm.Model)
+            {
+                case DrawerAsContents:
+                    DialogHost.Show(new DrawerDialogViewModel(), dialogIdentifier: "Drawer");
+                    break;
+                case Widget:
+                    DialogHost.Show(
+                        new SqlDialogViewModel(new SqlDialog()),
+                        dialogIdentifier: "Sql"
+                    );
+                    break;
+            }
+        }
+
+        [RelayCommand]
+        public void OpenDrawerDialog()
+        {
+            DialogHost.Show(new SqlDialogViewModel(new SqlDialog()), dialogIdentifier: "Drawer");
         }
     }
 }
