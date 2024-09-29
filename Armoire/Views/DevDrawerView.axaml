@@ -1,0 +1,25 @@
+<Window
+    x:Class="Armoire.Views.DevDrawerView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModels="clr-namespace:Armoire.ViewModels"
+    Title="DevDrawerView"
+    x:DataType="viewModels:DevDrawerViewModel"
+    Height="52"
+    Width="400"
+    Background="Black"
+    SystemDecorations="None"
+    mc:Ignorable="d">
+	<Canvas>
+		<Button
+            Canvas.Left="10"
+            Canvas.Top="10"
+            Content="hi" />
+		<Button
+            Canvas.Left="66"
+            Canvas.Top="10"
+            Content="bye" />
+	</Canvas>
+</Window>

@@ -4,6 +4,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Armoire.Models;
 using Armoire.Utils;
+using Armoire.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DialogHostAvalonia;
@@ -13,68 +14,81 @@ namespace Armoire.ViewModels
 {
     public partial class MainWindowViewModel : ViewModelBase
     {
+        private int _contentsUnitCount;
         private int _drawerCount;
+        private int _itemCount;
 
-        public ObservableCollection<ContentsUnitViewModel> DrawerContents { get; } = [];
+        public ObservableCollection<ContentsUnitViewModel> DockContents { get; } = [];
 
-        [ObservableProperty]
-        private string _headingMain = "Welcome to Armoire!";
+        private bool CanAddContentsUnit() => true;
 
-        [ObservableProperty]
-        private string _headingDock = "Dock";
-
-        [ObservableProperty]
-        private string _headingDockAlt = "Dock Alternate";
-
-        private bool CanAddDrawer() => true;
-
-        [RelayCommand(CanExecute = nameof(CanAddDrawer))]
-        private async Task HandleAddClick()
+        [RelayCommand(CanExecute = nameof(CanAddContentsUnit))]
+        private async Task HandleDrawerAddClick()
         {
             await Task.Delay(TimeSpan.FromSeconds(1));
             //await DialogHost.Show(new NewEntryPopUpViewModel());
-            DrawerContents.Add(
-                new ContentsUnitViewModel(new DrawerAsContents($"drawer {++_drawerCount}"))
+            _contentsUnitCount++;
+            _drawerCount++;
+            DockContents.Add(
+                new ContentsUnitViewModel(new DrawerAsContents($"drawer {_drawerCount}"))
             );
         }
 
         public MainWindowViewModel()
         {
-            DrawerContents.Add(new ContentsUnitViewModel(new Widget("database", null)));
-            DrawerContents.Add(new ContentsUnitViewModel(new DrawerAsContents("drawer 0")));
-            DrawerContents.Add(new ContentsUnitViewModel(new Item("Paint", "C:\\WINDOWS\\system32\\mspaint.exe", "0")));
+            DockContents.Add(new ContentsUnitViewModel(new Widget("database", null)));
+            DockContents.Add(new ContentsUnitViewModel(new DrawerAsContents("drawer 0")));
+            DockContents.Add(
+                new ContentsUnitViewModel(
+                    new Item("Paint", "C:\\WINDOWS\\system32\\mspaint.exe", "0")
+                )
+            );
         }
 
         [RelayCommand]
         public void OpenSqlDialog()
         {
-            DialogHost.Show(new SqlDialogViewModel(new SqlDialog()), dialogIdentifier: "Sql");
+            DialogHost.Show(new SqlDialogViewModel(new SqlDialog()));
         }
 
         [RelayCommand]
-        public void OpenDialog(ContentsUnitViewModel vm)
+        public void HandleContentsClick(ContentsUnitViewModel vm)
         {
             switch (vm.Model)
             {
                 case DrawerAsContents:
-                    DialogHost.Show(new DrawerDialogViewModel(), dialogIdentifier: "Drawer");
+                    DialogHost.Show(new DrawerDialogViewModel());
                     break;
                 case Widget:
-                    DialogHost.Show(
-                        new SqlDialogViewModel(new SqlDialog()),
-                        dialogIdentifier: "Sql"
-                    );
+                    DialogHost.Show(new SqlDialogViewModel(new SqlDialog()));
                     break;
-                case Item:
-                    ((Item)vm.Model).Execute();
+                case Item item:
+                    item.Execute();
                     break;
             }
         }
 
         [RelayCommand]
-        public void OpenDrawerDialog()
+        public void HandleDatabaseClick(string dbType)
         {
-            DialogHost.Show(new SqlDialogViewModel(new SqlDialog()), dialogIdentifier: "Drawer");
+            switch (dbType)
+            {
+                case "fake":
+                    DialogHost.Show(new SqlDialogViewModel(new SqlDialog()));
+                    break;
+            }
+        }
+
+        [RelayCommand]
+        public void HandleWrenchClick()
+        {
+            var w = new DevDrawerView();
+            var vm = new DevDrawerViewModel();
+            w.DataContext = vm;
+            w.Position = vm.Point;
+            w.Show();
+            //DialogHost.Show(new DevDialogViewModel());
+            //DialogHost.Show(new SqlDialogViewModel(new SqlDialog()));
         }
     }
 }

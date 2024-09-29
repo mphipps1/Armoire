@@ -8,7 +8,7 @@ namespace Armoire.ViewModels;
 
 public partial class SqlDialogViewModel : ViewModelBase
 {
-    public SqlDialogViewModel() { }
+    //public SqlDialogViewModel() { }
 
     public SqlDialogViewModel(ISqlDialog sqlDialogModel)
     {
@@ -19,7 +19,6 @@ public partial class SqlDialogViewModel : ViewModelBase
         _body1 = sqlDialogModel.Body1;
         _body2 = sqlDialogModel.Body2;
     }
-
 
     private readonly ISqlDialog _model;
 

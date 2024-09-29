@@ -1,6 +1,6 @@
-﻿using Armoire.Models;
+﻿using System.Windows.Input;
+using Armoire.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
-using System.Windows.Input;
 
 namespace Armoire.ViewModels;
 
@@ -22,9 +22,9 @@ public partial class ContentsUnitViewModel : ViewModelBase
         Name = contentsUnit.Name;
         IconKind = contentsUnit switch
         {
-            DrawerAsContents => "Tray",
-            Widget => "Database",
-            Item => "Pyramid",
+            DrawerAsContents => "PackageVariantClosed",
+            Widget => "Octagram",
+            Item => "Star",
             _ => "Rectangle"
         };
         IconPath = contentsUnit switch
@@ -39,8 +39,5 @@ public partial class ContentsUnitViewModel : ViewModelBase
 
     public ContentsUnitViewModel() { }
 
-    public void OnItemClick()
-    {
-
-    }
+    public void OnItemClick() { }
 }
