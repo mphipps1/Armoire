@@ -90,7 +90,8 @@
 			</ItemsControl>
 		</StackPanel>
 
-		<dialogHostAvalonia:DialogHost Grid.Column="1" CloseOnClickAway="True" />
+		<dialogHostAvalonia:DialogHost  x:Name="MainDialogHost" Grid.Column="1" CloseOnClickAway="True" />
+	
 	</Grid>
 
 

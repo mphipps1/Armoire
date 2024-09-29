@@ -2,7 +2,21 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Armoire.Views.DrawerDialogView">
-  Welcome to Avalonia!
+
+	<Border Background="LightGray" Height="200" Width="700"
+        HorizontalAlignment="Left" VerticalAlignment="Center" >
+		<StackPanel Orientation="Horizontal"  VerticalAlignment="Center" Spacing="20">
+			<Button Height="100" Width="100" Background="Red">Drawer1</Button>
+			<Button Height="100" Width="100" Background="Red">Drawer2</Button>
+			<Border Width="100" Height="100" Background="Red"
+					HorizontalAlignment="Center" VerticalAlignment="Center">
+				<TextBlock Text="Item"
+						   HorizontalAlignment="Center"
+						   VerticalAlignment="Center"
+						   Foreground="White"
+						   TextAlignment="Center" />
+			</Border>
+		</StackPanel>
+	</Border>
 </UserControl>
