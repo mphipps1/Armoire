@@ -1,7 +1,7 @@
 ﻿using System.Windows.Input;
 using Armoire.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
-
+using System.Windows.Input;
 namespace Armoire.ViewModels;
 
 public partial class ContentsUnitViewModel : ViewModelBase
@@ -27,6 +27,7 @@ public partial class ContentsUnitViewModel : ViewModelBase
             Item => "Star",
             _ => "Rectangle"
         };
+        //IconPath uses svgs as images
         IconPath = contentsUnit switch
         {
             DrawerAsContents => "/Assets/closedGradientDrawer.svg",
@@ -39,5 +40,5 @@ public partial class ContentsUnitViewModel : ViewModelBase
 
     public ContentsUnitViewModel() { }
 
-    public void OnItemClick() { }
+
 }
