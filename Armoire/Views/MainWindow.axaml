@@ -23,16 +23,22 @@
         -->
         <viewModels:MainWindowViewModel />
     </Design.DataContext>
-
-    <dialogHostAvalonia:DialogHost CloseOnClickAway="True" Identifier="Sql">
-        <dialogHostAvalonia:DialogHost.DialogContent>
-            <viewModels:SqlDialogViewModel />
-        </dialogHostAvalonia:DialogHost.DialogContent>
-        <!--  put the content over which the dialog is shown here (e.g. your main window grid)  -->
-        <dialogHostAvalonia:DialogHost CloseOnClickAway="True" Identifier="Drawer">
-            <dialogHostAvalonia:DialogHost.DialogContent>
-                <viewModels:DrawerDialogViewModel />
-            </dialogHostAvalonia:DialogHost.DialogContent>
+	<Window.Styles>
+		<Style Selector="Button">
+			<Setter Property="Background" Value="Transparent"/>
+			<Setter Property="BorderBrush" Value="Purple" />
+			<Setter Property="BorderThickness" Value="1" />
+		</Style>
+	</Window.Styles>
+	<dialogHostAvalonia:DialogHost CloseOnClickAway="True" Identifier="Sql">
+		<dialogHostAvalonia:DialogHost.DialogContent>
+			<viewModels:SqlDialogViewModel />
+		</dialogHostAvalonia:DialogHost.DialogContent>
+		<!--  put the content over which the dialog is shown here (e.g. your main window grid)  -->
+		<dialogHostAvalonia:DialogHost CloseOnClickAway="True" Identifier="Drawer">
+			<dialogHostAvalonia:DialogHost.DialogContent>
+				<viewModels:DrawerDialogViewModel />
+			</dialogHostAvalonia:DialogHost.DialogContent>
             <Grid x:Name="Root" ColumnDefinitions="*,*,*">
                 <StackPanel
                     Grid.Column="0"
@@ -69,10 +75,13 @@
                                     CommandParameter="{Binding .}">
                                     <Button.Content>
                                         <StackPanel HorizontalAlignment="Center">
-                                            <avalonia:MaterialIcon
+											<!--
+											<avalonia:MaterialIcon
                                                 Width="50"
                                                 Height="50"
-                                                Kind="{Binding IconKind}" />
+                                                Kind="{Binding IconKind}" />-->
+											
+									        <Svg Height="100" Name="openDrawer.svg" Path="{Binding IconPath}"/> 
                                             <TextBlock Text="{Binding Name}" TextAlignment="Center" />
                                         </StackPanel>
                                     </Button.Content>

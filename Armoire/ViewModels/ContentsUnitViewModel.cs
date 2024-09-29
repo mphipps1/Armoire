@@ -12,6 +12,9 @@ public partial class ContentsUnitViewModel : ViewModelBase
     [ObservableProperty]
     private string? _iconKind;
 
+    [ObservableProperty]
+    private string? _iconPath;
+
     public IContentsUnit Model { get; set; }
 
     public ContentsUnitViewModel(IContentsUnit contentsUnit)
@@ -23,6 +26,13 @@ public partial class ContentsUnitViewModel : ViewModelBase
             Widget => "Database",
             Item => "Pyramid",
             _ => "Rectangle"
+        };
+        IconPath = contentsUnit switch
+        {
+            DrawerAsContents => "/Assets/closedGradientDrawer.svg",
+            Widget => "/Assets/databaseIcon.svg",
+            Item => "/Assets/mspaintLogo.svg",
+            _ => "/Assets/closedDrawer.svg"
         };
         Model = contentsUnit;
     }
