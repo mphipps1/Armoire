@@ -1,3 +1,3 @@
 ﻿namespace Armoire.ViewModels;
 
-public class DrawerDialogViewModel { }
+public class DrawerDialogViewModel : ViewModelBase { }

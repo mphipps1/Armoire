@@ -15,83 +15,86 @@
     Icon="/Assets/avalonia-logo.ico"
     mc:Ignorable="d">
 
-	<Design.DataContext>
-		<!--
+    <Design.DataContext>
+        <!--
             This only sets the DataContext for the previewer in an IDE,
             to set the actual DataContext for runtime, set the DataContext property in code
             (look at App.axaml.cs)
         -->
-		<viewModels:MainWindowViewModel />
-	</Design.DataContext>
+        <viewModels:MainWindowViewModel />
+    </Design.DataContext>
 
-	<Window.Styles>
-		<Style Selector="Button">
-			<Setter Property="Background" Value="Transparent"/>
-			<Setter Property="BorderBrush" Value="Purple" />
-			<Setter Property="BorderThickness" Value="1" />
-		</Style>
-	</Window.Styles>
+    <Window.Styles>
+        <Style Selector="Button">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="Purple" />
+            <Setter Property="BorderThickness" Value="1" />
+        </Style>
+    </Window.Styles>
 
-	<Grid x:Name="Root" ColumnDefinitions="*,3*">
-		<StackPanel
+    <Grid x:Name="Root" ColumnDefinitions="*,3*">
+        <StackPanel
             Grid.Column="0"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             Spacing="20">
-			<Grid ColumnDefinitions="*,*">
-				<StackPanel Grid.Column="0" Spacing="10">
-					<Button Margin="5,0">
-						<avalonia:MaterialIcon
+            <Grid ColumnDefinitions="*,*">
+                <StackPanel Grid.Column="0" Spacing="10">
+                    <Button Margin="5,0">
+                        <avalonia:MaterialIcon
                             Width="20"
                             Height="20"
                             Kind="OctagramPlus" />
-					</Button>
-					<Button Margin="5,0">
-						<avalonia:MaterialIcon
+                    </Button>
+                    <Button Margin="5,0">
+                        <avalonia:MaterialIcon
                             Width="20"
                             Height="20"
                             Kind="StarPlus" />
-					</Button>
-				</StackPanel>
-				<StackPanel Grid.Column="1" Spacing="10">
-					<Button Margin="5,0" Command="{Binding HandleDrawerAddClickCommand}">
-						<avalonia:MaterialIcon
+                    </Button>
+                </StackPanel>
+                <StackPanel Grid.Column="1" Spacing="10">
+                    <Button Margin="5,0" Command="{Binding HandleDrawerAddClickCommand}">
+                        <avalonia:MaterialIcon
                             Width="20"
                             Height="20"
                             Kind="PackageVariantClosedPlus" />
-					</Button>
-					<Button Margin="5,0" Command="{Binding HandleWrenchClickCommand}">
-						<avalonia:MaterialIcon
+                    </Button>
+                    <Button Margin="5,0" Command="{Binding HandleWrenchClickCommand}">
+                        <avalonia:MaterialIcon
                             Width="20"
                             Height="20"
                             Kind="Wrench" />
-					</Button>
-				</StackPanel>
-			</Grid>
-			<ItemsControl ItemsSource="{Binding DockContents}">
-				<ItemsControl.ItemTemplate>
-					<DataTemplate DataType="vm:ContentsUnitViewModel">
-						<Button
+                    </Button>
+                </StackPanel>
+            </Grid>
+            <ItemsControl ItemsSource="{Binding DockContents}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="vm:ContentsUnitViewModel">
+                        <Button
                             Margin="10"
                             Command="{Binding #Root.((vm:MainWindowViewModel)DataContext).HandleContentsClickCommand, FallbackValue=.}"
                             CommandParameter="{Binding .}">
-							<Button.Content>
-								<StackPanel HorizontalAlignment="Center">
-									<Svg Height="100" Name="openDrawer.svg" Path="{Binding IconPath}"/>
-									<TextBlock Text="{Binding Name}" TextAlignment="Center" />
-								</StackPanel>
-							</Button.Content>
-							<Button.Flyout>
-								<Flyout>Drawer Contents</Flyout>
-							</Button.Flyout>
-						</Button>
-					</DataTemplate>
-				</ItemsControl.ItemTemplate>
-			</ItemsControl>
-		</StackPanel>
+                            <Button.Content>
+                                <StackPanel HorizontalAlignment="Center">
+                                    <Svg
+                                        Name="openDrawer.svg"
+                                        Height="100"
+                                        Path="{Binding IconPath}" />
+                                    <TextBlock Text="{Binding Name}" TextAlignment="Center" />
+                                </StackPanel>
+                            </Button.Content>
+                            <Button.Flyout>
+                                <Flyout>Drawer Contents</Flyout>
+                            </Button.Flyout>
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
 
-		<dialogHostAvalonia:DialogHost Grid.Column="1" CloseOnClickAway="True" />
-	</Grid>
+        <dialogHostAvalonia:DialogHost Grid.Column="1" CloseOnClickAway="True" />
+    </Grid>
 
 
 </Window>
