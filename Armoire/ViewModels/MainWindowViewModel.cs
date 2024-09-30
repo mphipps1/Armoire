@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using Armoire.Models;
 using Armoire.Utils;
 using Armoire.Views;
+using Avalonia.VisualTree;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DialogHostAvalonia;
@@ -17,6 +20,7 @@ namespace Armoire.ViewModels
         private int _contentsUnitCount;
         private int _drawerCount;
         private int _itemCount;
+        private DevDrawerView? _devDrawerView;
 
         public ObservableCollection<ContentsUnitViewModel> DockContents { get; } = [];
 
@@ -64,7 +68,7 @@ namespace Armoire.ViewModels
             switch (vm.Model)
             {
                 case DrawerAsContents:
-                    DialogHost.Show(new DrawerDialogViewModel());
+                    //DialogHost.Show(new DrawerDialogViewModel());
                     break;
                 case Widget:
                     DialogHost.Show(new SqlDialogViewModel(new SqlDialog()));
@@ -89,11 +93,36 @@ namespace Armoire.ViewModels
         [RelayCommand]
         public void HandleWrenchClick()
         {
-            var w = new DevDrawerView();
-            var vm = new DevDrawerViewModel();
-            w.DataContext = vm;
-            w.Position = vm.Point;
-            w.Show();
+            if (_devDrawerView is null)
+            {
+                _devDrawerView = new DevDrawerView();
+                var vm = new DevDrawerViewModel();
+                _devDrawerView.DataContext = vm;
+                //w.Position = vm.Point;
+                _devDrawerView.Show();
+                foreach (var vc in _devDrawerView.GetVisualChildren())
+                {
+                    Debug.WriteLine("Reporting from HandleWrenchClick depth 1: " + vc);
+                    foreach (var vc2 in vc.GetVisualChildren())
+                    {
+                        Debug.WriteLine("Reporting from HandleWrenchClick depth 2: " + vc2);
+                        foreach (var vc3 in vc2.GetVisualChildren())
+                        {
+                            Debug.WriteLine("Reporting from HandleWrenchClick depth 3: " + vc3);
+                            foreach (var vc4 in vc3.GetVisualChildren())
+                            {
+                                // One of these is the Canvas
+                                Debug.WriteLine("Reporting from HandleWrenchClick depth 4: " + vc4);
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                _devDrawerView.Close();
+                _devDrawerView = null;
+            }
             //DialogHost.Show(new DevDialogViewModel());
             //DialogHost.Show(new SqlDialogViewModel(new SqlDialog()));
         }
