@@ -18,5 +18,6 @@ namespace Armoire
                 .UsePlatformDetect()
                 .WithInterFont()
                 .LogToTrace();
+
     }
 }

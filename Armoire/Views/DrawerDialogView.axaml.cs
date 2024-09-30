@@ -1,3 +1,4 @@
+using Armoire.Interfaces;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -5,16 +6,17 @@ using Avalonia.Markup.Xaml;
 
 namespace Armoire.Views;
 
-public partial class DrawerDialogView : UserControl
+public partial class DrawerDialogView : UserControl, IDrawerDialogService
 {
     private bool isDrawerOpen = false;
+
     public DrawerDialogView()
     {
         InitializeComponent();
     }
 
 
-    private void Btn_PointerReleased(object sender, PointerReleasedEventArgs e)
+    public void Btn_PointerReleased(object sender, PointerReleasedEventArgs e)
     {
         if (e.InitialPressMouseButton == MouseButton.Right)
         {
@@ -45,4 +47,6 @@ public partial class DrawerDialogView : UserControl
 
         isDrawerOpen = !isDrawerOpen;
     }
+
+    
 }

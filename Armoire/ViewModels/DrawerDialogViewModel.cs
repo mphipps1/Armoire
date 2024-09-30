@@ -1,3 +1,15 @@
-﻿namespace Armoire.ViewModels;
+﻿using System.Collections.ObjectModel;
 
-public class DrawerDialogViewModel : ViewModelBase { }
+namespace Armoire.ViewModels;
+
+public class DrawerDialogViewModel : ViewModelBase {
+
+    public ObservableCollection<ContentsUnitViewModel> drawerContents { get; } = [];
+
+    public DrawerDialogViewModel()
+    {
+
+
+    }
+
+}

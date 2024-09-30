@@ -1,5 +1,6 @@
 ﻿using Armoire.Views;
 using Avalonia.Controls;
+using Avalonia.Input;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -11,33 +12,25 @@ namespace Armoire.Interfaces
 {
     public interface IDrawerDialogService
     {
-        public void DrawerDialogView();
+        public void Btn_PointerReleased(object sender, PointerReleasedEventArgs e);
+
+        public void ToggleDrawer(); 
 
     }
     public class DrawerDialog : IDrawerDialogService
     {
-        public DrawerDialog() { 
-        }
-
-        public void DrawerDialogView()
+        public DrawerDialog(IDrawerDialogService drawerDialogService)
         {
-            throw new NotImplementedException();
         }
 
-        /**
-public void DrawerDialogView()
-{
-   DrawerDialogView dialog = new DrawerDialogView();
+        public void Btn_PointerReleased(object sender, PointerReleasedEventArgs e)
+        {
+           
+        }
 
-   var Windodialog = new Window
-   {
-       Content = dialog,
-       Width = 300,
-       Height = 200
-   };
-
-   Windodialog.ShowDialog(this);
-}
-*/
+        public void ToggleDrawer()
+        {
+            
+        }
     }
 }
