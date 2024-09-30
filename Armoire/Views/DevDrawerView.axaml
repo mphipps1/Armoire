@@ -11,6 +11,7 @@
     Width="400"
     Background="Black"
     SystemDecorations="None"
+    WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
 	<Canvas>
 		<Button

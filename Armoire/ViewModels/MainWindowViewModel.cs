@@ -17,6 +17,7 @@ namespace Armoire.ViewModels
         private int _contentsUnitCount;
         private int _drawerCount;
         private int _itemCount;
+        private DevDrawerView? _devDrawerView;
 
         public ObservableCollection<ContentsUnitViewModel> DockContents { get; } = [];
 
@@ -89,11 +90,19 @@ namespace Armoire.ViewModels
         [RelayCommand]
         public void HandleWrenchClick()
         {
-            var w = new DevDrawerView();
-            var vm = new DevDrawerViewModel();
-            w.DataContext = vm;
-            w.Position = vm.Point;
-            w.Show();
+            if (_devDrawerView is null)
+            {
+                _devDrawerView = new DevDrawerView();
+                var vm = new DevDrawerViewModel();
+                _devDrawerView.DataContext = vm;
+                //w.Position = vm.Point;
+                _devDrawerView.Show();
+            }
+            else
+            {
+                _devDrawerView.Close();
+                _devDrawerView = null;
+            }
             //DialogHost.Show(new DevDialogViewModel());
             //DialogHost.Show(new SqlDialogViewModel(new SqlDialog()));
         }
