@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              x:Class="Armoire.Views.DrawerDialogView">
 
-	<Border Background="LightGray" Height="200" Width="700"
+	<Border Background="LightGray" Height="125" Width="700"
         HorizontalAlignment="Left" VerticalAlignment="Center" >
 		<StackPanel Orientation="Horizontal"  VerticalAlignment="Center" Spacing="20">
 			<Button Height="100" Width="100" Background="Red">Drawer1</Button>

@@ -85,7 +85,10 @@
                                 </StackPanel>
                             </Button.Content>
                             <Button.Flyout>
-                                <Flyout>Drawer Contents</Flyout>
+								<!--Make this placement a binding that alternates between right, down, and up depending on where we are in the drawer structure-->
+                                <Flyout Placement="Right">
+                                    <viewModels:DrawerDialogViewModel />
+                                </Flyout>
                             </Button.Flyout>
                         </Button>
                     </DataTemplate>

@@ -17,10 +17,13 @@
 		<Button
             Canvas.Left="10"
             Canvas.Top="10"
-            Content="hi" />
+            Content="hi" 
+            Name="B1"
+            />
 		<Button
-            Canvas.Left="66"
+            Canvas.Left="{Binding #B1.Bounds.Width}"
             Canvas.Top="10"
-            Content="bye" />
+            Margin="20, 0"
+            Content="{Binding #B1.Width}" />
 	</Canvas>
 </Window>
