@@ -1,7 +1,6 @@
-﻿using System.Windows.Input;
-using Armoire.Models;
+﻿using Armoire.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
-using System.Windows.Input;
+
 namespace Armoire.ViewModels;
 
 public partial class ContentsUnitViewModel : ViewModelBase
@@ -39,6 +38,4 @@ public partial class ContentsUnitViewModel : ViewModelBase
     }
 
     public ContentsUnitViewModel() { }
-
-
 }

@@ -14,9 +14,9 @@
     x:DataType="vm:MainWindowViewModel"
     Icon="/Assets/avalonia-logo.ico"
     mc:Ignorable="d">
-	<Window.Background>
-		<ImageBrush Source="/Assets/p.jpg" Stretch="Fill"/>
-	</Window.Background>
+    <Window.Background>
+        <ImageBrush Source="/Assets/p.jpg" Stretch="Fill" />
+    </Window.Background>
     <Design.DataContext>
         <!--
             This only sets the DataContext for the previewer in an IDE,
@@ -75,6 +75,7 @@
                     <DataTemplate DataType="vm:ContentsUnitViewModel">
                         <Button
                             Margin="10"
+                            Click="FlyoutGate"
                             Command="{Binding #Root.((vm:MainWindowViewModel)DataContext).HandleContentsClickCommand, FallbackValue=.}"
                             CommandParameter="{Binding .}">
                             <Button.Content>
@@ -87,7 +88,7 @@
                                 </StackPanel>
                             </Button.Content>
                             <Button.Flyout>
-								<!--Make this placement a binding that alternates between right, down, and up depending on where we are in the drawer structure-->
+                                <!--  Make this placement a binding that alternates between right, down, and up depending on where we are in the drawer structure  -->
                                 <Flyout Placement="Right">
                                     <viewModels:DrawerDialogViewModel />
                                 </Flyout>
