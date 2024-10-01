@@ -1,4 +1,10 @@
+using System;
+using System.Diagnostics;
+using System.Linq;
+using Armoire.Models;
+using Armoire.ViewModels;
 using Avalonia.Controls;
+using Avalonia.Interactivity;
 
 namespace Armoire.Views
 {
@@ -7,6 +13,32 @@ namespace Armoire.Views
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        public void FlyoutGate(object? sender, RoutedEventArgs args)
+        {
+            Debug.WriteLine("Reporting from MainWindow CodeBehind FlyoutGate. `sender`: " + sender);
+            if (sender is not Button senderAsButton)
+                return;
+
+            if (senderAsButton.CommandParameter is not ContentsUnitViewModel cuVm)
+            {
+                Debug.WriteLine(
+                    "Reporting from MainWindow CodeBehind FlyoutGate. `CommandParameter.Type`: "
+                        + senderAsButton.CommandParameter?.GetType()
+                );
+                return;
+            }
+
+            Debug.WriteLine(
+                "Reporting from MainWindow CodeBehind FlyoutGate. `CommandParameter.Model`: "
+                    + cuVm.Model
+            );
+
+            if (cuVm.Model is DrawerAsContents)
+                return;
+
+            senderAsButton.Flyout?.Hide();
         }
     }
 }
