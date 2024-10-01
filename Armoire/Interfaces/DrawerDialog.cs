@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,18 +20,21 @@ namespace Armoire.Interfaces
     }
     public class DrawerDialog : IDrawerDialogService
     {
-        public DrawerDialog(IDrawerDialogService drawerDialogService)
+        private DrawerDialogView drawerDialogView;
+        public DrawerDialog()
         {
+         drawerDialogView = new DrawerDialogView();
+           
         }
 
         public void Btn_PointerReleased(object sender, PointerReleasedEventArgs e)
         {
-           
+            drawerDialogView.Btn_PointerReleased(sender, e);
         }
 
         public void ToggleDrawer()
         {
-            
+            drawerDialogView.ToggleDrawer();   
         }
     }
 }

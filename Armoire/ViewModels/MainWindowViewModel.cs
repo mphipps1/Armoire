@@ -68,7 +68,7 @@ namespace Armoire.ViewModels
             switch (vm.Model)
             {
                 case DrawerAsContents:
-                    //DialogHost.Show(new DrawerDialogViewModel());
+                    DialogHost.Show(new DrawerDialogViewModel());
                     break;
                 case Widget:
                     DialogHost.Show(new SqlDialogViewModel(new SqlDialog()));
@@ -133,6 +133,15 @@ namespace Armoire.ViewModels
             //probably not the best long term solution as this will return true when windows 12 releases
             //https://stackoverflow.com/questions/69038560/detect-windows-11-with-net-framework-or-windows-api
             return Environment.OSVersion.Version.Build >= 22000;
+        }
+
+        [RelayCommand]
+        private void Flyout_OnOpened(ContentsUnitViewModel vm)
+        {
+            var contentsViewModel = vm.Model;
+
+          
+
         }
     }
 }
