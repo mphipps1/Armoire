@@ -63,6 +63,12 @@ namespace Armoire.ViewModels
         }
 
         [RelayCommand]
+        private void DeleteDrawer(ContentsUnitViewModel drawer)
+        {
+            DockContents.Remove(drawer);
+        }
+
+        [RelayCommand]
         public void HandleContentsClick(ContentsUnitViewModel vm)
         {
             switch (vm.Model)

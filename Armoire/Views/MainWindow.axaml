@@ -71,32 +71,44 @@
                 </StackPanel>
             </Grid>
             <ItemsControl ItemsSource="{Binding DockContents}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate DataType="vm:ContentsUnitViewModel">
-                        <Button
-                            Margin="10"
-                            Click="FlyoutGate"
-                            Command="{Binding #Root.((vm:MainWindowViewModel)DataContext).HandleContentsClickCommand, FallbackValue=.}"
-                            CommandParameter="{Binding .}">
-                            <Button.Content>
-                                <StackPanel HorizontalAlignment="Center">
-                                    <Svg
-                                        Name="openDrawer.svg"
-                                        Height="100"
-                                        Path="{Binding IconPath}" />
-                                    <TextBlock Text="{Binding Name}" TextAlignment="Center" />
-                                </StackPanel>
-                            </Button.Content>
-                            <Button.Flyout>
-                                <!--  Make this placement a binding that alternates between right, down, and up depending on where we are in the drawer structure  -->
-                                <Flyout Placement="Right">
-                                    <viewModels:DrawerDialogViewModel />
-                                </Flyout>
-                            </Button.Flyout>
-                        </Button>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+				<ItemsControl.ItemTemplate>
+					<DataTemplate DataType="vm:ContentsUnitViewModel">
+						<StackPanel>
+							<!-- Button for handling click events and context menu -->
+							<Button
+								Margin="10"
+								Click="FlyoutGate"
+								Command="{Binding #Root.((vm:MainWindowViewModel)DataContext).HandleContentsClickCommand, FallbackValue=.}"
+								CommandParameter="{Binding .}">
+								<Button.Content>
+									<StackPanel HorizontalAlignment="Center">
+										<Svg
+											Name="openDrawer.svg"
+											Height="100"
+											Path="{Binding IconPath}" />
+										<TextBlock Text="{Binding Name}" TextAlignment="Center" />
+									</StackPanel>
+								</Button.Content>
+								<Button.Flyout>
+									<!-- Make this placement a binding that alternates between right, down, and up depending on where we are in the drawer structure -->
+									<Flyout Placement="Right">
+										<viewModels:DrawerDialogViewModel />
+									</Flyout>
+								</Button.Flyout>
+
+								<!-- Context Menu for Delete Drawer (attached to drawer button) -->
+								<Button.ContextMenu>
+									<ContextMenu>
+										<MenuItem Header="Delete"
+												  Command="{Binding #Root.((vm:MainWindowViewModel)DataContext).DeleteDrawerCommand, FallbackValue=.}"
+												  CommandParameter="{Binding .}" />
+									</ContextMenu>
+								</Button.ContextMenu>
+							</Button>
+						</StackPanel>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ItemsControl>
         </StackPanel>
 
         <dialogHostAvalonia:DialogHost Grid.Column="1" CloseOnClickAway="True" />
