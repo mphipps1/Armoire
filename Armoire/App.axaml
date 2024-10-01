@@ -20,5 +20,9 @@
             SecondaryColor="Lime" />
         <avalonia:MaterialIconStyles />
         <dialogHostAvalonia:DialogHostStyles />
+
+        <Style Selector="FlyoutPresenter.wider">
+            <Setter Property="MaxWidth" Value="850" />
+        </Style>
     </Application.Styles>
 </Application>

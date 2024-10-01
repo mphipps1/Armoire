@@ -44,7 +44,6 @@ namespace Armoire.ViewModels
                 Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                 "Microsoft\\WindowsApps\\mspaint.exe"
             );
-            DockContents.Add(new ContentsUnitViewModel(new Widget("database", null)));
             DockContents.Add(new ContentsUnitViewModel(new DrawerAsContents("drawer 0")));
             if (isWindows11())
                 DockContents.Add(new ContentsUnitViewModel(new Item("Paint", win11Path, "0")));
@@ -99,6 +98,7 @@ namespace Armoire.ViewModels
         [RelayCommand]
         public void HandleWrenchClick()
         {
+            // This approach is Anti-MVVM. The ViewModel should be unaware of the View.
             if (_devDrawerView is null)
             {
                 _devDrawerView = new DevDrawerView();
