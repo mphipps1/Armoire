@@ -1,10 +1,14 @@
 ﻿using Armoire.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using DialogHostAvalonia;
 
 namespace Armoire.ViewModels;
 
 public partial class ContentsUnitViewModel : ViewModelBase
 {
+    private static int _count;
+
     [ObservableProperty]
     private string? _name;
 
@@ -14,7 +18,7 @@ public partial class ContentsUnitViewModel : ViewModelBase
     [ObservableProperty]
     private string? _iconPath;
 
-    public IContentsUnit Model { get; set; }
+    public IContentsUnit? Model { get; set; }
 
     public ContentsUnitViewModel(IContentsUnit contentsUnit)
     {
@@ -37,5 +41,11 @@ public partial class ContentsUnitViewModel : ViewModelBase
         Model = contentsUnit;
     }
 
-    public ContentsUnitViewModel() { }
+    public ContentsUnitViewModel()
+    {
+        Name = "unit " + ++_count;
+    }
+
+    [RelayCommand]
+    public virtual void HandleContentsClick() { }
 }

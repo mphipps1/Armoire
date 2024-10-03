@@ -27,15 +27,9 @@ namespace Armoire.ViewModels
         private bool CanAddContentsUnit() => true;
 
         [RelayCommand(CanExecute = nameof(CanAddContentsUnit))]
-        private async Task HandleDrawerAddClick()
+        private void HandleDrawerAddClick()
         {
-            await Task.Delay(TimeSpan.FromSeconds(1));
-            //await DialogHost.Show(new NewEntryPopUpViewModel());
-            _contentsUnitCount++;
-            _drawerCount++;
-            DockContents.Add(
-                new ContentsUnitViewModel(new DrawerAsContents($"drawer {_drawerCount}"))
-            );
+            DockContents.Add(new DrawerAsContentsViewModel());
         }
 
         public MainWindowViewModel()
@@ -80,17 +74,6 @@ namespace Armoire.ViewModels
                     break;
                 case Item item:
                     item.Execute();
-                    break;
-            }
-        }
-
-        [RelayCommand]
-        public void HandleDatabaseClick(string dbType)
-        {
-            switch (dbType)
-            {
-                case "fake":
-                    DialogHost.Show(new SqlDialogViewModel(new SqlDialog()));
                     break;
             }
         }

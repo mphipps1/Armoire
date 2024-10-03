@@ -4,9 +4,9 @@ using Avalonia.Markup.Xaml;
 
 namespace Armoire.Views;
 
-public partial class DevDialogView : UserControl
+public partial class ContentsUnitView : UserControl
 {
-    public DevDialogView()
+    public ContentsUnitView()
     {
         InitializeComponent();
     }
