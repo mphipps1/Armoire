@@ -20,5 +20,11 @@ public class ItemViewModel : ContentsUnitViewModel
             : @"C:\WINDOWS\system32\mspaint.exe";
         IconKind = "Star";
         IconPath = "/Assets/mspaintLogo.svg";
+        Model = new Item(Name, ExecutablePath, "0");
+    }
+
+    public override void HandleContentsClick()
+    {
+        (Model as Item)?.Execute();
     }
 }

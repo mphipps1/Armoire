@@ -7,5 +7,6 @@ public class DrawerAsContentsViewModel : ContentsUnitViewModel
     public DrawerAsContentsViewModel()
     {
         Name = "drawer " + ++_count;
+        IconPath = "/Assets/closedGradientDrawer.svg";
     }
 }

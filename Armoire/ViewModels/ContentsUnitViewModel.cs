@@ -48,4 +48,7 @@ public partial class ContentsUnitViewModel : ViewModelBase
 
     [RelayCommand]
     public virtual void HandleContentsClick() { }
+
+    [RelayCommand]
+    public virtual void HandleDeleteClick() { }
 }

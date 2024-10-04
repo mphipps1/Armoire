@@ -30,6 +30,7 @@ namespace Armoire.Views
                 return;
             }
 
+            // TODO: This is anti-MVVM because the view should be unaware of the model.
             Debug.WriteLine(
                 "Reporting from MainWindow CodeBehind FlyoutGate. `CommandParameter.Model`: "
                     + cuVm.Model

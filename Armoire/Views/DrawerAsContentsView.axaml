@@ -1,0 +1,37 @@
+<UserControl
+    x:Class="Armoire.Views.DrawerAsContentsView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="clr-namespace:Armoire.ViewModels"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    x:DataType="vm:DrawerAsContentsViewModel"
+    mc:Ignorable="d">
+
+    <Button Margin="10" Command="{Binding HandleContentsClickCommand}">
+        <Button.Content>
+            <StackPanel HorizontalAlignment="Center">
+                <Svg
+                    Name="openDrawer"
+                    Height="100"
+                    Path="{Binding IconPath}" />
+                <TextBlock Text="{Binding Name}" TextAlignment="Center" />
+            </StackPanel>
+        </Button.Content>
+        <Button.Flyout>
+            <!--  Make this placement a binding that alternates between right, down, and up depending on where we are in the drawer structure  -->
+            <Flyout Placement="Right">
+                <vm:DrawerDialogViewModel />
+            </Flyout>
+        </Button.Flyout>
+
+        <!--  Context Menu for Delete Drawer (attached to drawer button)  -->
+        <Button.ContextMenu>
+            <ContextMenu>
+                <MenuItem Command="{Binding HandleDeleteClickCommand}" Header="Delete" />
+            </ContextMenu>
+        </Button.ContextMenu>
+    </Button>
+</UserControl>

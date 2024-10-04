@@ -2,11 +2,13 @@
     x:Class="Armoire.Views.MainWindow"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:armoire="clr-namespace:Armoire"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:dialogHostAvalonia="clr-namespace:DialogHostAvalonia;assembly=DialogHost.Avalonia"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModels="clr-namespace:Armoire.ViewModels"
+    xmlns:views="clr-namespace:Armoire.Views"
     xmlns:vm="using:Armoire.ViewModels"
     Title="Armoire"
     d:DesignHeight="450"
@@ -71,44 +73,10 @@
                 </StackPanel>
             </Grid>
             <ItemsControl ItemsSource="{Binding DockContents}">
-				<ItemsControl.ItemTemplate>
-					<DataTemplate DataType="vm:ContentsUnitViewModel">
-						<StackPanel>
-							<!-- Button for handling click events and context menu -->
-							<Button
-								Margin="10"
-								Click="FlyoutGate"
-								Command="{Binding #Root.((vm:MainWindowViewModel)DataContext).HandleContentsClickCommand, FallbackValue=.}"
-								CommandParameter="{Binding .}">
-								<Button.Content>
-									<StackPanel HorizontalAlignment="Center">
-										<Svg
-											Name="openDrawer.svg"
-											Height="100"
-											Path="{Binding IconPath}" />
-										<TextBlock Text="{Binding Name}" TextAlignment="Center" />
-									</StackPanel>
-								</Button.Content>
-								<Button.Flyout>
-									<!-- Make this placement a binding that alternates between right, down, and up depending on where we are in the drawer structure -->
-									<Flyout Placement="Right">
-										<viewModels:DrawerDialogViewModel />
-									</Flyout>
-								</Button.Flyout>
-
-								<!-- Context Menu for Delete Drawer (attached to drawer button) -->
-								<Button.ContextMenu>
-									<ContextMenu>
-										<MenuItem Header="Delete"
-												  Command="{Binding #Root.((vm:MainWindowViewModel)DataContext).DeleteDrawerCommand, FallbackValue=.}"
-												  CommandParameter="{Binding .}" />
-									</ContextMenu>
-								</Button.ContextMenu>
-							</Button>
-						</StackPanel>
-					</DataTemplate>
-				</ItemsControl.ItemTemplate>
-			</ItemsControl>
+                <ItemsControl.ItemTemplate>
+                    <armoire:ViewLocator />
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
         </StackPanel>
 
         <dialogHostAvalonia:DialogHost Grid.Column="1" CloseOnClickAway="True" />

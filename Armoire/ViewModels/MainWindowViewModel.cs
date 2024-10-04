@@ -34,19 +34,8 @@ namespace Armoire.ViewModels
 
         public MainWindowViewModel()
         {
-            var win11Path = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                "Microsoft\\WindowsApps\\mspaint.exe"
-            );
-            DockContents.Add(new ContentsUnitViewModel(new DrawerAsContents("drawer 0")));
-            if (isWindows11())
-                DockContents.Add(new ContentsUnitViewModel(new Item("Paint", win11Path, "0")));
-            else
-                DockContents.Add(
-                    new ContentsUnitViewModel(
-                        new Item("Paint", "C:\\WINDOWS\\system32\\mspaint.exe", "0")
-                    )
-                );
+            DockContents.Add(new DrawerAsContentsViewModel());
+            DockContents.Add(new ItemViewModel());
         }
 
         [RelayCommand]
