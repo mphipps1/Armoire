@@ -14,7 +14,7 @@
         <Button.Content>
             <StackPanel HorizontalAlignment="Center">
                 <Svg
-                    Name="openDrawer"
+                    Name="OpenDrawer"
                     Height="100"
                     Path="{Binding IconPath}" />
                 <TextBlock Text="{Binding Name}" TextAlignment="Center" />

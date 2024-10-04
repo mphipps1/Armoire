@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Diagnostics;
-using System.IO;
-using System.Threading.Tasks;
-using Armoire.Models;
-using Armoire.Utils;
 using Armoire.Views;
 using Avalonia.VisualTree;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using DialogHostAvalonia;
-using Microsoft.Data.Sqlite;
 
 namespace Armoire.ViewModels
 {
@@ -22,7 +16,7 @@ namespace Armoire.ViewModels
         private int _itemCount;
         private DevDrawerView? _devDrawerView;
 
-        public ObservableCollection<ContentsUnitViewModel> DockContents { get; } = [];
+        public ObservableCollection<ContentsUnitViewModel> DockContents { get; set; } = [];
 
         private bool CanAddContentsUnit() => true;
 
@@ -34,14 +28,35 @@ namespace Armoire.ViewModels
 
         public MainWindowViewModel()
         {
+            DockContents.CollectionChanged += dc_CollectionChanged;
             DockContents.Add(new DrawerAsContentsViewModel());
             DockContents.Add(new ItemViewModel());
         }
 
-        [RelayCommand]
-        public void OpenSqlDialog()
+        private void dc_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
-            DialogHost.Show(new SqlDialogViewModel(new SqlDialog()));
+            // https://stackoverflow.com/a/8490996/16458003
+            if (e.NewItems != null)
+                foreach (ContentsUnitViewModel item in e.NewItems)
+                    item.PropertyChanged += dc_PropertyChanged;
+
+            if (e.OldItems != null)
+                foreach (ContentsUnitViewModel item in e.OldItems)
+                    item.PropertyChanged -= dc_PropertyChanged;
+        }
+
+        private void dc_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case "DeleteMe":
+                    if (sender is ContentsUnitViewModel cu)
+                        DockContents.Remove(cu);
+                    break;
+                default:
+                    Debug.WriteLine("Different property changed.");
+                    break;
+            }
         }
 
         [RelayCommand]
@@ -51,26 +66,9 @@ namespace Armoire.ViewModels
         }
 
         [RelayCommand]
-        public void HandleContentsClick(ContentsUnitViewModel vm)
-        {
-            switch (vm.Model)
-            {
-                case DrawerAsContents:
-                    //DialogHost.Show(new DrawerDialogViewModel());
-                    break;
-                case Widget:
-                    DialogHost.Show(new SqlDialogViewModel(new SqlDialog()));
-                    break;
-                case Item item:
-                    item.Execute();
-                    break;
-            }
-        }
-
-        [RelayCommand]
         public void HandleWrenchClick()
         {
-            // This approach is Anti-MVVM. The ViewModel should be unaware of the View.
+            // TODO: This approach is Anti-MVVM. The ViewModel should be unaware of the View.
             if (_devDrawerView is null)
             {
                 _devDrawerView = new DevDrawerView();
@@ -103,14 +101,6 @@ namespace Armoire.ViewModels
             }
             //DialogHost.Show(new DevDialogViewModel());
             //DialogHost.Show(new SqlDialogViewModel(new SqlDialog()));
-        }
-
-        public bool isWindows11()
-        {
-            //windows 11 machines will return a verion build greater that 22000,
-            //probably not the best long term solution as this will return true when windows 12 releases
-            //https://stackoverflow.com/questions/69038560/detect-windows-11-with-net-framework-or-windows-api
-            return Environment.OSVersion.Version.Build >= 22000;
         }
     }
 }

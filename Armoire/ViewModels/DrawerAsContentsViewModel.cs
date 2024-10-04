@@ -1,4 +1,6 @@
-﻿namespace Armoire.ViewModels;
+﻿using CommunityToolkit.Mvvm.Input;
+
+namespace Armoire.ViewModels;
 
 public class DrawerAsContentsViewModel : ContentsUnitViewModel
 {
@@ -8,5 +10,13 @@ public class DrawerAsContentsViewModel : ContentsUnitViewModel
     {
         Name = "drawer " + ++_count;
         IconPath = "/Assets/closedGradientDrawer.svg";
+    }
+
+    private DrawerAsContentsViewModel(DrawerAsContentsViewModel copyMe)
+    {
+        Name = copyMe.Name;
+        IconPath = copyMe.IconPath;
+        IconKind = copyMe.IconKind;
+        DeleteMe = copyMe.DeleteMe;
     }
 }
