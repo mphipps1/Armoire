@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using Armoire.Views;
 using Avalonia.VisualTree;
-using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
 namespace Armoire.ViewModels
@@ -57,12 +56,6 @@ namespace Armoire.ViewModels
                     Debug.WriteLine("Different property changed.");
                     break;
             }
-        }
-
-        [RelayCommand]
-        private void DeleteDrawer(ContentsUnitViewModel drawer)
-        {
-            DockContents.Remove(drawer);
         }
 
         [RelayCommand]
