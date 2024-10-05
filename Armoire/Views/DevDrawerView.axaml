@@ -6,24 +6,37 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModels="clr-namespace:Armoire.ViewModels"
     Title="DevDrawerView"
-    x:DataType="viewModels:DevDrawerViewModel"
-    Height="52"
     Width="400"
+    Height="52"
+    x:DataType="viewModels:DevDrawerViewModel"
     Background="Black"
     SystemDecorations="None"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
-	<Canvas>
-		<Button
+    <Canvas>
+        <Button
+            Name="B1"
             Canvas.Left="10"
             Canvas.Top="10"
-            Content="hi" 
-            Name="B1"
-            />
-		<Button
+            Content="Fake DB">
+            <Button.Flyout>
+                <Flyout
+                    FlyoutPresenterClasses="wider"
+                    HorizontalOffset="150"
+                    Placement="Top">
+                    <viewModels:SqlDialogViewModel />
+                </Flyout>
+            </Button.Flyout>
+        </Button>
+
+        <!--
+            Pass #B1.Bounds.Width as a Command Parameter to give it to the ViewModel to add to a
+            running total that can then be accessed by this (the next) button.
+        -->
+        <Button
             Canvas.Left="{Binding #B1.Bounds.Width}"
             Canvas.Top="10"
-            Margin="20, 0"
-            Content="{Binding #B1.Width}" />
-	</Canvas>
+            Margin="20,0"
+            Content="Real DB" />
+    </Canvas>
 </Window>

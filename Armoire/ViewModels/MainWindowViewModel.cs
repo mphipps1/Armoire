@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Diagnostics;
-using System.IO;
-using System.Threading.Tasks;
-using Armoire.Models;
-using Armoire.Utils;
 using Armoire.Views;
 using Avalonia.VisualTree;
-using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using DialogHostAvalonia;
-using Microsoft.Data.Sqlite;
 
 namespace Armoire.ViewModels
 {
@@ -22,76 +15,45 @@ namespace Armoire.ViewModels
         private int _itemCount;
         private DevDrawerView? _devDrawerView;
 
-        public ObservableCollection<ContentsUnitViewModel> DockContents { get; } = [];
+        public ObservableCollection<ContentsUnitViewModel> DockContents { get; set; } = [];
 
         private bool CanAddContentsUnit() => true;
 
         [RelayCommand(CanExecute = nameof(CanAddContentsUnit))]
-        private async Task HandleDrawerAddClick()
+        private void HandleDrawerAddClick()
         {
-            await Task.Delay(TimeSpan.FromSeconds(1));
-            //await DialogHost.Show(new NewEntryPopUpViewModel());
-            _contentsUnitCount++;
-            _drawerCount++;
-            DockContents.Add(
-                new ContentsUnitViewModel(new DrawerAsContents($"drawer {_drawerCount}"))
-            );
+            DockContents.Add(new DrawerAsContentsViewModel());
         }
 
         public MainWindowViewModel()
         {
-            var win11Path = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                "Microsoft\\WindowsApps\\mspaint.exe"
-            );
-            DockContents.Add(new ContentsUnitViewModel(new Widget("database", null)));
-            DockContents.Add(new ContentsUnitViewModel(new DrawerAsContents("drawer 0")));
-            if (isWindows11())
-                DockContents.Add(new ContentsUnitViewModel(new Item("Paint", win11Path, "0")));
-            else
-                DockContents.Add(
-                    new ContentsUnitViewModel(
-                        new Item("Paint", "C:\\WINDOWS\\system32\\mspaint.exe", "0")
-                    )
-                );
+            DockContents.CollectionChanged += dc_CollectionChanged;
+            DockContents.Add(new DrawerAsContentsViewModel());
+            DockContents.Add(new ItemViewModel());
         }
 
-        [RelayCommand]
-        public void OpenSqlDialog()
+        private void dc_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
-            DialogHost.Show(new SqlDialogViewModel(new SqlDialog()));
+            // https://stackoverflow.com/a/8490996/16458003
+            if (e.NewItems != null)
+                foreach (ContentsUnitViewModel item in e.NewItems)
+                    item.PropertyChanged += dc_PropertyChanged;
+
+            if (e.OldItems != null)
+                foreach (ContentsUnitViewModel item in e.OldItems)
+                    item.PropertyChanged -= dc_PropertyChanged;
         }
 
-        [RelayCommand]
-        private void DeleteDrawer(ContentsUnitViewModel drawer)
+        private void dc_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            DockContents.Remove(drawer);
-        }
-
-        [RelayCommand]
-        public void HandleContentsClick(ContentsUnitViewModel vm)
-        {
-            switch (vm.Model)
+            switch (e.PropertyName)
             {
-                case DrawerAsContents:
-                 //   DialogHost.Show(new DrawerDialogViewModel());
+                case "DeleteMe":
+                    if (sender is ContentsUnitViewModel cu)
+                        DockContents.Remove(cu);
                     break;
-                case Widget:
-                    DialogHost.Show(new SqlDialogViewModel(new SqlDialog()));
-                    break;
-                case Item item:
-                    item.Execute();
-                    break;
-            }
-        }
-
-        [RelayCommand]
-        public void HandleDatabaseClick(string dbType)
-        {
-            switch (dbType)
-            {
-                case "fake":
-                    DialogHost.Show(new SqlDialogViewModel(new SqlDialog()));
+                default:
+                    Debug.WriteLine("Different property changed.");
                     break;
             }
         }
@@ -99,6 +61,7 @@ namespace Armoire.ViewModels
         [RelayCommand]
         public void HandleWrenchClick()
         {
+            // TODO: This approach is Anti-MVVM. The ViewModel should be unaware of the View.
             if (_devDrawerView is null)
             {
                 _devDrawerView = new DevDrawerView();
@@ -131,23 +94,6 @@ namespace Armoire.ViewModels
             }
             //DialogHost.Show(new DevDialogViewModel());
             //DialogHost.Show(new SqlDialogViewModel(new SqlDialog()));
-        }
-
-        public bool isWindows11()
-        {
-            //windows 11 machines will return a verion build greater that 22000,
-            //probably not the best long term solution as this will return true when windows 12 releases
-            //https://stackoverflow.com/questions/69038560/detect-windows-11-with-net-framework-or-windows-api
-            return Environment.OSVersion.Version.Build >= 22000;
-        }
-
-        [RelayCommand]
-        private void Flyout_OnOpened(ContentsUnitViewModel vm)
-        {
-            var contentsViewModel = vm.Model;
-
-          
-
         }
     }
 }

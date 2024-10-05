@@ -1,10 +1,14 @@
-﻿using Armoire.Models;
+﻿using System.ComponentModel;
+using Armoire.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 
 namespace Armoire.ViewModels;
 
 public partial class ContentsUnitViewModel : ViewModelBase
 {
+    private static int _count;
+
     [ObservableProperty]
     private string? _name;
 
@@ -14,28 +18,22 @@ public partial class ContentsUnitViewModel : ViewModelBase
     [ObservableProperty]
     private string? _iconPath;
 
-    public IContentsUnit Model { get; set; }
+    [ObservableProperty]
+    private bool _deleteMe;
 
-    public ContentsUnitViewModel(IContentsUnit contentsUnit)
+    public IContentsUnit? Model { get; set; }
+
+    public ContentsUnitViewModel()
     {
-        Name = contentsUnit.Name;
-        IconKind = contentsUnit switch
-        {
-            DrawerAsContents => "PackageVariantClosed",
-            Widget => "Octagram",
-            Item => "Star",
-            _ => "Rectangle"
-        };
-        //IconPath uses svgs as images
-        IconPath = contentsUnit switch
-        {
-            DrawerAsContents => "/Assets/closedGradientDrawer.svg",
-            Widget => "/Assets/databaseIcon.svg",
-            Item => "/Assets/mspaintLogo.svg",
-            _ => "/Assets/closedDrawer.svg"
-        };
-        Model = contentsUnit;
+        Name = "unit " + ++_count;
     }
 
-    public ContentsUnitViewModel() { }
+    [RelayCommand]
+    public virtual void HandleContentsClick() { }
+
+    [RelayCommand]
+    public virtual void HandleDeleteClick()
+    {
+        DeleteMe = true;
+    }
 }

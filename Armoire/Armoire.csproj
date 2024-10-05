@@ -33,10 +33,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Utils\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Update="Views\NewEntryPopUp.axaml.cs">
       <DependentUpon>NewEntryPopUp.axaml</DependentUpon>
     </Compile>

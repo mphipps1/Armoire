@@ -14,31 +14,5 @@ namespace Armoire.Views
         {
             InitializeComponent();
         }
-
-        public void FlyoutGate(object? sender, RoutedEventArgs args)
-        {
-            Debug.WriteLine("Reporting from MainWindow CodeBehind FlyoutGate. `sender`: " + sender);
-            if (sender is not Button senderAsButton)
-                return;
-
-            if (senderAsButton.CommandParameter is not ContentsUnitViewModel cuVm)
-            {
-                Debug.WriteLine(
-                    "Reporting from MainWindow CodeBehind FlyoutGate. `CommandParameter.Type`: "
-                        + senderAsButton.CommandParameter?.GetType()
-                );
-                return;
-            }
-
-            Debug.WriteLine(
-                "Reporting from MainWindow CodeBehind FlyoutGate. `CommandParameter.Model`: "
-                    + cuVm.Model
-            );
-
-            if (cuVm.Model is DrawerAsContents)
-                return;
-
-            senderAsButton.Flyout?.Hide();
-        }
     }
 }
