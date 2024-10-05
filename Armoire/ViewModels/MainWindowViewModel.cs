@@ -74,7 +74,7 @@ namespace Armoire.ViewModels
             switch (vm.Model)
             {
                 case DrawerAsContents:
-                    DialogHost.Show(new DrawerDialogViewModel());
+                 //   DialogHost.Show(new DrawerDialogViewModel());
                     break;
                 case Widget:
                     DialogHost.Show(new SqlDialogViewModel(new SqlDialog()));

@@ -102,6 +102,8 @@
 										<MenuItem Header="Delete"
 												  Command="{Binding #Root.((vm:MainWindowViewModel)DataContext).DeleteDrawerCommand, FallbackValue=.}"
 												  CommandParameter="{Binding .}" />
+										<MenuItem Header="Add Drawer"> </MenuItem>
+										<MenuItem Header="Add Item" > </MenuItem>
 									</ContextMenu>
 								</Button.ContextMenu>
 							</Button>
