@@ -20,9 +20,10 @@ public class DrawerDialogViewModel : ViewModelBase {
 
     public DrawerDialogViewModel()
     {
-        drawerContents.Add(new ContentsUnitViewModel(new DrawerAsContents("drawer 0")));
-        drawerContents.Add(new ContentsUnitViewModel(new DrawerAsContents("drawer 1")));
-        drawerContents.Add(new ContentsUnitViewModel(new DrawerAsContents("drawer 1")));
+        drawerContents.Add(new DrawerAsContentsViewModel());
+        drawerContents.Add(new DrawerAsContentsViewModel());
+        drawerContents.Add(new DrawerAsContentsViewModel());
+
 
     }
 
@@ -49,14 +50,14 @@ public class DrawerDialogViewModel : ViewModelBase {
     {
         await Task.Delay(TimeSpan.FromSeconds(1));
         drawerContents.Add(
-            new ContentsUnitViewModel(new DrawerAsContents("Drawer"))
-        );
+            new DrawerAsContentsViewModel()
+        ) ;
     }
 
     private async Task addItemClick()
     {
         await Task.Delay(TimeSpan.FromSeconds(1));
-        drawerContents.Add(new ContentsUnitViewModel(new Item("Item","path","1")));
+        drawerContents.Add(new DrawerAsContentsViewModel());
 
     }
 }
