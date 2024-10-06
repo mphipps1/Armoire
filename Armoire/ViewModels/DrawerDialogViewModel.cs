@@ -1,17 +1,17 @@
-﻿using Armoire.Interfaces;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
+using Armoire.Interfaces;
 using Armoire.Models;
 using Armoire.Views;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using ShimSkiaSharp;
-using System;
-using System.Collections.ObjectModel;
-using System.Threading.Tasks;
 
 namespace Armoire.ViewModels;
 
-public class DrawerDialogViewModel : ViewModelBase {
-
+public class DrawerDialogViewModel : DrawerViewModel
+{
     public ObservableCollection<ContentsUnitViewModel> drawerContents { get; } = [];
 
     private string Name1 = "Drawer";
@@ -23,8 +23,6 @@ public class DrawerDialogViewModel : ViewModelBase {
         drawerContents.Add(new DrawerAsContentsViewModel());
         drawerContents.Add(new DrawerAsContentsViewModel());
         drawerContents.Add(new DrawerAsContentsViewModel());
-
-
     }
 
     public void Btn_PointerReleased(object sender, PointerReleasedEventArgs e)
@@ -37,27 +35,17 @@ public class DrawerDialogViewModel : ViewModelBase {
         drawerDialog.ToggleDrawer();
     }
 
-
-    private async Task addContentsToDrawer(object? sender, RoutedEventArgs arg)
-    {
-
-
-    }
-
-
+    private async Task addContentsToDrawer(object? sender, RoutedEventArgs arg) { }
 
     private async Task AddDrawerClick()
     {
         await Task.Delay(TimeSpan.FromSeconds(1));
-        drawerContents.Add(
-            new DrawerAsContentsViewModel()
-        ) ;
+        drawerContents.Add(new DrawerAsContentsViewModel());
     }
 
     private async Task addItemClick()
     {
         await Task.Delay(TimeSpan.FromSeconds(1));
         drawerContents.Add(new DrawerAsContentsViewModel());
-
     }
 }

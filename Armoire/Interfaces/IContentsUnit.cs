@@ -1,4 +1,4 @@
-﻿namespace Armoire.Models;
+﻿namespace Armoire.Interfaces;
 
 public interface IContentsUnit
 {

@@ -8,7 +8,6 @@
     xmlns:dialogHostAvalonia="clr-namespace:DialogHostAvalonia;assembly=DialogHost.Avalonia"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModels="clr-namespace:Armoire.ViewModels"
-    xmlns:views="clr-namespace:Armoire.Views"
     xmlns:vm="using:Armoire.ViewModels"
     Title="Armoire"
     d:DesignHeight="450"

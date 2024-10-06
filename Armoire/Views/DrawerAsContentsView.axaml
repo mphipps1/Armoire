@@ -2,6 +2,7 @@
     x:Class="Armoire.Views.DrawerAsContentsView"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:armoire="clr-namespace:Armoire"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="clr-namespace:Armoire.ViewModels"
@@ -22,9 +23,11 @@
         </Button.Content>
         <Button.Flyout>
             <!--  Make this placement a binding that alternates between right, down, and up depending on where we are in the drawer structure  -->
-            <Flyout Placement="Right">
-                <vm:DrawerDialogViewModel />
-            </Flyout>
+            <Flyout
+                Content="{Binding DrawerAsContainer}"
+                FlyoutPresenterClasses="wider"
+                Placement="Right"
+                VerticalOffset="4" />
         </Button.Flyout>
 
         <!--  Context Menu for Delete Drawer (attached to drawer button)  -->
