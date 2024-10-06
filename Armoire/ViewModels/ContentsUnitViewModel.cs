@@ -26,6 +26,7 @@ public partial class ContentsUnitViewModel : ViewModelBase
     public ContentsUnitViewModel()
     {
         Name = "unit " + ++_count;
+
     }
 
     [RelayCommand]
