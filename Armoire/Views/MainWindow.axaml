@@ -8,7 +8,6 @@
     xmlns:dialogHostAvalonia="clr-namespace:DialogHostAvalonia;assembly=DialogHost.Avalonia"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModels="clr-namespace:Armoire.ViewModels"
-    xmlns:views="clr-namespace:Armoire.Views"
     xmlns:vm="using:Armoire.ViewModels"
     Title="Armoire"
     d:DesignHeight="450"
@@ -16,9 +15,10 @@
     x:DataType="vm:MainWindowViewModel"
     Icon="/Assets/avalonia-logo.ico"
     mc:Ignorable="d">
-    <Window.Background>
-        <ImageBrush Source="/Assets/p.jpg" Stretch="Fill" />
-    </Window.Background>
+	<Window.Background>
+		<ImageBrush Source="/Assets/p4.jpg" Stretch="Fill"/>
+		<!--p.jpg and p4.jpg are from https://www.artstation.com/aenamiart they say we must cite their work-->
+	</Window.Background>
     <Design.DataContext>
         <!--
             This only sets the DataContext for the previewer in an IDE,
@@ -78,7 +78,6 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </StackPanel>
-
         <dialogHostAvalonia:DialogHost Grid.Column="1" CloseOnClickAway="True" />
     </Grid>
 

@@ -1,4 +1,6 @@
-﻿namespace Armoire.Models;
+﻿using Armoire.Interfaces;
+
+namespace Armoire.Models;
 
 public class Widget : IContentsUnit
 {

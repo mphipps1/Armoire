@@ -4,9 +4,9 @@ using Avalonia.Markup.Xaml;
 
 namespace Armoire.Views;
 
-public partial class NewEntryPopUp : UserControl
+public partial class NewEntryPopUpView : UserControl
 {
-    public NewEntryPopUp()
+    public NewEntryPopUpView()
     {
         InitializeComponent();
     }
