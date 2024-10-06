@@ -12,7 +12,8 @@ using System.Threading.Tasks;
 
 namespace Armoire.ViewModels;
 
-public partial class DrawerDialogViewModel : ViewModelBase {
+public partial class DrawerDialogViewModel : DrawerViewModel
+{
 
     public ObservableCollection<ContentsUnitViewModel> drawerContents { get; } = [];
 
