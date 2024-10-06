@@ -1,33 +1,54 @@
 using Armoire.Interfaces;
+using Armoire.ViewModels;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Markup.Xaml;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Armoire.Views;
 
 public partial class DrawerDialogView : UserControl, IDrawerDialogService
 {
-    private bool isDrawerOpen = false;
+    
+   
 
     public DrawerDialogView()
     {
         InitializeComponent();
+       DataContext = new DrawerDialogViewModel();
+        
+        
     }
-
-
+    
+   
+ 
     public void Btn_PointerReleased(object sender, PointerReleasedEventArgs e)
     {
-        if (e.InitialPressMouseButton == MouseButton.Right)
+
+        if (e.Source is Border border)
         {
-            var button = sender as Button;
-            button?.ContextMenu?.Open(button);
+           
+            var pointerPoint = e.GetCurrentPoint(border);
+            var properties = pointerPoint.Properties;
+
+            
+            if (properties.IsRightButtonPressed)
+            {
+                
+                if (border.ContextMenu != null)
+                {
+                    // Open the context menu
+                    border.ContextMenu.Open(border);
+                }
+            }
         }
     }
 
     public void ToggleDrawer()
     {
-        var drawer = this.FindControl<Border>("Drawer");
+         bool isDrawerOpen = false;
+    var drawer = this.FindControl<Border>("Drawer");
         drawer.IsVisible = true;
         drawer.Height = 100;
 

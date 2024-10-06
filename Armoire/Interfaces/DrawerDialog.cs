@@ -1,6 +1,7 @@
 ﻿using Armoire.Views;
 using Avalonia.Controls;
 using Avalonia.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -18,8 +19,9 @@ namespace Armoire.Interfaces
         public void ToggleDrawer(); 
 
     }
-    public class DrawerDialog : IDrawerDialogService
+    public partial class DrawerDialog : ObservableObject, IDrawerDialogService
     {
+        [ObservableProperty]
         private DrawerDialogView drawerDialogView;
         public DrawerDialog()
         {

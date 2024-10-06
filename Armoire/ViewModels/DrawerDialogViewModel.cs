@@ -3,6 +3,8 @@ using Armoire.Models;
 using Armoire.Views;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using ShimSkiaSharp;
 using System;
 using System.Collections.ObjectModel;
@@ -10,43 +12,41 @@ using System.Threading.Tasks;
 
 namespace Armoire.ViewModels;
 
-public class DrawerDialogViewModel : ViewModelBase {
+public partial class DrawerDialogViewModel : ViewModelBase {
 
     public ObservableCollection<ContentsUnitViewModel> drawerContents { get; } = [];
 
-    private string Name1 = "Drawer";
 
-    private DrawerDialog drawerDialog = new DrawerDialog();
+    [ObservableProperty]
+    private DrawerDialog drawerDialog;
+
 
     public DrawerDialogViewModel()
     {
-        drawerContents.Add(new DrawerAsContentsViewModel());
-        drawerContents.Add(new DrawerAsContentsViewModel());
-        drawerContents.Add(new DrawerAsContentsViewModel());
-
-
+       
+    
     }
 
+    /**
     public void Btn_PointerReleased(object sender, PointerReleasedEventArgs e)
     {
-        drawerDialog.Btn_PointerReleased(sender, e);
+        
+           drawerDialog.Btn_PointerReleased(sender, e);
     }
 
     public void ToggleDrawer()
     {
+        
         drawerDialog.ToggleDrawer();
     }
 
 
-    private async Task addContentsToDrawer(object? sender, RoutedEventArgs arg)
-    {
-
-
-    }
+    */
 
 
 
-    private async Task AddDrawerClick()
+    [RelayCommand]
+    public async Task AddDrawerClick()
     {
         await Task.Delay(TimeSpan.FromSeconds(1));
         drawerContents.Add(
@@ -54,10 +54,11 @@ public class DrawerDialogViewModel : ViewModelBase {
         ) ;
     }
 
-    private async Task addItemClick()
+    [RelayCommand]
+    public async Task addItemClick()
     {
         await Task.Delay(TimeSpan.FromSeconds(1));
-        drawerContents.Add(new DrawerAsContentsViewModel());
+        drawerContents.Add(new ItemViewModel());
 
     }
 }
