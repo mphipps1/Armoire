@@ -1,11 +1,12 @@
 ﻿using System.ComponentModel;
+using Armoire.Interfaces;
 using Armoire.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
 namespace Armoire.ViewModels;
 
-public partial class ContentsUnitViewModel : ViewModelBase
+public partial class ContentsUnitViewModel : ViewModelBase, IHasId
 {
     private static int _count;
 
@@ -36,4 +37,6 @@ public partial class ContentsUnitViewModel : ViewModelBase
     {
         DeleteMe = true;
     }
+
+    public int Id { get; set; }
 }

@@ -1,3 +1,10 @@
-﻿namespace Armoire.Interfaces;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
-public interface IDrawer { }
+namespace Armoire.Interfaces;
+
+public interface IDrawer
+{
+    List<IContentsUnit> Contents { get; set; }
+    int Id { get; set; }
+}

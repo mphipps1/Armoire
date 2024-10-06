@@ -28,8 +28,14 @@ namespace Armoire.ViewModels
         public MainWindowViewModel()
         {
             DockContents.CollectionChanged += dc_CollectionChanged;
-            DockContents.Add(new DrawerAsContentsViewModel());
+            var d1 = new DrawerAsContentsViewModel
+            {
+                DrawerAsContainer = new DrawerDialogViewModel()
+            };
+            var d2 = new DrawerAsContentsViewModel() { DrawerAsContainer = new DrawerViewModel() };
+            DockContents.Add(d1);
             DockContents.Add(new ItemViewModel());
+            DockContents.Add(d2);
         }
 
         private void dc_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
