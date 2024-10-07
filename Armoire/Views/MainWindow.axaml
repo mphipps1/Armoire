@@ -63,7 +63,7 @@
                             Width="20"
                             Height="20"
                             Kind="PackageVariantClosedPlus" />
-                    </Button>
+					</Button>
                     <Button Margin="5,0" Command="{Binding HandleWrenchClickCommand}">
                         <avalonia:MaterialIcon
                             Width="20"

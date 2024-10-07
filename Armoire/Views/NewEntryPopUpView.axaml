@@ -3,7 +3,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="250"
-             x:Class="Armoire.Views.NewEntryPopUpView">
+			 xmlns:vm="using:Armoire.ViewModels"
+             x:Class="Armoire.Views.NewEntryPopUpView"
+			 x:DataType="vm:NewEntryPopUpViewModel">
 	<UserControl.Styles>
 		<Style Selector="TextBox">
 			<Setter Property="BorderThickness" Value="1" />
@@ -17,11 +19,16 @@
 	</UserControl.Styles>
 	<Border CornerRadius="10" BorderBrush="Purple" BorderThickness="1">
 	<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-	    <TextBlock Text="Enter New Entry Name:" />
-	    <TextBox Watermark="  Here" Width="300"></TextBox>
+		<TextBlock Text="Enter New Entry Name:" />
+		<TextBox Text="{Binding Name}" Width="300"></TextBox>
+		<ToggleButton HorizontalAlignment="Center"
+					  Margin="5"
+					  Command="{Binding UpdateEntryType}">
+			Is this a drawer?
+		</ToggleButton>
 		<TextBlock Text="Enter Path If Item" />
-		<TextBox Watermark="  Here"></TextBox>
-		<Button Width="100">Submit</Button>
+		<TextBox Text="{Binding Path}"></TextBox>
+		<Button Width="100" Command="{Binding Update}">Submit</Button>
 	</StackPanel>
 	</Border>
 </UserControl>
