@@ -23,6 +23,12 @@ public class ItemViewModel : ContentsUnitViewModel
         Model = new Item(Name, ExecutablePath, "0");
     }
 
+    public ItemViewModel(string name, string executablePath, string parentID)
+    {
+        ExecutablePath = executablePath;
+        Model = new Item(name, executablePath, parentID);
+    }
+
     public override void HandleContentsClick()
     {
         (Model as Item)?.Execute();

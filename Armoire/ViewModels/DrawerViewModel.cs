@@ -14,4 +14,8 @@ public class DrawerViewModel : ViewModelBase, IHasId
         Contents.Add(new DrawerAsContentsViewModel());
         Contents.Add(new DrawerAsContentsViewModel());
     }
+    public DrawerViewModel(int id)
+    {
+        Id = id;
+    }
 }

@@ -5,6 +5,7 @@ using System.Diagnostics;
 using Armoire.Views;
 using Avalonia.VisualTree;
 using CommunityToolkit.Mvvm.Input;
+using DialogHostAvalonia;
 
 namespace Armoire.ViewModels
 {
@@ -14,6 +15,7 @@ namespace Armoire.ViewModels
         private int _drawerCount;
         private int _itemCount;
         private DevDrawerView? _devDrawerView;
+        private NewEntryPopUpViewModel? currentEntry;
 
         public ObservableCollection<ContentsUnitViewModel> DockContents { get; set; } = [];
 
@@ -22,7 +24,9 @@ namespace Armoire.ViewModels
         [RelayCommand(CanExecute = nameof(CanAddContentsUnit))]
         private void HandleDrawerAddClick()
         {
-            DockContents.Add(new DrawerAsContentsViewModel());
+            currentEntry = new NewEntryPopUpViewModel(DockContents);
+            DialogHost.Show(currentEntry);
+            //DockContents.Add(new DrawerAsContentsViewModel());
         }
 
         public MainWindowViewModel()

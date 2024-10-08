@@ -13,6 +13,13 @@ public class DrawerAsContentsViewModel : ContentsUnitViewModel
         IconPath = "/Assets/closedGradientDrawer.svg";
     }
 
+    public DrawerAsContentsViewModel(int id, string name, string iconPath)
+    {
+        DrawerAsContainer = new DrawerViewModel(id);
+        Name = name;
+        IconPath = iconPath;
+    }
+
     private DrawerAsContentsViewModel(DrawerAsContentsViewModel copyMe)
     {
         Name = copyMe.Name;
