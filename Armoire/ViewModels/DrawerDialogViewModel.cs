@@ -21,6 +21,11 @@ public partial class DrawerDialogViewModel : DrawerViewModel
     [ObservableProperty]
     private DrawerDialog drawerDialog;
 
+    [ObservableProperty]
+    private DrawerViewModel drawerViewModel;
+
+    [ObservableProperty]
+    private ItemViewModel itemViewModel;
 
     public DrawerDialogViewModel()
     {
