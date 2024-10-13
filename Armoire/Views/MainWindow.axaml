@@ -20,6 +20,11 @@
 		<!--p.jpg and p4.jpg are from https://www.artstation.com/aenamiart they say we must cite their work-->
 	</Window.Background>
 	<Design.DataContext>
+		<!--
+            This only sets the DataContext for the previewer in an IDE,
+            to set the actual DataContext for runtime, set the DataContext property in code
+            (look at App.axaml.cs)
+        -->
 		<viewModels:MainWindowViewModel />
 	</Design.DataContext>
 
@@ -32,7 +37,7 @@
 	</Window.Styles>
 
 	<Grid x:Name="Root" ColumnDefinitions="*,3*,Auto">
-		<!-- Digital Clock (Top-Right) -->
+		<!-- Digital Clock -->
 		<TextBlock
             Text="{Binding CurrentTime}"
             FontSize="18"
