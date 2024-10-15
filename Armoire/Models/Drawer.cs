@@ -8,5 +8,7 @@ public class Drawer : IDrawer
     public Drawer() { }
 
     public List<IContentsUnit> Contents { get; set; } = [];
+    public int Hierarchy { get; set; }   
+
     public int Id { get; set; }
 }

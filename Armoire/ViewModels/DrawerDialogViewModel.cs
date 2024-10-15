@@ -21,15 +21,14 @@ public partial class DrawerDialogViewModel : DrawerViewModel
     [ObservableProperty]
     private DrawerDialog drawerDialog;
 
-    [ObservableProperty]
-    private DrawerViewModel drawerViewModel;
+
+    private static int _count = 0;
 
     [ObservableProperty]
-    private ItemViewModel itemViewModel;
-
+    private string _drawerName;
     public DrawerDialogViewModel()
     {
-       
+        drawerContents.Add(new DrawerAsContentsViewModel(1, DrawerName, "/Assets/closedGradientDrawer.svg"));
     
     }
 
@@ -50,16 +49,18 @@ public partial class DrawerDialogViewModel : DrawerViewModel
     */
 
 
+    
 
     [RelayCommand]
-    public async Task AddDrawerClick()
+    public async Task AddDrawer()
     {
+        _drawerName = "Drawer" + _count++;
         await Task.Delay(TimeSpan.FromSeconds(1));
         drawerContents.Add(
             new DrawerAsContentsViewModel()
         ) ;
     }
-
+    /**
     [RelayCommand]
     public async Task addItemClick()
     {
@@ -67,4 +68,5 @@ public partial class DrawerDialogViewModel : DrawerViewModel
         drawerContents.Add(new ItemViewModel());
 
     }
+    */
 }

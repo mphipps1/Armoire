@@ -34,9 +34,9 @@ namespace Armoire.ViewModels
             DockContents.CollectionChanged += dc_CollectionChanged;
             var d1 = new DrawerAsContentsViewModel
             {
-                DrawerAsContainer = new DrawerDialogViewModel()
+                DrawerAsContainer = new DrawerViewModel()
             };
-            var d2 = new DrawerAsContentsViewModel() { DrawerAsContainer = new DrawerViewModel() };
+            var d2 = new DrawerAsContentsViewModel() { DrawerAsContainer = new DrawerViewModel(1, 0) };
             DockContents.Add(d1);
             DockContents.Add(new ItemViewModel());
             DockContents.Add(d2);

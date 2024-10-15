@@ -1,3 +1,4 @@
+using Armoire.ViewModels;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
@@ -9,5 +10,6 @@ public partial class DrawerView : UserControl
     public DrawerView()
     {
         InitializeComponent();
+        DataContext = new DrawerViewModel();
     }
 }

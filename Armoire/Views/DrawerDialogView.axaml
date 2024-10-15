@@ -15,14 +15,14 @@
 	<Border Background="Gray"  MinHeight="200" MinWidth="300" HorizontalAlignment="Left" VerticalAlignment="Center"  PointerReleased="Btn_PointerReleased">
 		<Border.ContextMenu>
 			<ContextMenu>
-				<MenuItem Header="Add drawer" Command="{Binding AddDrawerClick}"/>
-				<MenuItem Header="Add File" Command="{Binding addItemClick}"/>
+				<MenuItem Header="Add drawer"/>
+				<MenuItem Header="Add File" />
 			</ContextMenu>
 		</Border.ContextMenu>
 		<StackPanel>
 			<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="10" >
-				<Button Content="Add Drawer"  Height="30" Margin="0,0,10,0"  Command="{Binding AddDrawerClick}" />
-				<Button Content="Add Item" Height="30" Margin="0,0,10,0"   Command="{Binding addItemClick}" />
+				<Button Content="Add Drawer"  Height="30" Margin="0,0,10,0"  />
+				<Button Content="Add Item" Height="30" Margin="0,0,10,0" />
 			</StackPanel>
 			<ItemsControl ItemsSource="{Binding drawerContents}">
 				<ItemsControl.ItemsPanel>
@@ -33,11 +33,11 @@
 				<ItemsControl.ItemTemplate>
 					<DataTemplate DataType="vm:ContentsUnitViewModel">
 						<Border Background="Transparent" Height="200" Width="300" HorizontalAlignment="Left" VerticalAlignment="Center">
-							<Button Height="100" Width="200" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="50,0,0,0">
+							<Button MinHeight="100" MinWidth="100" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="50,0,0,0">
 								<Button.Content>
 									<StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
 										<Svg Name="openDrawer.svg" Height="50" Width="50" Path="{Binding IconPath}" />
-										<TextBlock Text="Hello" VerticalAlignment="Center" HorizontalAlignment="Center" />
+										<TextBlock Text="{Binding Name}" VerticalAlignment="Center" HorizontalAlignment="Center" />
 									</StackPanel>
 								</Button.Content>
 							</Button>

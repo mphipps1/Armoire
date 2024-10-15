@@ -6,21 +6,35 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModels="clr-namespace:Armoire.ViewModels"
+    xmlns:vm="using:Armoire.ViewModels" 
     d:DesignHeight="450"
     d:DesignWidth="800"
     x:DataType="viewModels:DrawerViewModel"
     mc:Ignorable="d">
 
-    <ItemsControl ItemsSource="{Binding Contents}">
+	<UserControl.DataContext>
+		<viewModels:DrawerViewModel/>
+	</UserControl.DataContext>
+
+<Border Background="LightGray">
+	<StackPanel>
+		<StackPanel Orientation="Horizontal">
+			<Button Content="Add Drawer"  Height="30" Margin="0,0,10,0" Command="{Binding addDrawerClickCommand}"  />
+			<Button Content="Add Item" Height="30" Margin="0,0,10,0"  Command="{Binding addItemClickCommand }"  />
+		</StackPanel>
+    <ItemsControl x:Name="MyItemsControl"  ItemsSource="{Binding Contents}">
         <ItemsControl.ItemTemplate>
             <armoire:ViewLocator />
         </ItemsControl.ItemTemplate>
 
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
-                <WrapPanel HorizontalAlignment="Left" Orientation="Horizontal" />
+                <WrapPanel HorizontalAlignment="Left"  Orientation="{Binding WrapPanelOrientation}" />
             </ItemsPanelTemplate>
         </ItemsControl.ItemsPanel>
     </ItemsControl>
+	</StackPanel>
+</Border>
+
 
 </UserControl>
