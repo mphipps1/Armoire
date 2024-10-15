@@ -17,7 +17,7 @@ namespace Armoire.ViewModels
         private int _drawerCount;
         private int _itemCount;
         private DevDrawerView? _devDrawerView;
-        private NewEntryPopUpViewModel? currentEntry;
+        private NewItemViewModel? currentEntry;
         private Timer _timer;
         private string _currentTime;
 
@@ -34,7 +34,7 @@ namespace Armoire.ViewModels
         [RelayCommand(CanExecute = nameof(CanAddContentsUnit))]
         private void HandleDrawerAddClick()
         {
-            currentEntry = new NewEntryPopUpViewModel(DockContents);
+            currentEntry = new NewItemViewModel(DockContents);
             DialogHost.Show(currentEntry);
             //DockContents.Add(new DrawerAsContentsViewModel());
         }

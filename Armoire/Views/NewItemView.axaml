@@ -4,8 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="250"
 			 xmlns:vm="using:Armoire.ViewModels"
-             x:Class="Armoire.Views.NewEntryPopUpView"
-			 x:DataType="vm:NewEntryPopUpViewModel">
+             x:Class="Armoire.Views.NewItemView"
+			 x:DataType="vm:NewItemViewModel">
 	<UserControl.Styles>
 		<Style Selector="TextBox">
 			<Setter Property="BorderThickness" Value="1" />
@@ -18,17 +18,16 @@
 		</Style>
 	</UserControl.Styles>
 	<Border CornerRadius="10" BorderBrush="Purple" BorderThickness="1">
-	<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-		<TextBlock Text="Enter New Entry Name:" />
-		<TextBox Text="{Binding Name}" Width="300"></TextBox>
-		<ToggleButton HorizontalAlignment="Center"
-					  Margin="5"
-					  Command="{Binding UpdateEntryType}">
-			Is this a drawer?
-		</ToggleButton>
-		<TextBlock Text="Enter Path If Item" />
-		<TextBox Text="{Binding Path}"></TextBox>
-		<Button Width="100" Command="{Binding Update}">Submit</Button>
-	</StackPanel>
+		<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+			<TextBlock Margin="10">Prefered App Name: </TextBlock>
+			<TextBox Watermark="Paint" Text="{Binding Name}"></TextBox>
+			<TextBlock Margin="10">Choose Executable Name: </TextBlock>
+			<ComboBox
+				SelectedItem="{Binding NewExe}"
+				ItemsSource ="{Binding ExecutableNames}"
+				Width="400">
+			</ComboBox>
+			<Button Width="100" Command="{Binding Update}">Submit</Button>
+		</StackPanel>
 	</Border>
 </UserControl>

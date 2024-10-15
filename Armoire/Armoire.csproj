@@ -40,5 +40,8 @@
     <Compile Update="Views\DevDrawerView.axaml.cs">
       <DependentUpon>DevDrawerView.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\NewItemView.axaml.cs">
+      <DependentUpon>NewItemView.axaml</DependentUpon>
+    </Compile>
   </ItemGroup>
 </Project>
