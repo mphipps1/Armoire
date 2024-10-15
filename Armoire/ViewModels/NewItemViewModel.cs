@@ -1,0 +1,151 @@
+﻿using Armoire.Interfaces;
+using Armoire.Models;
+using Avalonia.Controls.Shapes;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using ExCSS;
+using Microsoft.Win32;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Input;
+
+namespace Armoire.ViewModels
+{
+    public partial class NewItemViewModel : ViewModelBase
+    {
+        public static Dictionary<string, string> Executables { get; set; }
+        public static ObservableCollection<string> ExecutableNames { get; set; }
+        
+
+        private ObservableCollection<ContentsUnitViewModel> Dock { get; set; }
+
+        [ObservableProperty]
+        public string _name;
+
+        [ObservableProperty]
+        public string _iconPath;
+
+        [ObservableProperty]
+        public string _newExe;
+
+        public NewItemViewModel(ObservableCollection<ContentsUnitViewModel> dock)
+        {
+            Dock = dock;
+            Executables = new Dictionary<string, string>();
+            ExecutableNames = new ObservableCollection<string>();
+            if(!Executables.Any()) 
+                GetExecutables();
+        }
+
+
+        [RelayCommand]
+        public void Update()
+        {
+             Dock.Add(new ItemViewModel(Name, Executables[NewExe], "0"));
+        }
+        public void GetExecutables()
+        {
+
+            //the following only works on windows
+            string registry_key_32 = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall";
+            string registry_key_64 = @"SOFTWARE\WoW6432Node\Microsoft\Windows\CurrentVersion\Uninstall";
+
+            Microsoft.Win32.RegistryKey key_32 = Registry.LocalMachine.OpenSubKey(registry_key_32);
+            Microsoft.Win32.RegistryKey key_64 = Registry.LocalMachine.OpenSubKey(registry_key_64);
+
+            foreach (string subkey_name in key_32.GetSubKeyNames())
+            {
+                using (RegistryKey subkey = key_32.OpenSubKey(subkey_name))
+                {
+                    if (!subkey.Name.Contains("{") && !Executables.ContainsKey(subkey_name))
+                    {
+                        string path = (string)subkey.GetValue("InstallLocation");
+                        if (path != null)
+                            Executables.Add(subkey_name, path + "\\" + MatchFileName(path, subkey_name));
+
+                    }
+                }
+            }
+
+            foreach (string subkey_name in key_64.GetSubKeyNames())
+            {
+                using (RegistryKey subkey = key_64.OpenSubKey(subkey_name))
+                {
+                    if (!subkey.Name.Contains("{") && !Executables.ContainsKey(subkey_name))
+                    {
+                        string path = (string)subkey.GetValue("InstallLocation");
+                        if (path != null)
+                            Executables.Add(subkey_name, path + "\\" + MatchFileName(path, subkey_name));
+
+                    }
+                }
+            }
+
+            foreach (string subkey_name in key_32.GetSubKeyNames())
+            {
+                using (RegistryKey subkey = key_32.OpenSubKey(subkey_name))
+                {
+                    if (!subkey.Name.Contains("{") && !Executables.ContainsKey(subkey_name))
+                    {
+                        string path = (string)subkey.GetValue("InstallLocation");
+                        if (path != null)
+                            Executables.Add(subkey_name, path + "\\" + MatchFileName(path, subkey_name));
+
+                    }
+                }
+            }
+
+            foreach (string subkey_name in key_64.GetSubKeyNames())
+            {
+                using (RegistryKey subkey = key_64.OpenSubKey(subkey_name))
+                {
+                    if (!subkey.Name.Contains("{") && !Executables.ContainsKey(subkey_name))
+                    {
+                        string path = (string)subkey.GetValue("InstallLocation");
+                        if (path != null)
+                            Executables.Add(subkey_name, path + "\\" + MatchFileName(path, subkey_name));
+
+                    }
+                }
+            }
+            foreach(KeyValuePair<string, string> kv in Executables)
+            {
+                ExecutableNames.Add(kv.Key);
+            }
+
+        }
+
+        //this file takes the full path of the application folder and checks the last folder matches any executable names
+        //an example of this is as follows:
+        // path = "C:\Program Files\Mozilla Firefox", subkey_name = 
+
+        public string MatchFileName(string path, string subkey_name)
+        {
+            if (path != null)
+            {
+                string exeName = "";
+                var files = Directory.GetFiles(path, "*.exe", SearchOption.TopDirectoryOnly);
+                foreach (var file in files)
+                {
+                    //gets the filename and the .exe from file, which is a full path
+                    string fileAndExtension = System.IO.Path.GetFileName(System.IO.Path.GetFullPath(file));
+                    //checks if the subkey_name contains the name of the executable file without the extension
+                    if (subkey_name.ToLower().Contains(fileAndExtension.Substring(0, fileAndExtension.Length - 4).ToLower()))
+                    {
+                        exeName = fileAndExtension;
+                        return exeName;
+                    }
+                }
+            }
+            return "";
+        }
+
+    }
+
+}

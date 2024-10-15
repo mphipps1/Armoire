@@ -1,7 +1,9 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Timers;
 using Armoire.Views;
 using Avalonia.VisualTree;
 using CommunityToolkit.Mvvm.Input;
@@ -15,7 +17,15 @@ namespace Armoire.ViewModels
         private int _drawerCount;
         private int _itemCount;
         private DevDrawerView? _devDrawerView;
-        private NewEntryPopUpViewModel? currentEntry;
+        private NewItemViewModel? currentEntry;
+        private Timer _timer;
+        private string _currentTime;
+
+        public string CurrentTime
+        {
+            get => _currentTime;
+            set => SetProperty(ref _currentTime, value);
+        }
 
         public ObservableCollection<ContentsUnitViewModel> DockContents { get; set; } = [];
 
@@ -24,13 +34,19 @@ namespace Armoire.ViewModels
         [RelayCommand(CanExecute = nameof(CanAddContentsUnit))]
         private void HandleDrawerAddClick()
         {
-            currentEntry = new NewEntryPopUpViewModel(DockContents);
+            currentEntry = new NewItemViewModel(DockContents);
             DialogHost.Show(currentEntry);
             //DockContents.Add(new DrawerAsContentsViewModel());
         }
 
         public MainWindowViewModel()
         {
+            _timer = new Timer(1000);
+            _timer.Elapsed += OnTimerElapsed;
+            _timer.Start();
+
+            UpdateTime();
+
             DockContents.CollectionChanged += dc_CollectionChanged;
             var d1 = new DrawerAsContentsViewModel
             {
@@ -40,6 +56,16 @@ namespace Armoire.ViewModels
             DockContents.Add(d1);
             DockContents.Add(new ItemViewModel());
             DockContents.Add(d2);
+        }
+
+        private void OnTimerElapsed(object sender, ElapsedEventArgs e)
+        {
+            UpdateTime();
+        }
+
+        private void UpdateTime()
+        {
+            CurrentTime = DateTime.Now.ToString("%h:mm tt");
         }
 
         private void dc_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
