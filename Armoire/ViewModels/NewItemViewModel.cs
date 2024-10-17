@@ -1,5 +1,7 @@
 ﻿using Armoire.Interfaces;
 using Armoire.Models;
+using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.Shapes;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -11,6 +13,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+//using Windows.Management;
+
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -66,7 +70,7 @@ namespace Armoire.ViewModels
                     if (!subkey.Name.Contains("{") && !Executables.ContainsKey(subkey_name))
                     {
                         string path = (string)subkey.GetValue("InstallLocation");
-                        if (path != null)
+                        if (path != null && path != "")
                             Executables.Add(subkey_name, path + "\\" + MatchFileName(path, subkey_name));
 
                     }
@@ -114,10 +118,14 @@ namespace Armoire.ViewModels
                     }
                 }
             }
-            foreach(KeyValuePair<string, string> kv in Executables)
+            foreach (KeyValuePair<string, string> kv in Executables)
             {
                 ExecutableNames.Add(kv.Key);
             }
+
+
+            //Windows.Management.Deployment.PackageManager packageManager = new Windows.Management.Deployment.PackageManager();
+            // IEnumerable<Windows.ApplicationModel.Package> packages = (IEnumerable<Windows.ApplicationModel.Package>)packageManager.FindPackages();
 
         }
 
@@ -130,11 +138,17 @@ namespace Armoire.ViewModels
             if (path != null)
             {
                 string exeName = "";
+                if (path.AsSpan() == "")
+                    return "";
                 var files = Directory.GetFiles(path, "*.exe", SearchOption.TopDirectoryOnly);
                 foreach (var file in files)
                 {
-                    //gets the filename and the .exe from file, which is a full path
-                    string fileAndExtension = System.IO.Path.GetFileName(System.IO.Path.GetFullPath(file));
+                    //gets the filename and the .exe from file, which is a full
+                    string fileAndExtension;
+                    var ret = System.IO.Path.GetFullPath(file);
+                    if (ret.AsSpan() == "")
+                        continue;
+                    fileAndExtension = System.IO.Path.GetFileName(ret);
                     //checks if the subkey_name contains the name of the executable file without the extension
                     if (subkey_name.ToLower().Contains(fileAndExtension.Substring(0, fileAndExtension.Length - 4).ToLower()))
                     {
