@@ -48,11 +48,15 @@ namespace Armoire.ViewModels
             UpdateTime();
 
             DockContents.CollectionChanged += dc_CollectionChanged;
-            var d1 = new DrawerAsContentsViewModel
-            {
-                DrawerAsContainer = new DrawerViewModel()
-            };
-            var d2 = new DrawerAsContentsViewModel() { DrawerAsContainer = new DrawerViewModel(1, 0) };
+            var d1 = new DrawerAsContentsViewModel();
+            d1.DrawerAsContainer = new DrawerViewModel(1, d1);
+            d1.DrawerHierarchy = 0;
+
+         
+            var d2 = new DrawerAsContentsViewModel();
+            d2.DrawerAsContainer = new DrawerViewModel(2, d2);
+            d2.DrawerHierarchy = 0;
+           
             DockContents.Add(d1);
             DockContents.Add(new ItemViewModel());
             DockContents.Add(d2);

@@ -22,6 +22,10 @@ public partial class ContentsUnitViewModel : ViewModelBase, IHasId
     [ObservableProperty]
     private bool _deleteMe;
 
+
+    [ObservableProperty]
+    private int _drawerHierarchy;
+
     public IContentsUnit? Model { get; set; }
 
     public ContentsUnitViewModel()

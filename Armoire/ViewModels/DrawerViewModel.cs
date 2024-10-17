@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Threading.Tasks;
 using Armoire.Interfaces;
 using Armoire.Models;
@@ -21,60 +22,45 @@ public partial class DrawerViewModel : ViewModelBase, IHasId
     public int Id { get; set; }
 
     [ObservableProperty]
-    private int drawerHierarchy;
+    private int _ParentdrawerhierarchyPosition;
 
   
-    private static int counter;
+    public DrawerAsContentsViewModel drawerAsContentsViewModel { get; set; }
 
 
 
-    
+
+
+
+
+
 
     public DrawerViewModel()
     {
     }
+
     public DrawerViewModel(int id)
     {
         Id = id;
     }
-
-    public DrawerViewModel(int id, int drawerhierarchy)
+    public DrawerViewModel(int id, DrawerAsContentsViewModel drawerascontentsviewmodel)
     {
+        drawerAsContentsViewModel = drawerascontentsviewmodel;
         Id = id;
-        drawerHierarchy = drawerhierarchy;
     }
+
 
     [RelayCommand]
     public async Task addDrawerClick()
     {
-        if (Contents.Count == 0)
-        {
-            counter += 1;
-        }
+        var drawerHierarchy = drawerAsContentsViewModel.DrawerHierarchy;
+        var drawerid = drawerAsContentsViewModel.Id;
 
-
-      
-        DrawerViewModel ViewModel = new DrawerViewModel(1,counter);
-
+        var newDrawer = new DrawerAsContentsViewModel();
+        newDrawer.DrawerAsContainer = new DrawerViewModel(drawerid++, newDrawer);
+        newDrawer.DrawerHierarchy = ++drawerHierarchy;
         await Task.Delay(TimeSpan.FromSeconds(1));
-        Contents.Add(
-            new DrawerAsContentsViewModel() { DrawerAsContainer = ViewModel} 
-        );
-
-        var drawerAsContentsViewModel = (DrawerAsContentsViewModel)Contents[0];
-        
-        if(drawerAsContentsViewModel.DrawerAsContainer.drawerHierarchy % 2 == 1)
-        {
-            _wrapPanelOrientation = Orientation.Horizontal;
-        } else if (drawerAsContentsViewModel.DrawerAsContainer.drawerHierarchy % 2 == 0)
-        {
-            _wrapPanelOrientation = Orientation.Vertical;
-        }
-
-     
-            
-        
-        
+        Contents.Add(newDrawer);
     }
 
     [RelayCommand]

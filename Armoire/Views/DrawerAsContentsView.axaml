@@ -11,7 +11,7 @@
     x:DataType="vm:DrawerAsContentsViewModel"
     mc:Ignorable="d">
 
-    <Button Margin="10" Command="{Binding HandleContentsClickCommand}">
+    <Button Margin="10" Command="{Binding CheckDraweModelCommand}"   CommandParameter="{Binding}" x:Name="DrawerButton">
         <Button.Content>
             <StackPanel HorizontalAlignment="Center">
                 <Svg
@@ -23,10 +23,10 @@
         </Button.Content>
         <Button.Flyout>
             <!--  Make this placement a binding that alternates between right, down, and up depending on where we are in the drawer structure  -->
-            <Flyout
+			<Flyout
                 Content="{Binding DrawerAsContainer}"
                 FlyoutPresenterClasses="wider"
-                Placement="Right"
+                Placement= "Right"
                 VerticalOffset="4" />
         </Button.Flyout>
 
