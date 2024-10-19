@@ -1,13 +1,4 @@
-﻿using Armoire.Interfaces;
-using Armoire.Models;
-using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Controls.Shapes;
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using ExCSS;
-using Microsoft.Win32;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -18,6 +9,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Armoire.Interfaces;
+using Armoire.Models;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Controls.Shapes;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using ExCSS;
+using Microsoft.Win32;
 
 namespace Armoire.ViewModels
 {
@@ -25,7 +25,6 @@ namespace Armoire.ViewModels
     {
         public static Dictionary<string, string> Executables { get; set; }
         public static ObservableCollection<string> ExecutableNames { get; set; }
-        
 
         private ObservableCollection<ContentsUnitViewModel> Dock { get; set; }
 
@@ -43,22 +42,22 @@ namespace Armoire.ViewModels
             Dock = dock;
             Executables = new Dictionary<string, string>();
             ExecutableNames = new ObservableCollection<string>();
-            if(!Executables.Any()) 
+            if (!Executables.Any())
                 GetExecutables();
         }
-
 
         [RelayCommand]
         public void Update()
         {
-             Dock.Add(new ItemViewModel(Name, Executables[NewExe], "0"));
+            Dock.Add(new ItemViewModel(Name, Executables[NewExe], "0"));
         }
+
         public void GetExecutables()
         {
-
             //the following only works on windows
             string registry_key_32 = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall";
-            string registry_key_64 = @"SOFTWARE\WoW6432Node\Microsoft\Windows\CurrentVersion\Uninstall";
+            string registry_key_64 =
+                @"SOFTWARE\WoW6432Node\Microsoft\Windows\CurrentVersion\Uninstall";
 
             Microsoft.Win32.RegistryKey key_32 = Registry.LocalMachine.OpenSubKey(registry_key_32);
             Microsoft.Win32.RegistryKey key_64 = Registry.LocalMachine.OpenSubKey(registry_key_64);
@@ -71,8 +70,10 @@ namespace Armoire.ViewModels
                     {
                         string path = (string)subkey.GetValue("InstallLocation");
                         if (path != null && path != "")
-                            Executables.Add(subkey_name, path + "\\" + MatchFileName(path, subkey_name));
-
+                            Executables.Add(
+                                subkey_name,
+                                path + "\\" + MatchFileName(path, subkey_name)
+                            );
                     }
                 }
             }
@@ -85,8 +86,13 @@ namespace Armoire.ViewModels
                     {
                         string path = (string)subkey.GetValue("InstallLocation");
                         if (path != null)
-                            Executables.Add(subkey_name, path + "\\" + MatchFileName(path, subkey_name));
-
+                        {
+                            path = path.Replace("\"", "");
+                            Executables.Add(
+                                subkey_name,
+                                path + "\\" + MatchFileName(path, subkey_name)
+                            );
+                        }
                     }
                 }
             }
@@ -99,8 +105,10 @@ namespace Armoire.ViewModels
                     {
                         string path = (string)subkey.GetValue("InstallLocation");
                         if (path != null)
-                            Executables.Add(subkey_name, path + "\\" + MatchFileName(path, subkey_name));
-
+                            Executables.Add(
+                                subkey_name,
+                                path + "\\" + MatchFileName(path, subkey_name)
+                            );
                     }
                 }
             }
@@ -113,8 +121,10 @@ namespace Armoire.ViewModels
                     {
                         string path = (string)subkey.GetValue("InstallLocation");
                         if (path != null)
-                            Executables.Add(subkey_name, path + "\\" + MatchFileName(path, subkey_name));
-
+                            Executables.Add(
+                                subkey_name,
+                                path + "\\" + MatchFileName(path, subkey_name)
+                            );
                     }
                 }
             }
@@ -123,15 +133,13 @@ namespace Armoire.ViewModels
                 ExecutableNames.Add(kv.Key);
             }
 
-
             //Windows.Management.Deployment.PackageManager packageManager = new Windows.Management.Deployment.PackageManager();
             // IEnumerable<Windows.ApplicationModel.Package> packages = (IEnumerable<Windows.ApplicationModel.Package>)packageManager.FindPackages();
-
         }
 
         //this file takes the full path of the application folder and checks the last folder matches any executable names
         //an example of this is as follows:
-        // path = "C:\Program Files\Mozilla Firefox", subkey_name = 
+        // path = "C:\Program Files\Mozilla Firefox", subkey_name =
 
         public string MatchFileName(string path, string subkey_name)
         {
@@ -150,7 +158,13 @@ namespace Armoire.ViewModels
                         continue;
                     fileAndExtension = System.IO.Path.GetFileName(ret);
                     //checks if the subkey_name contains the name of the executable file without the extension
-                    if (subkey_name.ToLower().Contains(fileAndExtension.Substring(0, fileAndExtension.Length - 4).ToLower()))
+                    if (
+                        subkey_name
+                            .ToLower()
+                            .Contains(
+                                fileAndExtension.Substring(0, fileAndExtension.Length - 4).ToLower()
+                            )
+                    )
                     {
                         exeName = fileAndExtension;
                         return exeName;
@@ -159,7 +173,5 @@ namespace Armoire.ViewModels
             }
             return "";
         }
-
     }
-
 }
