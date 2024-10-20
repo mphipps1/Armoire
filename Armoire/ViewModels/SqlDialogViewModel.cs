@@ -18,16 +18,6 @@ public partial class SqlDialogViewModel : ViewModelBase
         _body2 = _model.Body2;
     }
 
-    public SqlDialogViewModel(ISqlDialog sqlDialogModel)
-    {
-        _model = sqlDialogModel;
-        _heading0 = sqlDialogModel.Heading0;
-        _heading1 = sqlDialogModel.Heading1;
-        _heading2 = sqlDialogModel.Heading2;
-        _body1 = sqlDialogModel.Body1;
-        _body2 = sqlDialogModel.Body2;
-    }
-
     private readonly ISqlDialog _model;
 
     [ObservableProperty]
