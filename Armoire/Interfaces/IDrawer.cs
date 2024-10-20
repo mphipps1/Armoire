@@ -6,5 +6,4 @@ namespace Armoire.Interfaces;
 public interface IDrawer
 {
     List<IContentsUnit> Contents { get; set; }
-    int Id { get; set; }
 }

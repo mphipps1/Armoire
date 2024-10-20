@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Armoire.Interfaces;
 using Armoire.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;

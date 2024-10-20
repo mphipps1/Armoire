@@ -1,4 +1,5 @@
-﻿using Armoire.Utils;
+﻿using Armoire.Interfaces;
+using Armoire.Utils;
 using Microsoft.Data.Sqlite;
 
 namespace Armoire.Models;
