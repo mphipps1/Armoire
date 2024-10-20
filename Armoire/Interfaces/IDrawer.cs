@@ -1,9 +1,17 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Armoire.Interfaces;
 
-public interface IDrawer
+public interface IDrawer : IContentsUnit
 {
-    List<IContentsUnit> Contents { get; set; }
+    // [Key] -> `DrawerId` is the primary key.
+    // [Database...] -> A new `DrawerId` gets generated for each row inserted.
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public long DrawerId { get; set; }
+
+    List<IDrawer> Drawers { get; set; }
+    List<IItem> Items { get; set; }
 }
