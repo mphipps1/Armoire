@@ -20,13 +20,13 @@ public class AppDbContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         modelBuilder
-            .Entity<IDrawer>()
+            .Entity<Drawer>()
             .HasOne(d => d.ParentDrawer)
             .WithMany(d => d.Drawers)
             .HasForeignKey(d => d.ParentDrawerId);
 
         modelBuilder
-            .Entity<IItem>()
+            .Entity<Item>()
             .HasOne(d => d.ParentDrawer)
             .WithMany(d => d.Items)
             .HasForeignKey(d => d.ParentDrawerId);

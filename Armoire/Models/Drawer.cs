@@ -1,26 +1,18 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Armoire.Interfaces;
 
 namespace Armoire.Models;
 
-public class Drawer : IDrawer
+public class Drawer : ContentsUnit
 {
-    public int Position { get; set; }
-
-    private string? _name;
-
-    public string Name
-    {
-        get => _name ?? $"default{DrawerId}";
-        set => _name = value;
-    }
-
-    public string IconPath { get; set; } = "default";
-
-    public IDrawer? ParentDrawer { get; set; }
-
+    // [Key] -> `DrawerId` is the primary key.
+    // [Database...] -> A new `DrawerId` gets generated for each row inserted.
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public long DrawerId { get; set; }
-    public List<IDrawer> Drawers { get; set; } = [];
-    public List<IItem> Items { get; set; } = [];
-    public long ParentDrawerId { get; set; }
+
+    public List<Drawer> Drawers { get; set; } = [];
+    public List<Item> Items { get; set; } = [];
 }

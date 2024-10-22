@@ -1,10 +1,21 @@
-﻿using System.Diagnostics;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics;
 using Armoire.Interfaces;
 
 namespace Armoire.Models;
 
-public class Item : IItem
+public class Item : ContentsUnit
 {
+    // [Key] -> `DrawerId` is the primary key.
+    // [Database...] -> A new `DrawerId` gets generated for each row inserted.
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public long ItemId { get; set; }
+
+    [MaxLength(100)]
+    public string ExecutablePath { get; set; } = "default";
+
     private Process process { get; set; }
 
     public void Execute()
@@ -23,11 +34,4 @@ public class Item : IItem
         process.StartInfo.FileName = path;
         process.StartInfo.UseShellExecute = true;
     }
-
-    public long ItemId { get; set; }
-    public string ExecutablePath { get; set; } = "default";
-    public string Name { get; set; }
-    public string IconPath { get; set; } = "default";
-    public IDrawer? ParentDrawer { get; set; }
-    public long ParentDrawerId { get; set; }
 }
