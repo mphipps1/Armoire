@@ -27,6 +27,15 @@ public class ItemViewModel : ContentsUnitViewModel
     {
         ExecutablePath = executablePath;
         Model = new Item(name, executablePath, parentID);
+        Name = name;
+    }
+
+    public ItemViewModel(string name, string executablePath, string iconPath, string parentID)
+    {
+        ExecutablePath = executablePath;
+        Model = new Item(name, executablePath, parentID);
+        IconPath = iconPath;
+        Name = name;
     }
 
     public override void HandleContentsClick()

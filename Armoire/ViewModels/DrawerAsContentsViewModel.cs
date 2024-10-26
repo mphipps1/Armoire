@@ -1,7 +1,9 @@
 ﻿using Armoire.Models;
+using Armoire.Views;
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using DialogHostAvalonia;
 
 
 namespace Armoire.ViewModels;
@@ -19,6 +21,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
     public DrawerAsContentsViewModel()
     {
         Name = "drawer " + ++_count;
+        Id = _count;
         IconPath = "/Assets/closedGradientDrawer.svg";
     }
 
@@ -27,6 +30,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
 
         DrawerHierarchy = drawerHierarchy;  
         Name = "drawer " + ++_count;
+        Id = _count;
         IconPath = "/Assets/closedGradientDrawer.svg";
     }
 
@@ -39,6 +43,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
 
     private DrawerAsContentsViewModel(DrawerAsContentsViewModel copyMe)
     {
+        Id = _count++;
         Name = copyMe.Name;
         IconPath = copyMe.IconPath;
         IconKind = copyMe.IconKind;
@@ -71,4 +76,20 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
            
         }
     }
+
+    [RelayCommand]
+    public void AddItemClick()
+    {
+        DialogHost.Show(new NewItemViewModel(DrawerAsContainer.Id));
+    }
+
+    [RelayCommand]
+    public void ChangeDrawerName()
+    {
+        var view = new ChangeDrawerNameViewModel(Name);
+        DialogHost.Show(view);
+        //var window = new ChangeDrawerNameView();
+        //window.Show();
+    }
+
 }

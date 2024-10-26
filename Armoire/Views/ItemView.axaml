@@ -9,22 +9,37 @@
     d:DesignWidth="800"
     x:DataType="vm:ItemViewModel"
     mc:Ignorable="d">
-    <Button Margin="10" Command="{Binding HandleContentsClickCommand}">
-        <Button.Content>
-            <StackPanel HorizontalAlignment="Center">
-                <Svg
-                    Name="openDrawer"
-                    Height="100"
-                    Path="{Binding IconPath}" />
-                <TextBlock Text="{Binding Name}" TextAlignment="Center" />
-            </StackPanel>
-        </Button.Content>
+
+	<UserControl.Styles>
+		<Style Selector="Button">
+			<Setter Property="Width" Value="60" />
+			<Setter Property="Height" Value="60" />
+			<Setter Property="Padding" Value="-15" />
+			<Setter Property="Background" Value="White" />
+		</Style>
+	</UserControl.Styles>
+	
+    <Button Margin="5" Command="{Binding HandleContentsClickCommand}"
+>
+		<ToolTip.Tip>
+			<ToolTip Height="40" Width="90" Padding="3" Background="Transparent">
+				<TextBlock Text="{Binding Name}" Foreground="White" />
+			</ToolTip>
+		</ToolTip.Tip>
+		<Button.Content>
+			<Viewbox Stretch="Fill">
+				<Svg
+				Name="openDrawer"
+				Height="100"
+				Path="{Binding IconPath}" />
+			</Viewbox>
+		</Button.Content>
 
         <!--  Context Menu for Delete Drawer (attached to drawer button)  -->
         <Button.ContextMenu>
             <ContextMenu>
                 <MenuItem Command="{Binding HandleDeleteClickCommand}" Header="Delete" />
-            </ContextMenu>
+			</ContextMenu>
         </Button.ContextMenu>
     </Button>
 </UserControl>

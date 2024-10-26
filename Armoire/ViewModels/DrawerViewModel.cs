@@ -9,6 +9,7 @@ using Avalonia.Controls;
 using Avalonia.Layout;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using DialogHostAvalonia;
 using Material.Styles.Controls;
 using Microsoft.VisualBasic;
 
@@ -27,14 +28,6 @@ public partial class DrawerViewModel : ViewModelBase, IHasId
   
     public DrawerAsContentsViewModel drawerAsContentsViewModel { get; set; }
 
-
-
-
-
-
-
-
-
     public DrawerViewModel()
     {
     }
@@ -51,7 +44,7 @@ public partial class DrawerViewModel : ViewModelBase, IHasId
 
 
     [RelayCommand]
-    public async Task addDrawerClick()
+    public async Task AddDrawerClick()
     {
         var drawerHierarchy = drawerAsContentsViewModel.DrawerHierarchy;
         var drawerid = drawerAsContentsViewModel.Id;
@@ -64,10 +57,8 @@ public partial class DrawerViewModel : ViewModelBase, IHasId
     }
 
     [RelayCommand]
-    public async Task addItemClick()
+    public void AddItemClick()
     {
-        await Task.Delay(TimeSpan.FromSeconds(1));
-        Contents.Add(new ItemViewModel());
-
+        DialogHost.Show(new NewItemViewModel(Id));
     }
 }

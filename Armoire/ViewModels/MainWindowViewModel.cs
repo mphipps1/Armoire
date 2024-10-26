@@ -27,14 +27,14 @@ namespace Armoire.ViewModels
             set => SetProperty(ref _currentTime, value);
         }
 
-        public ObservableCollection<ContentsUnitViewModel> DockContents { get; set; } = [];
+        public static ObservableCollection<ContentsUnitViewModel> DockContents { get; set; } = [];
 
         private bool CanAddContentsUnit() => true;
 
         [RelayCommand(CanExecute = nameof(CanAddContentsUnit))]
         private void HandleDrawerAddClick()
         {
-            currentEntry = new NewItemViewModel(DockContents);
+            currentEntry = new NewItemViewModel(0);
             DialogHost.Show(currentEntry);
             //DockContents.Add(new DrawerAsContentsViewModel());
         }
@@ -134,6 +134,18 @@ namespace Armoire.ViewModels
             }
             //DialogHost.Show(new DevDialogViewModel());
             //DialogHost.Show(new SqlDialogViewModel(new SqlDialog()));
+        }
+
+        [RelayCommand]
+        public void AddItemClick()
+        {
+            DialogHost.Show(new NewItemViewModel(0));
+        }
+
+        [RelayCommand]
+        public void AddDrawerClick()
+        {
+            DockContents.Add(new DrawerAsContentsViewModel());
         }
     }
 }

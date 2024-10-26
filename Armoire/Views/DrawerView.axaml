@@ -6,35 +6,44 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModels="clr-namespace:Armoire.ViewModels"
-    xmlns:vm="using:Armoire.ViewModels" 
+    xmlns:vm="using:Armoire.ViewModels"
     d:DesignHeight="450"
     d:DesignWidth="800"
     x:DataType="viewModels:DrawerViewModel"
     mc:Ignorable="d">
 
-	<UserControl.DataContext>
-		<viewModels:DrawerViewModel/>
-	</UserControl.DataContext>
+    <UserControl.DataContext>
+        <viewModels:DrawerViewModel />
+    </UserControl.DataContext>
 
-<Border Background="LightGray">
-	<StackPanel>
-		<StackPanel Orientation="Horizontal">
-			<Button Content="Add Drawer"  Height="30" Margin="0,0,10,0" Command="{Binding addDrawerClickCommand}" CommandParameter="{Binding}"   />
-			<Button Content="Add Item" Height="30" Margin="0,0,10,0"  Command="{Binding addItemClickCommand }"  />
-		</StackPanel>
-    <ItemsControl x:Name="MyItemsControl"  ItemsSource="{Binding Contents}">
-        <ItemsControl.ItemTemplate>
-            <armoire:ViewLocator />
-        </ItemsControl.ItemTemplate>
+    <Border Background="LightGray">
+        <StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Button
+                    Height="30"
+                    Margin="0,0,10,0"
+                    Command="{Binding AddDrawerClickCommand}"
+                    CommandParameter="{Binding}"
+                    Content="Add Drawer" />
+                <Button
+                    Height="30"
+                    Margin="0,0,10,0"
+                    Command="{Binding AddItemClickCommand}"
+                    Content="Add Item" />
+            </StackPanel>
+            <ItemsControl x:Name="MyItemsControl" ItemsSource="{Binding Contents}">
+                <ItemsControl.ItemTemplate>
+                    <armoire:ViewLocator />
+                </ItemsControl.ItemTemplate>
 
-        <ItemsControl.ItemsPanel>
-            <ItemsPanelTemplate>
-                <WrapPanel HorizontalAlignment="Left"  Orientation="{Binding WrapPanelOrientation}" />
-            </ItemsPanelTemplate>
-        </ItemsControl.ItemsPanel>
-    </ItemsControl>
-	</StackPanel>
-</Border>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel HorizontalAlignment="Left" Orientation="{Binding WrapPanelOrientation}" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </StackPanel>
+    </Border>
 
 
 </UserControl>
