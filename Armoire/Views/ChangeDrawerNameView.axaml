@@ -1,0 +1,28 @@
+<UserControl     
+	x:Class="Armoire.Views.ChangeDrawerNameView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="clr-namespace:Armoire.ViewModels"
+    d:DesignHeight="450"
+    d:DesignWidth="400"
+    x:DataType="vm:ChangeDrawerNameViewModel"
+    mc:Ignorable="d">
+	<Canvas Margin="10" Width="120" Height="60">
+			<StackPanel Width="120" Height="300" Spacing="10">
+				<TextBox
+				FontSize="12"
+				Watermark="NewName"
+				Background="White"
+				Foreground="Black"
+				CornerRadius="4"
+				Height="25"
+				Text="{Binding NewName}"></TextBox>
+				<Button Width="100" Command="{Binding UpdateNameCommand}" FontSize="10">
+					Change Name
+				</Button>
+			</StackPanel>
+	</Canvas>
+
+</UserControl>

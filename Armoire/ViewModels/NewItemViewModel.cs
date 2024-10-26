@@ -26,6 +26,7 @@ namespace Armoire.ViewModels
         public static Dictionary<string, string> Executables { get; set; }
         public static ObservableCollection<string> ExecutableNames { get; set; }
 
+
         private ObservableCollection<ContentsUnitViewModel> Dock { get; set; }
 
         [ObservableProperty]
@@ -37,11 +38,14 @@ namespace Armoire.ViewModels
         [ObservableProperty]
         public string _newExe;
 
-        public NewItemViewModel(ObservableCollection<ContentsUnitViewModel> dock)
+        private int TargetDrawerID;
+
+        public NewItemViewModel(int targetDrawerID)
         {
-            Dock = dock;
+            Dock = MainWindowViewModel.DockContents;
             Executables = new Dictionary<string, string>();
             ExecutableNames = new ObservableCollection<string>();
+            TargetDrawerID = targetDrawerID;
             if (!Executables.Any())
                 GetExecutables();
         }
@@ -49,7 +53,32 @@ namespace Armoire.ViewModels
         [RelayCommand]
         public void Update()
         {
-            Dock.Add(new ItemViewModel(Name, Executables[NewExe], "0"));
+            var targetDrawer = GetTargetDrawer(Dock);
+            if (targetDrawer != null) 
+                targetDrawer.Add(new ItemViewModel(Name, Executables[NewExe], TargetDrawerID.ToString()));
+        }
+
+        private ObservableCollection<ContentsUnitViewModel>? GetTargetDrawer(ObservableCollection<ContentsUnitViewModel> currentDrawer)
+        {
+            foreach(var unit in currentDrawer)
+            {
+                if (unit is DrawerAsContentsViewModel dacvm)
+                {
+                    if(dacvm.Id == TargetDrawerID)
+                    {
+                         return dacvm.DrawerAsContainer.Contents;
+                    }
+                }
+            }
+            foreach(var unit in currentDrawer)
+            {
+                if (unit is DrawerAsContentsViewModel dacvm)
+                {
+                    var ret = GetTargetDrawer(dacvm.DrawerAsContainer.Contents);
+                    return ret;
+                }
+            }
+            return null;
         }
 
         public void GetExecutables()

@@ -10,23 +10,39 @@
     d:DesignWidth="800"
     x:DataType="vm:DrawerAsContentsViewModel"
     mc:Ignorable="d">
+    <UserControl.Styles>
+        <Style Selector="Button">
+            <Setter Property="Width" Value="60" />
+            <Setter Property="Height" Value="60" />
+			<Setter Property="Padding" Value="-15" />
+			<Setter Property="Background" Value="White" />
+        </Style>
+    </UserControl.Styles>
 
-    <Button Margin="10" Command="{Binding CheckDraweModelCommand}"   CommandParameter="{Binding}" x:Name="DrawerButton">
+    <Button
+        x:Name="DrawerButton"
+        Margin="5"
+        Command="{Binding CheckDraweModelCommand}"
+        CommandParameter="{Binding}">
+		<ToolTip.Tip>
+			<ToolTip Height="40" Width="90" Padding="3" Background="Transparent">
+				<TextBlock Text="{Binding Name}" Foreground="White" />
+			</ToolTip>
+		</ToolTip.Tip>
         <Button.Content>
-            <StackPanel HorizontalAlignment="Center">
+			<Viewbox Stretch="Fill">
                 <Svg
                     Name="OpenDrawer"
                     Height="100"
                     Path="{Binding IconPath}" />
-                <TextBlock Text="{Binding Name}" TextAlignment="Center" />
-            </StackPanel>
+			</Viewbox>
         </Button.Content>
         <Button.Flyout>
             <!--  Make this placement a binding that alternates between right, down, and up depending on where we are in the drawer structure  -->
-			<Flyout
+            <Flyout
                 Content="{Binding DrawerAsContainer}"
                 FlyoutPresenterClasses="wider"
-                Placement= "{Binding FlyoutPlacement}"
+                Placement="Right"
                 VerticalOffset="4" />
         </Button.Flyout>
 
@@ -34,9 +50,10 @@
         <Button.ContextMenu>
             <ContextMenu>
                 <MenuItem Command="{Binding HandleDeleteClickCommand}" Header="Delete" />
-				<MenuItem Command="{Binding addDrawerClickCommand}" Header="Add Drawer"/>
-				<MenuItem Command="{Binding addItemClickCommand}" Header="Add Item" />
-            </ContextMenu>
+				<MenuItem Command="{Binding AddItemClickCommand}" Header="Add Item" />
+				<MenuItem Command="{Binding AddDrawerClickCommand}" Header="Add Drawer" />
+				<MenuItem Command="{Binding ChangeDrawerNameCommand}" Header="Change Name" />
+			</ContextMenu>
         </Button.ContextMenu>
     </Button>
 </UserControl>

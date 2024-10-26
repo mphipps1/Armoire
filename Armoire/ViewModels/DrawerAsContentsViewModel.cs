@@ -1,10 +1,9 @@
 ﻿using Armoire.Models;
+using Armoire.Views;
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.VisualBasic;
-using System.Threading.Tasks;
-using System;
+using DialogHostAvalonia;
 
 
 namespace Armoire.ViewModels;
@@ -22,7 +21,9 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
     public DrawerAsContentsViewModel()
     {
         Name = "drawer " + ++_count;
+        Id = _count;
         IconPath = "/Assets/closedGradientDrawer.svg";
+        DrawerAsContainer = new DrawerViewModel();
     }
 
     public DrawerAsContentsViewModel(int id,int drawerHierarchy)
@@ -30,6 +31,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
 
         DrawerHierarchy = drawerHierarchy;  
         Name = "drawer " + ++_count;
+        Id = _count;
         IconPath = "/Assets/closedGradientDrawer.svg";
     }
 
@@ -42,6 +44,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
 
     private DrawerAsContentsViewModel(DrawerAsContentsViewModel copyMe)
     {
+        Id = _count++;
         Name = copyMe.Name;
         IconPath = copyMe.IconPath;
         IconKind = copyMe.IconKind;
@@ -59,42 +62,48 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
 
             if(viewModel.DrawerHierarchy == 0)
             {
-                FlyoutPlacement = PlacementMode.Right;
+            //    FlyoutPlacement = PlacementMode.Right;
                 drawerviewmodel.WrapPanelOrientation = Avalonia.Layout.Orientation.Horizontal;
 
             }else if(viewModel.DrawerHierarchy % 2 == 1)
-            {   FlyoutPlacement= PlacementMode.Bottom;
+            {     //FlyoutPlacement= PlacementMode.Bottom;
                 drawerviewmodel.WrapPanelOrientation = Avalonia.Layout.Orientation.Vertical;
 
             }else
             {
-                 FlyoutPlacement = PlacementMode.Right;
+               // FlyoutPlacement = PlacementMode.Bottom;
                 drawerviewmodel.WrapPanelOrientation = Avalonia.Layout.Orientation.Horizontal;
             }
            
         }
     }
 
-
-
     [RelayCommand]
-    public async Task addDrawerClick()
+    public void AddItemClick()
     {
-        var drawerHierarchy = this.DrawerHierarchy;
-        var drawerid = this.Id;
-
-        var newDrawer = new DrawerAsContentsViewModel();
-        newDrawer.DrawerAsContainer = new DrawerViewModel(drawerid++, newDrawer);
-        newDrawer.DrawerHierarchy = ++drawerHierarchy;
-        await Task.Delay(TimeSpan.FromSeconds(1));
-        DrawerAsContainer.Contents.Add(newDrawer);
+        DialogHost.Show(new NewItemViewModel(Id));
     }
 
     [RelayCommand]
-    public async Task addItemClick()
+    public void AddDrawerClick()
     {
-        await Task.Delay(TimeSpan.FromSeconds(1));
-        DrawerAsContainer.Contents.Add(new ItemViewModel());
-
+        if (DrawerAsContainer.Contents.Count < 10)
+        {
+            var newDrawer = new DrawerAsContentsViewModel();
+            newDrawer.DrawerHierarchy = DrawerHierarchy + 1;
+            DrawerAsContainer.Contents.Add(newDrawer);
+        }
+        else
+            DialogHost.Show(new ErrorMessageViewModel($"Drawer '{Name}' is full.\nDrawers can only hold 10 items."));
     }
+
+    [RelayCommand]
+    public void ChangeDrawerName()
+    {
+        var view = new ChangeDrawerNameViewModel(Name);
+        DialogHost.Show(view);
+        //var window = new ChangeDrawerNameView();
+        //window.Show();
+    }
+
 }

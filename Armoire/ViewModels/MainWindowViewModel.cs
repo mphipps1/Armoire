@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Timers;
+using System.Xml.Linq;
 using Armoire.Views;
 using Avalonia.VisualTree;
 using CommunityToolkit.Mvvm.Input;
@@ -27,17 +28,10 @@ namespace Armoire.ViewModels
             set => SetProperty(ref _currentTime, value);
         }
 
-        public ObservableCollection<ContentsUnitViewModel> DockContents { get; set; } = [];
+        public static ObservableCollection<ContentsUnitViewModel> DockContents { get; set; } = [];
 
         private bool CanAddContentsUnit() => true;
 
-        [RelayCommand(CanExecute = nameof(CanAddContentsUnit))]
-        private void HandleDrawerAddClick()
-        {
-            currentEntry = new NewItemViewModel(DockContents);
-            DialogHost.Show(currentEntry);
-            //DockContents.Add(new DrawerAsContentsViewModel());
-        }
 
         public MainWindowViewModel()
         {
@@ -134,6 +128,21 @@ namespace Armoire.ViewModels
             }
             //DialogHost.Show(new DevDialogViewModel());
             //DialogHost.Show(new SqlDialogViewModel(new SqlDialog()));
+        }
+
+        [RelayCommand]
+        public void AddItemClick()
+        {
+            DialogHost.Show(new NewItemViewModel(0));
+        }
+
+        [RelayCommand]
+        public void AddDrawerClick()
+        {
+            if (DockContents.Count < 10)
+                DockContents.Add(new DrawerAsContentsViewModel());
+            else
+                DialogHost.Show(new ErrorMessageViewModel($"The dock is full, it can\n only hold 10 items."));
         }
     }
 }
