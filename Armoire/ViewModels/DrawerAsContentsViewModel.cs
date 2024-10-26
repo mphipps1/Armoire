@@ -4,12 +4,14 @@ using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DialogHostAvalonia;
+using Avalonia.Controls.Primitives;
 
 
 namespace Armoire.ViewModels;
 
 public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
 {
+    private const int MAXNESTERDRAWERS = 4;
     private static int _count;
     public DrawerViewModel DrawerAsContainer { get; set; }
 
@@ -52,8 +54,9 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
     }
 
     [RelayCommand]
-    private void CheckDraweModel(object parameter)
+    public void CheckDraweModel(object parameter)
     {
+      
 
         if (parameter is DrawerAsContentsViewModel viewModel)
         {
@@ -62,21 +65,26 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
 
             if(viewModel.DrawerHierarchy == 0)
             {
-            //    FlyoutPlacement = PlacementMode.Right;
+                FlyoutPlacement = PlacementMode.Right;
                 drawerviewmodel.WrapPanelOrientation = Avalonia.Layout.Orientation.Horizontal;
 
             }else if(viewModel.DrawerHierarchy % 2 == 1)
-            {     //FlyoutPlacement= PlacementMode.Bottom;
+            {
+                FlyoutPlacement = PlacementMode.Bottom;
                 drawerviewmodel.WrapPanelOrientation = Avalonia.Layout.Orientation.Vertical;
 
             }else
             {
-               // FlyoutPlacement = PlacementMode.Bottom;
+                FlyoutPlacement = PlacementMode.Right;
                 drawerviewmodel.WrapPanelOrientation = Avalonia.Layout.Orientation.Horizontal;
             }
-           
+
+            OnPropertyChanged(nameof(FlyoutPlacement));
+
         }
     }
+
+   
 
     [RelayCommand]
     public void AddItemClick()
@@ -91,7 +99,13 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
         {
             var newDrawer = new DrawerAsContentsViewModel();
             newDrawer.DrawerHierarchy = DrawerHierarchy + 1;
-            DrawerAsContainer.Contents.Add(newDrawer);
+            if (newDrawer.DrawerHierarchy <= MAXNESTERDRAWERS)
+            {
+                DrawerAsContainer.Contents.Add(newDrawer);
+            }else {
+
+                DialogHost.Show(new ErrorMessageViewModel($"Maximum drawer nesting level reached. You can only open up to 4 nested drawers."));
+            }
         }
         else
             DialogHost.Show(new ErrorMessageViewModel($"Drawer '{Name}' is full.\nDrawers can only hold 10 items."));
