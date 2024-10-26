@@ -26,7 +26,7 @@
 			<Flyout
                 Content="{Binding DrawerAsContainer}"
                 FlyoutPresenterClasses="wider"
-                Placement= "Right"
+                Placement= "{Binding FlyoutPlacement}"
                 VerticalOffset="4" />
         </Button.Flyout>
 
@@ -34,6 +34,8 @@
         <Button.ContextMenu>
             <ContextMenu>
                 <MenuItem Command="{Binding HandleDeleteClickCommand}" Header="Delete" />
+				<MenuItem Command="{Binding addDrawerClickCommand}" Header="Add Drawer"/>
+				<MenuItem Command="{Binding addItemClickCommand}" Header="Add Item" />
             </ContextMenu>
         </Button.ContextMenu>
     </Button>

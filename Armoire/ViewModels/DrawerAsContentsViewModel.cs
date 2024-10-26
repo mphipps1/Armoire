@@ -2,6 +2,9 @@
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.VisualBasic;
+using System.Threading.Tasks;
+using System;
 
 
 namespace Armoire.ViewModels;
@@ -56,19 +59,42 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
 
             if(viewModel.DrawerHierarchy == 0)
             {
-            //    FlyoutPlacement = PlacementMode.Right;
+                FlyoutPlacement = PlacementMode.Right;
                 drawerviewmodel.WrapPanelOrientation = Avalonia.Layout.Orientation.Horizontal;
 
             }else if(viewModel.DrawerHierarchy % 2 == 1)
-            {     //FlyoutPlacement= PlacementMode.Bottom;
+            {   FlyoutPlacement= PlacementMode.Bottom;
                 drawerviewmodel.WrapPanelOrientation = Avalonia.Layout.Orientation.Vertical;
 
             }else
             {
-               // FlyoutPlacement = PlacementMode.Bottom;
+                 FlyoutPlacement = PlacementMode.Right;
                 drawerviewmodel.WrapPanelOrientation = Avalonia.Layout.Orientation.Horizontal;
             }
            
         }
+    }
+
+
+
+    [RelayCommand]
+    public async Task addDrawerClick()
+    {
+        var drawerHierarchy = this.DrawerHierarchy;
+        var drawerid = this.Id;
+
+        var newDrawer = new DrawerAsContentsViewModel();
+        newDrawer.DrawerAsContainer = new DrawerViewModel(drawerid++, newDrawer);
+        newDrawer.DrawerHierarchy = ++drawerHierarchy;
+        await Task.Delay(TimeSpan.FromSeconds(1));
+        DrawerAsContainer.Contents.Add(newDrawer);
+    }
+
+    [RelayCommand]
+    public async Task addItemClick()
+    {
+        await Task.Delay(TimeSpan.FromSeconds(1));
+        DrawerAsContainer.Contents.Add(new ItemViewModel());
+
     }
 }

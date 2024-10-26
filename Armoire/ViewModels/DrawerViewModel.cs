@@ -50,24 +50,5 @@ public partial class DrawerViewModel : ViewModelBase, IHasId
     }
 
 
-    [RelayCommand]
-    public async Task addDrawerClick()
-    {
-        var drawerHierarchy = drawerAsContentsViewModel.DrawerHierarchy;
-        var drawerid = drawerAsContentsViewModel.Id;
-
-        var newDrawer = new DrawerAsContentsViewModel();
-        newDrawer.DrawerAsContainer = new DrawerViewModel(drawerid++, newDrawer);
-        newDrawer.DrawerHierarchy = ++drawerHierarchy;
-        await Task.Delay(TimeSpan.FromSeconds(1));
-        Contents.Add(newDrawer);
-    }
-
-    [RelayCommand]
-    public async Task addItemClick()
-    {
-        await Task.Delay(TimeSpan.FromSeconds(1));
-        Contents.Add(new ItemViewModel());
-
-    }
+  
 }

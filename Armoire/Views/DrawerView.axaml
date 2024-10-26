@@ -18,10 +18,6 @@
 
 <Border Background="LightGray">
 	<StackPanel>
-		<StackPanel Orientation="Horizontal">
-			<Button Content="Add Drawer"  Height="30" Margin="0,0,10,0" Command="{Binding addDrawerClickCommand}" CommandParameter="{Binding}"   />
-			<Button Content="Add Item" Height="30" Margin="0,0,10,0"  Command="{Binding addItemClickCommand }"  />
-		</StackPanel>
     <ItemsControl x:Name="MyItemsControl"  ItemsSource="{Binding Contents}">
         <ItemsControl.ItemTemplate>
             <armoire:ViewLocator />
