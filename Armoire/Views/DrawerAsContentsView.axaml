@@ -51,7 +51,8 @@
             <ContextMenu>
                 <MenuItem Command="{Binding HandleDeleteClickCommand}" Header="Delete" />
 				<MenuItem Command="{Binding AddItemClickCommand}" Header="Add Item" />
-				<MenuItem Command="{Binding ChangeDrawerNameCommand}" Header="Change Name" ></MenuItem>
+				<MenuItem Command="{Binding AddDrawerClickCommand}" Header="Add Drawer" />
+				<MenuItem Command="{Binding ChangeDrawerNameCommand}" Header="Change Name" />
 			</ContextMenu>
         </Button.ContextMenu>
     </Button>

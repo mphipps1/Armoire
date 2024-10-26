@@ -23,6 +23,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
         Name = "drawer " + ++_count;
         Id = _count;
         IconPath = "/Assets/closedGradientDrawer.svg";
+        DrawerAsContainer = new DrawerViewModel();
     }
 
     public DrawerAsContentsViewModel(int id,int drawerHierarchy)
@@ -80,7 +81,20 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
     [RelayCommand]
     public void AddItemClick()
     {
-        DialogHost.Show(new NewItemViewModel(DrawerAsContainer.Id));
+        DialogHost.Show(new NewItemViewModel(Id));
+    }
+
+    [RelayCommand]
+    public void AddDrawerClick()
+    {
+        if (DrawerAsContainer.Contents.Count < 10)
+        {
+            var newDrawer = new DrawerAsContentsViewModel();
+            newDrawer.DrawerHierarchy = DrawerHierarchy + 1;
+            DrawerAsContainer.Contents.Add(newDrawer);
+        }
+        else
+            DialogHost.Show(new ErrorMessageViewModel($"Drawer '{Name}' is full.\nDrawers can only hold 10 items."));
     }
 
     [RelayCommand]
