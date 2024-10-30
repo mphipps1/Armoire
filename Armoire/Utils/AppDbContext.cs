@@ -1,4 +1,4 @@
-﻿using Armoire.Interfaces;
+﻿using System;
 using Armoire.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,10 +9,18 @@ public class AppDbContext : DbContext
 {
     public DbSet<Drawer> Drawers { get; set; }
     public DbSet<Item> Items { get; set; }
+    public string DbPath { get; }
+
+    public AppDbContext()
+    {
+        var folder = Environment.SpecialFolder.LocalApplicationData;
+        var path = Environment.GetFolderPath(folder);
+        DbPath = System.IO.Path.Join(path, "ArmoireData.db");
+    }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlite("Data Source=ArmoireData.db");
+        optionsBuilder.UseSqlite($"Data Source={DbPath}");
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -2,7 +2,7 @@
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="220" d:DesignHeight="250"
+             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="450"
 			 xmlns:vm="using:Armoire.ViewModels"
              x:Class="Armoire.Views.NewItemView"
 			 x:DataType="vm:NewItemViewModel">
@@ -12,22 +12,66 @@
 			<Setter Property="BorderBrush" Value="Purple" />
 			<Setter Property="Margin" Value="0 10 0 5" />
 			<Setter Property="Height" Value="40" />
+			<Setter Property="Background" Value="White" />
+			<Setter Property="Foreground" Value="Black" />
+			<Setter Property="CornerRadius" Value="8" />
 		</Style>
 		<Style Selector="TextBlock">
-			<Setter Property="Margin" Value="0 5 0 0" />
+			<Setter Property="Margin" Value="0" />
+		</Style>
+
+		<Style Selector="ComboBox">
+			<Setter Property="BorderThickness" Value="1" />
+			<Setter Property="BorderBrush" Value="Purple" />
+			<Setter Property="IsTextSearchEnabled" Value="True" />
+			<Setter Property="HorizontalAlignment" Value="Center" />
+			<Setter Property="VerticalAlignment" Value="Center" />
+			<Setter Property="HorizontalContentAlignment" Value="Center" />
+			<Setter Property="VerticalContentAlignment" Value="Center" />
 		</Style>
 	</UserControl.Styles>
-	<Border CornerRadius="10" BorderBrush="Purple" BorderThickness="1">
-		<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-			<TextBlock Margin="10">Prefered App Name: </TextBlock>
-			<TextBox Watermark="Paint" Text="{Binding Name}"></TextBox>
-			<TextBlock Margin="10">Choose Executable Name: </TextBlock>
-			<ComboBox
-				SelectedItem="{Binding NewExe}"
-				ItemsSource ="{Binding ExecutableNames}"
-				Width="200">
-			</ComboBox>
-			<Button Width="100" Command="{Binding Update}">Submit</Button>
-		</StackPanel>
-	</Border>
+	<StackPanel HorizontalAlignment="Center"
+				VerticalAlignment="Center"
+				Width="150"
+				Height="200"
+				Name="Stack"
+				Background="Transparent">
+		<TextBlock Margin="0 5 0 -10">Name: </TextBlock>
+		<TextBox Watermark="Paint"
+				 Text="{Binding Name}"
+				 Height="30"></TextBox>
+		<TextBlock Margin="0 5 0 -10">Icon Path: </TextBlock>
+		<TextBox Watermark="Path"
+				 Text="{Binding IconPath}"
+				 Height="30"></TextBox>
+		<CheckBox Click="OnPopupButton_Click"
+				  IsChecked="false"
+				  Name="ClickedItem"
+				  Command="{Binding IsItemClicked}"
+				  HorizontalAlignment="Center">
+				Is item?
+		</CheckBox>
+		<Popup
+			Name="Popup"
+			WindowManagerAddShadowHint="False"
+			PlacementMode="Bottom"
+			PlacementTarget="{Binding ElementName=ClickedItem}">
+			<StackPanel Width="150">
+				<TextBlock Margin="10">Choose App Name: </TextBlock>
+				<ComboBox
+					SelectedItem="{Binding NewExe}"
+					ItemsSource ="{Binding ExecutableNames}"
+					Width="150"
+					Height="50">
+				</ComboBox>
+			</StackPanel>
+		</Popup>
+
+		<Button Width="100"
+				Margin="10"
+				Name="Submit"
+				Command="{Binding Update}">
+			Submit
+		</Button>
+	</StackPanel>
 </UserControl>

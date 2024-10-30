@@ -5,6 +5,19 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+
+using DialogHostAvalonia;
+
+//using Windows.Management;
+
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using Armoire.Interfaces;
+using Armoire.Models;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Controls.Shapes;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
@@ -27,9 +40,13 @@ namespace Armoire.ViewModels
         [ObservableProperty]
         public string _newExe;
 
-        private int TargetDrawerID;
+        [ObservableProperty]
+        public bool _isItem;
 
-        public NewItemViewModel(int targetDrawerID)
+        private int TargetDrawerID;
+        private int TargetDrawerHeirarchy;
+
+        public NewItemViewModel(int targetDrawerID, int targetDrawerHeirarchy)
         {
             Dock = MainWindowViewModel.DockContents;
             Executables = new Dictionary<string, string>();
@@ -37,6 +54,8 @@ namespace Armoire.ViewModels
             TargetDrawerID = targetDrawerID;
             if (!Executables.Any())
                 GetExecutables();
+            IsItem = false;
+            TargetDrawerHeirarchy = targetDrawerHeirarchy;
         }
 
         [RelayCommand]
@@ -44,9 +63,17 @@ namespace Armoire.ViewModels
         {
             var targetDrawer = GetTargetDrawer(Dock);
             if (targetDrawer != null)
-                targetDrawer.Add(
-                    new ItemViewModel(Name, Executables[NewExe], TargetDrawerID.ToString())
-                );
+
+            {
+                if (IsItem)
+                    targetDrawer.Add(new ItemViewModel(Name, Executables[NewExe], TargetDrawerID.ToString()));
+                else
+                {
+                    var newDrawer = new DrawerAsContentsViewModel(Name, IconPath);
+                    newDrawer.DrawerHierarchy = TargetDrawerHeirarchy + 1;
+                    targetDrawer.Add(newDrawer);
+                }
+            }
         }
 
         private ObservableCollection<ContentsUnitViewModel>? GetTargetDrawer(
@@ -76,83 +103,18 @@ namespace Armoire.ViewModels
 
         public void GetExecutables()
         {
-            //the following only works on windows
-            string registry_key_32 = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall";
-            string registry_key_64 =
-                @"SOFTWARE\WoW6432Node\Microsoft\Windows\CurrentVersion\Uninstall";
-
-            Microsoft.Win32.RegistryKey key_32 = Registry.LocalMachine.OpenSubKey(registry_key_32);
-            Microsoft.Win32.RegistryKey key_64 = Registry.LocalMachine.OpenSubKey(registry_key_64);
-
-            foreach (string subkey_name in key_32.GetSubKeyNames())
+            string directoryPath = @"C:\ProgramData\Microsoft\Windows\Start Menu\Programs";
+           
+            if (Directory.Exists(directoryPath))
             {
-                using (RegistryKey subkey = key_32.OpenSubKey(subkey_name))
+                foreach (string file in Directory.EnumerateFiles(directoryPath, "*.lnk", SearchOption.AllDirectories))
                 {
-                    if (!subkey.Name.Contains("{") && !Executables.ContainsKey(subkey_name))
+                    if (!Executables.ContainsKey(System.IO.Path.GetFileNameWithoutExtension(file)))
                     {
-                        string path = (string)subkey.GetValue("InstallLocation");
-                        if (path != null && path != "")
-                            Executables.Add(
-                                subkey_name,
-                                path + "\\" + MatchFileName(path, subkey_name)
-                            );
+                        Executables.Add(System.IO.Path.GetFileNameWithoutExtension(file), file);
+                        ExecutableNames.Add(System.IO.Path.GetFileNameWithoutExtension(file));
                     }
                 }
-            }
-
-            foreach (string subkey_name in key_64.GetSubKeyNames())
-            {
-                using (RegistryKey subkey = key_64.OpenSubKey(subkey_name))
-                {
-                    if (!subkey.Name.Contains("{") && !Executables.ContainsKey(subkey_name))
-                    {
-                        string path = (string)subkey.GetValue("InstallLocation");
-                        if (path != null)
-                        {
-                            path = path.Replace("\"", "");
-                            Executables.Add(
-                                subkey_name,
-                                path + "\\" + MatchFileName(path, subkey_name)
-                            );
-                        }
-                    }
-                }
-            }
-
-            foreach (string subkey_name in key_32.GetSubKeyNames())
-            {
-                using (RegistryKey subkey = key_32.OpenSubKey(subkey_name))
-                {
-                    if (!subkey.Name.Contains("{") && !Executables.ContainsKey(subkey_name))
-                    {
-                        string path = (string)subkey.GetValue("InstallLocation");
-                        if (path != null)
-                            Executables.Add(
-                                subkey_name,
-                                path + "\\" + MatchFileName(path, subkey_name)
-                            );
-                    }
-                }
-            }
-
-            foreach (string subkey_name in key_64.GetSubKeyNames())
-            {
-                using (RegistryKey subkey = key_64.OpenSubKey(subkey_name))
-                {
-                    if (!subkey.Name.Contains("{") && !Executables.ContainsKey(subkey_name))
-                    {
-                        string path = (string)subkey.GetValue("InstallLocation");
-                        if (path != null)
-                            Executables.Add(
-                                subkey_name,
-                                path + "\\" + MatchFileName(path, subkey_name)
-                            );
-                    }
-                }
-            }
-            foreach (KeyValuePair<string, string> kv in Executables)
-            {
-                ExecutableNames.Add(kv.Key);
             }
 
             //Windows.Management.Deployment.PackageManager packageManager = new Windows.Management.Deployment.PackageManager();
@@ -194,6 +156,12 @@ namespace Armoire.ViewModels
                 }
             }
             return "";
+        }
+
+        [RelayCommand]
+        public void IsItemClicked()
+        {
+            IsItem = !IsItem;
         }
     }
 }
