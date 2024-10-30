@@ -6,8 +6,6 @@ public class ContentsUnit
 {
     public int Position { get; set; }
 
-    private string? _name;
-
     [MaxLength(100)]
     public string Name { get; set; } = "default";
 

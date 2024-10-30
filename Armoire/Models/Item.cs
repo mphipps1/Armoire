@@ -23,6 +23,9 @@ public class Item : ContentsUnit
         process.Start();
     }
 
+    // Parameterless constructor for EF.
+    public Item() { }
+
     public Item(string name, string path, string parentDrawer)
     {
         Name = name;

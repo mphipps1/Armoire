@@ -3,6 +3,10 @@
 ##
 ## Get latest from `dotnet new gitignore`
 
+# EF stuff
+Armoire/Migrations
+Armoire/ArmoireData.db
+
 # dotenv files
 .env
 
