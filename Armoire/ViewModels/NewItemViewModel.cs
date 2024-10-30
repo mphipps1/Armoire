@@ -1,22 +1,12 @@
-﻿using System;
-using System.Collections;
+﻿//using Windows.Management;
+
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-//using Windows.Management;
-
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using Armoire.Interfaces;
-using Armoire.Models;
-using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Controls.Shapes;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using ExCSS;
 using Microsoft.Win32;
 
 namespace Armoire.ViewModels
@@ -25,7 +15,6 @@ namespace Armoire.ViewModels
     {
         public static Dictionary<string, string> Executables { get; set; }
         public static ObservableCollection<string> ExecutableNames { get; set; }
-
 
         private ObservableCollection<ContentsUnitViewModel> Dock { get; set; }
 
@@ -54,23 +43,27 @@ namespace Armoire.ViewModels
         public void Update()
         {
             var targetDrawer = GetTargetDrawer(Dock);
-            if (targetDrawer != null) 
-                targetDrawer.Add(new ItemViewModel(Name, Executables[NewExe], TargetDrawerID.ToString()));
+            if (targetDrawer != null)
+                targetDrawer.Add(
+                    new ItemViewModel(Name, Executables[NewExe], TargetDrawerID.ToString())
+                );
         }
 
-        private ObservableCollection<ContentsUnitViewModel>? GetTargetDrawer(ObservableCollection<ContentsUnitViewModel> currentDrawer)
+        private ObservableCollection<ContentsUnitViewModel>? GetTargetDrawer(
+            ObservableCollection<ContentsUnitViewModel> currentDrawer
+        )
         {
-            foreach(var unit in currentDrawer)
+            foreach (var unit in currentDrawer)
             {
                 if (unit is DrawerAsContentsViewModel dacvm)
                 {
-                    if(dacvm.Id == TargetDrawerID)
+                    if (dacvm.Id == TargetDrawerID)
                     {
-                         return dacvm.DrawerAsContainer.Contents;
+                        return dacvm.DrawerAsContainer.Contents;
                     }
                 }
             }
-            foreach(var unit in currentDrawer)
+            foreach (var unit in currentDrawer)
             {
                 if (unit is DrawerAsContentsViewModel dacvm)
                 {

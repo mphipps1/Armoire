@@ -4,7 +4,8 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Timers;
-using System.Xml.Linq;
+using Armoire.Models;
+using Armoire.Utils;
 using Armoire.Views;
 using Avalonia.VisualTree;
 using CommunityToolkit.Mvvm.Input;
@@ -32,7 +33,6 @@ namespace Armoire.ViewModels
 
         private bool CanAddContentsUnit() => true;
 
-
         public MainWindowViewModel()
         {
             _timer = new Timer(1000);
@@ -41,16 +41,18 @@ namespace Armoire.ViewModels
 
             UpdateTime();
 
+            // Register event handlers.
             DockContents.CollectionChanged += dc_CollectionChanged;
+            DockContents.CollectionChanged += dc_OnAdd;
+
             var d1 = new DrawerAsContentsViewModel();
             d1.DrawerAsContainer = new DrawerViewModel(1, d1);
             d1.DrawerHierarchy = 0;
 
-         
             var d2 = new DrawerAsContentsViewModel();
             d2.DrawerAsContainer = new DrawerViewModel(2, d2);
             d2.DrawerHierarchy = 0;
-           
+
             DockContents.Add(d1);
             DockContents.Add(new ItemViewModel());
             DockContents.Add(d2);
@@ -59,6 +61,24 @@ namespace Armoire.ViewModels
         private void OnTimerElapsed(object sender, ElapsedEventArgs e)
         {
             UpdateTime();
+        }
+
+        private void dc_OnAdd(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            using var context = new AppDbContext();
+            if (e.NewItems is { } ni)
+            {
+                foreach (var item in ni)
+                {
+                    if (item is DrawerAsContentsViewModel)
+                    {
+                        var newContentsUnit = new Drawer();
+                        context.Drawers.Add(newContentsUnit);
+                    }
+                }
+            }
+            // This line produces `No such table: drawers` exception
+            // context.SaveChanges();
         }
 
         private void UpdateTime()
@@ -142,7 +162,9 @@ namespace Armoire.ViewModels
             if (DockContents.Count < 10)
                 DockContents.Add(new DrawerAsContentsViewModel());
             else
-                DialogHost.Show(new ErrorMessageViewModel($"The dock is full, it can\n only hold 10 items."));
+                DialogHost.Show(
+                    new ErrorMessageViewModel($"The dock is full, it can\n only hold 10 items.")
+                );
         }
     }
 }
