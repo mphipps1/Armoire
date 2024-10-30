@@ -78,7 +78,7 @@
 	<Panel>
 
         <StackPanel
-            HorizontalAlignment="Center"
+            HorizontalAlignment="Left"
             VerticalAlignment="Center"
             Spacing="20">
 			<!--  Digital Clock  -->
@@ -106,6 +106,8 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </StackPanel>
-        <dialogHostAvalonia:DialogHost  CloseOnClickAway="True" />
+        <dialogHostAvalonia:DialogHost
+			CloseOnClickAway="True" 
+			Background="Transparent"/>
 	</Panel>
 </Window>

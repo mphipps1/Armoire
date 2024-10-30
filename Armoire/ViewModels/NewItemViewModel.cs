@@ -121,43 +121,6 @@ namespace Armoire.ViewModels
             // IEnumerable<Windows.ApplicationModel.Package> packages = (IEnumerable<Windows.ApplicationModel.Package>)packageManager.FindPackages();
         }
 
-        //this file takes the full path of the application folder and checks the last folder matches any executable names
-        //an example of this is as follows:
-        // path = "C:\Program Files\Mozilla Firefox", subkey_name =
-
-        public string MatchFileName(string path, string subkey_name)
-        {
-            if (path != null)
-            {
-                string exeName = "";
-                if (path.AsSpan() == "")
-                    return "";
-                var files = Directory.GetFiles(path, "*.exe", SearchOption.TopDirectoryOnly);
-                foreach (var file in files)
-                {
-                    //gets the filename and the .exe from file, which is a full
-                    string fileAndExtension;
-                    var ret = System.IO.Path.GetFullPath(file);
-                    if (ret.AsSpan() == "")
-                        continue;
-                    fileAndExtension = System.IO.Path.GetFileName(ret);
-                    //checks if the subkey_name contains the name of the executable file without the extension
-                    if (
-                        subkey_name
-                            .ToLower()
-                            .Contains(
-                                fileAndExtension.Substring(0, fileAndExtension.Length - 4).ToLower()
-                            )
-                    )
-                    {
-                        exeName = fileAndExtension;
-                        return exeName;
-                    }
-                }
-            }
-            return "";
-        }
-
         [RelayCommand]
         public void IsItemClicked()
         {
