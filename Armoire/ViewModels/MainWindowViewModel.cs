@@ -65,20 +65,22 @@ namespace Armoire.ViewModels
 
         private void dc_OnAdd(object? sender, NotifyCollectionChangedEventArgs e)
         {
-            using var context = new AppDbContext();
-            if (e.NewItems is { } ni)
+            using (var context = new AppDbContext())
             {
-                foreach (var item in ni)
+                if (e.NewItems is { } ni)
                 {
-                    if (item is DrawerAsContentsViewModel)
+                    foreach (var item in ni)
                     {
-                        var newContentsUnit = new Drawer();
-                        context.Drawers.Add(newContentsUnit);
+                        if (item is DrawerAsContentsViewModel)
+                        {
+                            var newContentsUnit = new Drawer();
+                            context.Drawers.Add(newContentsUnit);
+                        }
                     }
                 }
+                // This line produces `'FOREIGN KEY constraint failed.'` exception
+                // context.SaveChanges();
             }
-            // This line produces `No such table: Drawers` exception
-            // context.SaveChanges();
         }
 
         private void UpdateTime()
