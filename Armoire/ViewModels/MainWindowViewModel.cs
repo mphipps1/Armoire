@@ -77,7 +77,7 @@ namespace Armoire.ViewModels
                     }
                 }
             }
-            // This line produces `No such table: drawers` exception
+            // This line produces `No such table: Drawers` exception
             // context.SaveChanges();
         }
 
