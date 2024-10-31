@@ -9,13 +9,13 @@ namespace Armoire.Views;
 public partial class NewItemView : UserControl
 {
     private Popup popup;
-    private Button submit;
+    private StackPanel backAndSubmit;
     private StackPanel stack;
     public NewItemView()
     {
         InitializeComponent();
         popup = this.FindControl<Popup>("Popup");
-        submit = this.Find<Button>("Submit");
+        backAndSubmit = this.Find<StackPanel>("BackAndSubmit");
         stack = this.Find<StackPanel>("Stack");
 
 
@@ -26,13 +26,13 @@ public partial class NewItemView : UserControl
         if (popup.IsOpen)
         {
             popup.IsOpen = false;
-            submit.Margin = Thickness.Parse("10");
+            backAndSubmit.Margin = Thickness.Parse("-8 10 10 10");
             stack.Height = 200;
         }
         else
         {
             popup.IsOpen = true;
-            submit.Margin = Thickness.Parse("10 90 10 10");
+            backAndSubmit.Margin = Thickness.Parse("-8 90 10 10");
             stack.Height = 270;
 
         }

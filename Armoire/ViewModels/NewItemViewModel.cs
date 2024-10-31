@@ -21,6 +21,7 @@ using Avalonia.Controls.Shapes;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Win32;
+using System.Drawing;
 
 namespace Armoire.ViewModels
 {
@@ -28,6 +29,7 @@ namespace Armoire.ViewModels
     {
         public static Dictionary<string, string> Executables { get; set; }
         public static ObservableCollection<string> ExecutableNames { get; set; }
+        public static Dictionary<string, Icon> Icons { get; set; }
 
         private ObservableCollection<ContentsUnitViewModel> Dock { get; set; }
 
@@ -44,6 +46,7 @@ namespace Armoire.ViewModels
         public bool _isItem;
 
         private int TargetDrawerID;
+
         private int TargetDrawerHeirarchy;
 
         public NewItemViewModel(int targetDrawerID, int targetDrawerHeirarchy)
@@ -51,6 +54,7 @@ namespace Armoire.ViewModels
             Dock = MainWindowViewModel.DockContents;
             Executables = new Dictionary<string, string>();
             ExecutableNames = new ObservableCollection<string>();
+            Icons = new Dictionary<string, Icon>();
             TargetDrawerID = targetDrawerID;
             if (!Executables.Any())
                 GetExecutables();
@@ -66,7 +70,9 @@ namespace Armoire.ViewModels
 
             {
                 if (IsItem)
-                    targetDrawer.Add(new ItemViewModel(Name, Executables[NewExe], TargetDrawerID.ToString()));
+                {
+                    targetDrawer.Add(new ItemViewModel(Name, Executables[NewExe], Icons[NewExe].ToBitmap(), TargetDrawerID.ToString()));
+                }
                 else
                 {
                     var newDrawer = new DrawerAsContentsViewModel(Name, IconPath);
@@ -74,12 +80,17 @@ namespace Armoire.ViewModels
                     targetDrawer.Add(newDrawer);
                 }
             }
+
+            //MainWindowViewModel._dialogIsOpen = false;
+            MainWindowViewModel.CloseDialog();
         }
 
         private ObservableCollection<ContentsUnitViewModel>? GetTargetDrawer(
             ObservableCollection<ContentsUnitViewModel> currentDrawer
         )
         {
+            if (TargetDrawerID == 0)
+                return Dock;
             foreach (var unit in currentDrawer)
             {
                 if (unit is DrawerAsContentsViewModel dacvm)
@@ -111,20 +122,25 @@ namespace Armoire.ViewModels
                 {
                     if (!Executables.ContainsKey(System.IO.Path.GetFileNameWithoutExtension(file)))
                     {
-                        Executables.Add(System.IO.Path.GetFileNameWithoutExtension(file), file);
-                        ExecutableNames.Add(System.IO.Path.GetFileNameWithoutExtension(file));
+                        string shortcut = System.IO.Path.GetFileNameWithoutExtension(file);
+                        Executables.Add(shortcut, file);
+                        ExecutableNames.Add(shortcut);
+                        Icons.Add(shortcut, Icon.ExtractAssociatedIcon(file));
                     }
                 }
             }
-
-            //Windows.Management.Deployment.PackageManager packageManager = new Windows.Management.Deployment.PackageManager();
-            // IEnumerable<Windows.ApplicationModel.Package> packages = (IEnumerable<Windows.ApplicationModel.Package>)packageManager.FindPackages();
         }
 
         [RelayCommand]
         public void IsItemClicked()
         {
             IsItem = !IsItem;
+        }
+
+        [RelayCommand]
+        public void CloseDialog()
+        {
+            MainWindowViewModel.CloseDialog();
         }
     }
 }

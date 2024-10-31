@@ -108,6 +108,7 @@
         </StackPanel>
         <dialogHostAvalonia:DialogHost
 			CloseOnClickAway="True" 
-			Background="Transparent"/>
+			Background="Transparent"
+			Identifier="MainDialogHost"/>
 	</Panel>
 </Window>

@@ -2,6 +2,7 @@
 using Armoire.Utils;
 using Armoire.Views;
 using Avalonia.VisualTree;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DialogHostAvalonia;
 using System;
@@ -28,6 +29,9 @@ namespace Armoire.ViewModels
             get => _currentTime;
             set => SetProperty(ref _currentTime, value);
         }
+
+        [ObservableProperty]
+        public static bool _dialogIsOpen;
 
         public static ObservableCollection<ContentsUnitViewModel> DockContents { get; set; } = [];
 
@@ -164,6 +168,11 @@ namespace Armoire.ViewModels
                 DialogHost.Show(
                     new ErrorMessageViewModel($"The dock is full, it can\n only hold 10 items.")
                 );
+        }
+
+        public static void CloseDialog()
+        {
+            DialogHost.GetDialogSession("MainDialogHost")?.Close(false);
         }
     }
 }

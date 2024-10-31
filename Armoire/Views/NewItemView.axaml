@@ -66,12 +66,25 @@
 				</ComboBox>
 			</StackPanel>
 		</Popup>
-
-		<Button Width="100"
-				Margin="10"
-				Name="Submit"
-				Command="{Binding Update}">
-			Submit
-		</Button>
+		<StackPanel Orientation="Horizontal"
+					Name="BackAndSubmit"
+					Margin="-8 10 10 10">
+			<Button Width="60"
+					Name="Back"
+					Margin="10"
+					Padding="0"
+					Command="{Binding CloseDialog}">
+				Back
+			</Button>
+			
+			<Button Width="60"
+					Height="30"
+					Name="Submit"
+					Margin="10"
+					Padding="0"
+					Command="{Binding Update}">
+				Submit
+			</Button>
+		</StackPanel>
 	</StackPanel>
 </UserControl>
