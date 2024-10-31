@@ -28,13 +28,6 @@ public partial class DrawerViewModel : ViewModelBase, IHasId
     public DrawerAsContentsViewModel drawerAsContentsViewModel { get; set; }
 
 
-
-
-
-
-
-
-
     public DrawerViewModel()
     {
     }

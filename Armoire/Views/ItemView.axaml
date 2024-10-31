@@ -42,6 +42,8 @@
         <Button.ContextMenu>
             <ContextMenu>
                 <MenuItem Command="{Binding HandleDeleteClickCommand}" Header="Delete" />
+				<MenuItem Command="{Binding MoveUpCommand}" Header="Move Up/Left" />
+				<MenuItem Command="{Binding MoveDownCommand}" Header="Move Down/Right" />
 			</ContextMenu>
         </Button.ContextMenu>
     </Button>

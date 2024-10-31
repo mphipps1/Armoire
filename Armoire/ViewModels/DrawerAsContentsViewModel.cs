@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DialogHostAvalonia;
 using Avalonia.Controls.Primitives;
+using System.Collections.ObjectModel;
 
 
 namespace Armoire.ViewModels;
@@ -129,5 +130,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
         //var window = new ChangeDrawerNameView();
         //window.Show();
     }
+
+  
 
 }

@@ -59,6 +59,7 @@ namespace Armoire.ViewModels
                     UpdateName(dacvm.DrawerAsContainer.Contents);
                 }
             }
+            MainWindowViewModel.CloseDialog();
         }
 
     }
