@@ -10,10 +10,10 @@ First, ensure you have `dotnet-ef` tool package installed.
 dotnet tool install --global dotnet-ef
 ```
 
-Now you can create and apply an initial migration.
+You can now source the `DbSetup.ps1` script and run its `dbs` function to delete existing database/migration and create new ones.
 
 ```
-dotnet ef migrations add InitialCreate --project .\Armoire\Armoire.csproj
-dotnet ef database update --project .\Armoire\Armoire.csproj
+. .\DbSetup.ps1
+dbs
 ```
 

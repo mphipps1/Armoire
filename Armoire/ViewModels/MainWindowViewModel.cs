@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Timers;
-using Armoire.Models;
+﻿using Armoire.Models;
 using Armoire.Utils;
 using Armoire.Views;
 using Avalonia.VisualTree;
 using CommunityToolkit.Mvvm.Input;
 using DialogHostAvalonia;
+using System;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Timers;
 
 namespace Armoire.ViewModels
 {
@@ -65,22 +65,19 @@ namespace Armoire.ViewModels
 
         private void dc_OnAdd(object? sender, NotifyCollectionChangedEventArgs e)
         {
-            using (var context = new AppDbContext())
+            using var context = new AppDbContext();
+            if (e.NewItems is not { } ni)
+                return;
+            foreach (var item in ni)
             {
-                if (e.NewItems is { } ni)
+                if (item is DrawerAsContentsViewModel)
                 {
-                    foreach (var item in ni)
-                    {
-                        if (item is DrawerAsContentsViewModel)
-                        {
-                            var newContentsUnit = new Drawer();
-                            context.Drawers.Add(newContentsUnit);
-                        }
-                    }
+                    var newContentsUnit = new Drawer();
+                    context.Drawers.Add(newContentsUnit);
                 }
-                // This line produces `'FOREIGN KEY constraint failed.'` exception
-                // context.SaveChanges();
             }
+            // This line produces `'FOREIGN KEY constraint failed.'` exception
+            // context.SaveChanges();
         }
 
         private void UpdateTime()
@@ -155,7 +152,7 @@ namespace Armoire.ViewModels
         [RelayCommand]
         public void AddItemClick()
         {
-            DialogHost.Show(new NewItemViewModel(0));
+            DialogHost.Show(new NewItemViewModel(0, 0));
         }
 
         [RelayCommand]
