@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Armoire.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -38,5 +39,13 @@ public class AppDbContext : DbContext
             .HasOne(d => d.ParentDrawer)
             .WithMany(d => d.Items)
             .HasForeignKey(d => d.ParentDrawerId);
+    }
+
+    public bool TryAddDrawer(Drawer drawer)
+    {
+        if (Drawers.Any(d => d.DrawerId == drawer.DrawerId))
+            return false;
+        Drawers.Add(drawer);
+        return true;
     }
 }
