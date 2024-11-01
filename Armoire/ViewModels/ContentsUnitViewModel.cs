@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
 using Armoire.Interfaces;
 using Armoire.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -12,7 +11,7 @@ public partial class ContentsUnitViewModel : ViewModelBase, IHasId
     private static int _count;
 
     [ObservableProperty]
-    private string? _name;
+    private string _name;
 
     [ObservableProperty]
     private string? _iconKind;
@@ -55,7 +54,6 @@ public partial class ContentsUnitViewModel : ViewModelBase, IHasId
         //using c# tuple to swap the drawerAsContents this function was called from and the DrawerAsConetnts before it
         if (indexOfMe > 0)
             (drawer[indexOfMe - 1], drawer[indexOfMe]) = (drawer[indexOfMe], drawer[indexOfMe - 1]);
-
     }
 
     [RelayCommand]
@@ -71,7 +69,10 @@ public partial class ContentsUnitViewModel : ViewModelBase, IHasId
             (drawer[indexOfMe + 1], drawer[indexOfMe]) = (drawer[indexOfMe], drawer[indexOfMe + 1]);
     }
 
-    public static ObservableCollection<ContentsUnitViewModel>? findParentDrawer(ObservableCollection<ContentsUnitViewModel> contentsIn, ContentsUnitViewModel target)
+    public static ObservableCollection<ContentsUnitViewModel>? findParentDrawer(
+        ObservableCollection<ContentsUnitViewModel> contentsIn,
+        ContentsUnitViewModel target
+    )
     {
         if (contentsIn.Contains(target))
             return contentsIn;
@@ -79,9 +80,9 @@ public partial class ContentsUnitViewModel : ViewModelBase, IHasId
         {
             if (unit is DrawerAsContentsViewModel dac)
             {
-                if (dac.DrawerAsContainer.Contents.Contains(target))
+                if (dac.InnerContainer.InnerContents.Contains(target))
                 {
-                    return dac.DrawerAsContainer.Contents;
+                    return dac.InnerContainer.InnerContents;
                 }
             }
         }
@@ -89,7 +90,7 @@ public partial class ContentsUnitViewModel : ViewModelBase, IHasId
         {
             if (unit is DrawerAsContentsViewModel dac)
             {
-                return findParentDrawer(dac.DrawerAsContainer.Contents, target);
+                return findParentDrawer(dac.InnerContainer.InnerContents, target);
             }
         }
         return null;

@@ -41,7 +41,7 @@ namespace Armoire.ViewModels
                     {
                         dacvm.Name = NewName;
                     }
-                    UpdateName(dacvm.DrawerAsContainer.Contents);
+                    UpdateName(dacvm.InnerContainer.InnerContents);
                 }
             }
         }
@@ -56,7 +56,7 @@ namespace Armoire.ViewModels
                     {
                         dacvm.Name = NewName;
                     }
-                    UpdateName(dacvm.DrawerAsContainer.Contents);
+                    UpdateName(dacvm.InnerContainer.InnerContents);
                 }
             }
             MainWindowViewModel.CloseDialog();

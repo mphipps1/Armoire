@@ -4,17 +4,11 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Timers;
-using Armoire.Models;
-using Armoire.Utils;
 using Armoire.Utils;
 using Armoire.Views;
-using Armoire.Views;
-using Avalonia.VisualTree;
 using Avalonia.VisualTree;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using CommunityToolkit.Mvvm.Input;
-using DialogHostAvalonia;
 using DialogHostAvalonia;
 
 namespace Armoire.ViewModels
@@ -55,20 +49,22 @@ namespace Armoire.ViewModels
             DockContents.CollectionChanged += dc_CollectionChanged;
             DockContents.CollectionChanged += dc_OnAdd;
 
-            // Create DACVM for the dock and add it to the DB.
-            var dockDac = new DrawerAsContentsViewModel(true);
-            SaveDrawerToDb(dockDac);
+            // Create DVM for the dock and add it to the DB.
+            // This DVM's `OuterContents` property should be null.
+            var dockDvm = new DrawerViewModel() { Name = "dock" };
+            dockDvm.SaveToDb();
 
-            OutputHelper.DebugPrintJson(dockDac, "dockDac");
-
-            var d1 = new DrawerAsContentsViewModel(dockDac, "apple");
-            d1.DrawerAsContainer = new DrawerViewModel(1, d1);
+            // Create a sample drawer for the dock.
+            var d1 = new DrawerAsContentsViewModel(dockDvm, "apple");
+            d1.InnerContainer = new DrawerViewModel(1, d1);
             d1.DrawerHierarchy = 0;
 
-            var d2 = new DrawerAsContentsViewModel(dockDac, "orange");
-            d2.DrawerAsContainer = new DrawerViewModel(2, d2);
+            // Create another sample drawer for the dock.
+            var d2 = new DrawerAsContentsViewModel(dockDvm, "orange");
+            d2.InnerContainer = new DrawerViewModel(2, d2);
             d2.DrawerHierarchy = 0;
 
+            // Add to the dock (this triggers dc_OnAdd).
             DockContents.Add(d1);
             DockContents.Add(new ItemViewModel());
             DockContents.Add(d2);
@@ -82,32 +78,21 @@ namespace Armoire.ViewModels
         private void dc_OnAdd(object? sender, NotifyCollectionChangedEventArgs e)
         {
             using var context = new AppDbContext();
-            if (e.NewItems is not { } ni)
+            if (e.NewItems is not { } newItems)
                 return;
             var i = 0;
-            foreach (var item in ni)
+            foreach (var item in newItems)
             {
-                if (item is DrawerAsContentsViewModel dacvm)
+                if (item is DrawerAsContentsViewModel deVm)
                 {
-                    var newContentsUnit = dacvm.GetDrawer();
+                    OutputHelper.DebugPrintJson(deVm, $"deVm{i++}");
+                    var newContentsUnit = deVm.CreateDrawer(context);
                     context.TryAddDrawer(newContentsUnit);
-                    OutputHelper.DebugPrintJson(dacvm, $"dacvm{i++}");
                 }
             }
             OutputHelper.DebugPrintJson(context.Drawers, "drawers");
 
             _onAddCount++;
-            // This line produces `'FOREIGN KEY constraint failed.'` exception
-            context.SaveChanges();
-        }
-
-        private void SaveDrawerToDb(DrawerAsContentsViewModel dac)
-        {
-            using var context = new AppDbContext();
-            var drawerToAdd = dac.GetDrawer();
-            OutputHelper.DebugPrintJson(drawerToAdd, "dockDrawer");
-            context.TryAddDrawer(drawerToAdd);
-            OutputHelper.DebugPrintJson(context.Drawers, "drawersAfterDockAdd");
             context.SaveChanges();
         }
 

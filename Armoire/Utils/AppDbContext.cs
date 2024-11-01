@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using Armoire.Models;
 using Microsoft.EntityFrameworkCore;
@@ -44,7 +45,10 @@ public class AppDbContext : DbContext
     public bool TryAddDrawer(Drawer drawer)
     {
         if (Drawers.Any(d => d.DrawerId == drawer.DrawerId))
+        {
+            Debug.WriteLine("Drawer already exists; skipping...");
             return false;
+        }
         Drawers.Add(drawer);
         return true;
     }

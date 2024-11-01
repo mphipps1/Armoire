@@ -18,7 +18,7 @@
 
     <Border Background="LightGray">
         <StackPanel>
-            <ItemsControl x:Name="MyItemsControl" ItemsSource="{Binding Contents}">
+            <ItemsControl x:Name="MyItemsControl" ItemsSource="{Binding InnerContents}">
                 <ItemsControl.ItemTemplate>
                     <armoire:ViewLocator />
                 </ItemsControl.ItemTemplate>

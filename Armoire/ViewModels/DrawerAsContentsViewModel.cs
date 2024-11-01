@@ -1,8 +1,6 @@
-﻿using System.Collections.ObjectModel;
-using Armoire.Models;
-using Armoire.Views;
+﻿using Armoire.Models;
+using Armoire.Utils;
 using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DialogHostAvalonia;
@@ -15,20 +13,25 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
     private static int _count;
     private static int _id2 = 2;
     public DrawerAsContentsViewModel? ParentDrawer { get; set; }
-    public DrawerViewModel DrawerAsContainer { get; set; }
+
+    // The "drawer as container" that contains this drawer button.
+    public DrawerViewModel OuterContainer { get; set; }
+
+    // The "drawer as container" that issues from this drawer button when clicked.
+    public DrawerViewModel InnerContainer { get; set; }
     public int ID2 { get; set; }
 
     [ObservableProperty]
     private PlacementMode _flyoutPlacement = PlacementMode.Right;
 
-    public DrawerAsContentsViewModel(DrawerAsContentsViewModel parent, string name)
+    public DrawerAsContentsViewModel(DrawerViewModel outerContainer, string name)
     {
         Name = name;
         Id = _count;
         IconPath = "/Assets/closedGradientDrawer.svg";
-        DrawerAsContainer = new DrawerViewModel();
+        InnerContainer = new DrawerViewModel();
         ID2 = _id2++;
-        ParentDrawer = parent;
+        OuterContainer = outerContainer;
     }
 
     public DrawerAsContentsViewModel()
@@ -36,7 +39,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
         Name = "drawer " + ++_count;
         Id = _count;
         IconPath = "/Assets/closedGradientDrawer.svg";
-        DrawerAsContainer = new DrawerViewModel();
+        InnerContainer = new DrawerViewModel();
         ID2 = _id2++;
     }
 
@@ -45,7 +48,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
         Name = "dock";
         Id = _count;
         IconPath = "/Assets/closedGradientDrawer.svg";
-        DrawerAsContainer = new DrawerViewModel();
+        InnerContainer = new DrawerViewModel();
         ID2 = 1;
     }
 
@@ -60,7 +63,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
 
     public DrawerAsContentsViewModel(int id, string name, string iconPath)
     {
-        DrawerAsContainer = new DrawerViewModel(id);
+        InnerContainer = new DrawerViewModel(id);
         Name = name;
         IconPath = iconPath;
         ID2 = _id2++;
@@ -68,7 +71,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
 
     public DrawerAsContentsViewModel(string name, string? iconPath)
     {
-        DrawerAsContainer = new DrawerViewModel(_count++);
+        InnerContainer = new DrawerViewModel(_count++);
         Name = name;
         if (iconPath == null || iconPath == "")
             IconPath = "/../Assets/closedGradientDrawer.svg";
@@ -82,7 +85,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
     {
         if (parameter is DrawerAsContentsViewModel viewModel)
         {
-            var drawerviewmodel = viewModel.DrawerAsContainer;
+            var drawerviewmodel = viewModel.InnerContainer;
 
             if (viewModel.DrawerHierarchy == 0)
             {
@@ -113,13 +116,13 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
     [RelayCommand]
     public void AddDrawerClick()
     {
-        if (DrawerAsContainer.Contents.Count < 10)
+        if (InnerContainer.InnerContents.Count < 10)
         {
             var newDrawer = new DrawerAsContentsViewModel();
             newDrawer.DrawerHierarchy = DrawerHierarchy + 1;
             if (newDrawer.DrawerHierarchy <= MAXNESTERDRAWERS)
             {
-                DrawerAsContainer.Contents.Add(newDrawer);
+                InnerContainer.InnerContents.Add(newDrawer);
             }
             else
             {
@@ -147,8 +150,14 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
         //window.Show();
     }
 
-    public Drawer GetDrawer()
+    public Drawer CreateDrawer(AppDbContext context)
     {
-        return new Drawer() { DrawerId = ID2, ParentDrawerId = ParentDrawer?.ID2 ?? 1 };
+        OutputHelper.DebugPrintJson(this, "DeVm_CreateDrawer_this");
+        OutputHelper.DebugPrintJson(OuterContainer, "DeVm_CreateDrawer_OuterContainer");
+        return new Drawer()
+        {
+            Name = Name,
+            ParentDrawerId = OuterContainer?.FindDrawer(context).DrawerId ?? 1
+        };
     }
 }
