@@ -10,8 +10,8 @@
     xmlns:viewModels="clr-namespace:Armoire.ViewModels"
     xmlns:vm="using:Armoire.ViewModels"
     Title="Armoire"
-    d:DesignHeight="450"
-    d:DesignWidth="800"
+    d:DesignHeight="700"
+    d:DesignWidth="300"
     x:DataType="vm:MainWindowViewModel"
     Icon="/Assets/avalonia-logo.ico"
     mc:Ignorable="d"
@@ -68,6 +68,14 @@
 			<Setter Property="BorderBrush" Value="Purple" />
 			<Setter Property="BorderThickness" Value="1" />
 		</Style>
+		<Style Selector="MenuItem">
+			<Setter Property="Height" Value="20" />
+		</Style>
+
+		<Style Selector="ContextMenu">
+			<Setter Property="Width" Value="150" />
+			<Setter Property="CornerRadius" Value="8" />
+		</Style>
     </Window.Styles>
 	<Window.ContextMenu>
 		<ContextMenu >
@@ -105,6 +113,74 @@
                     <armoire:ViewLocator />
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
+			<!-- Power settings button which displays a flyout for buttons to logoff, restart or shutdown-->
+			<Button Height="40"
+					Width="40">
+				<Button.Content>
+					<avalonia:MaterialIcon
+						Width="32"
+						Height="32"
+						Kind="PowerSettings" />
+				</Button.Content>
+				<ToolTip.Tip>
+					<ToolTip Height="40" Width="100" Padding="3" Background="Transparent">
+						<TextBlock Text="Power Settings" Foreground="White" />
+					</ToolTip>
+				</ToolTip.Tip>
+				<Button.Flyout>
+					<Flyout Placement="Right"
+							VerticalOffset="4">
+						<StackPanel Orientation="Horizontal"
+									Spacing="10">
+							<Button Command="{Binding Logoff}"
+									Height="40"
+									Width="40">
+								<Button.Content>
+									<avalonia:MaterialIcon
+										Width="32"
+										Height="32"
+										Kind="Logout"/>
+								</Button.Content>
+								<ToolTip.Tip>
+									<ToolTip Height="40" Width="90" Padding="3" Background="Transparent">
+										<TextBlock Text="Log Off" Foreground="White" />
+									</ToolTip>
+								</ToolTip.Tip>
+							</Button>
+							<Button Command="{Binding Restart}"
+									Height="40"
+									Width="40">
+								<Button.Content>
+									<avalonia:MaterialIcon
+										Width="32"
+										Height="32"
+										Kind="Restart"/>
+								</Button.Content>
+								<ToolTip.Tip>
+									<ToolTip Height="40" Width="90" Padding="3" Background="Transparent">
+										<TextBlock Text="Restart" Foreground="White" />
+									</ToolTip>
+								</ToolTip.Tip>
+							</Button>
+							<Button Command="{Binding Shutdown}"
+									Height="40"
+									Width="40">
+								<Button.Content>
+									<avalonia:MaterialIcon
+										Width="32"
+										Height="32"
+										Kind="Shutdown"/>
+								</Button.Content>
+								<ToolTip.Tip>
+									<ToolTip Height="40" Width="90" Padding="3" Background="Transparent">
+										<TextBlock Text="Shut Down" Foreground="White" />
+									</ToolTip>
+								</ToolTip.Tip>
+							</Button>
+						</StackPanel>
+					</Flyout>
+				</Button.Flyout>
+			</Button>
         </StackPanel>
         <dialogHostAvalonia:DialogHost
 			CloseOnClickAway="True" 
