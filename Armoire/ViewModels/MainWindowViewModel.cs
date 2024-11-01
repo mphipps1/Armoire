@@ -182,6 +182,22 @@ namespace Armoire.ViewModels
                 );
         }
 
+        [RelayCommand]
+        public void Logoff()
+        {
+            WindowsFunctionalities.LogOff();
+        }
+        [RelayCommand]
+        public void Restart()
+        {
+            WindowsFunctionalities.Restart();
+        }
+        [RelayCommand]
+        public void Shutdown()
+        {
+            WindowsFunctionalities.Shutdown();
+        }
+
         public static void CloseDialog()
         {
             DialogHost.GetDialogSession("MainDialogHost")?.Close(false);
