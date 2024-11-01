@@ -11,15 +11,12 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
 {
     private const int MAXNESTERDRAWERS = 4;
     private static int _count;
-    private static int _id2 = 2;
-    public DrawerAsContentsViewModel? ParentDrawer { get; set; }
 
     // The "drawer as container" that contains this drawer button.
     public DrawerViewModel OuterContainer { get; set; }
 
     // The "drawer as container" that issues from this drawer button when clicked.
     public DrawerViewModel InnerContainer { get; set; }
-    public int ID2 { get; set; }
 
     [ObservableProperty]
     private PlacementMode _flyoutPlacement = PlacementMode.Right;
@@ -30,7 +27,6 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
         Id = _count;
         IconPath = "/Assets/closedGradientDrawer.svg";
         InnerContainer = new DrawerViewModel();
-        ID2 = _id2++;
         OuterContainer = outerContainer;
     }
 
@@ -40,16 +36,6 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
         Id = _count;
         IconPath = "/Assets/closedGradientDrawer.svg";
         InnerContainer = new DrawerViewModel();
-        ID2 = _id2++;
-    }
-
-    public DrawerAsContentsViewModel(bool isDock)
-    {
-        Name = "dock";
-        Id = _count;
-        IconPath = "/Assets/closedGradientDrawer.svg";
-        InnerContainer = new DrawerViewModel();
-        ID2 = 1;
     }
 
     public DrawerAsContentsViewModel(int id, int drawerHierarchy)
@@ -58,7 +44,6 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
         Name = "drawer " + ++_count;
         Id = _count;
         IconPath = "/Assets/closedGradientDrawer.svg";
-        ID2 = _id2++;
     }
 
     public DrawerAsContentsViewModel(int id, string name, string iconPath)
@@ -66,7 +51,6 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
         InnerContainer = new DrawerViewModel(id);
         Name = name;
         IconPath = iconPath;
-        ID2 = _id2++;
     }
 
     public DrawerAsContentsViewModel(string name, string? iconPath)
@@ -77,7 +61,6 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
             IconPath = "/../Assets/closedGradientDrawer.svg";
         else
             IconPath = iconPath;
-        ID2 = _id2++;
     }
 
     [RelayCommand]
