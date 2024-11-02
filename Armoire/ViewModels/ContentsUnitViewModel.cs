@@ -46,7 +46,7 @@ public partial class ContentsUnitViewModel : ViewModelBase, IHasId
     [RelayCommand]
     public void MoveUp()
     {
-        var drawer = findParentDrawer(MainWindowViewModel.DockContents, this);
+        var drawer = findParentDrawer(MainWindowViewModel.DockViewModel.InnerContents, this);
         if (drawer == null)
             return;
         int indexOfMe = drawer.IndexOf(this);
@@ -59,7 +59,7 @@ public partial class ContentsUnitViewModel : ViewModelBase, IHasId
     [RelayCommand]
     public void MoveDown()
     {
-        var drawer = findParentDrawer(MainWindowViewModel.DockContents, this);
+        var drawer = findParentDrawer(MainWindowViewModel.DockViewModel.InnerContents, this);
         if (drawer == null)
             return;
         //using c# tuple to swap the drawerAsContents this function was called from and the DrawerAsConetnts before it

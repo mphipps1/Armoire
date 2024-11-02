@@ -1,14 +1,6 @@
-﻿using Avalonia.Controls;
+﻿using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using DialogHostAvalonia;
-using Microsoft.VisualBasic;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Armoire.ViewModels
 {
@@ -23,16 +15,13 @@ namespace Armoire.ViewModels
         public ChangeDrawerNameViewModel(string targetName)
         {
             TargetName = targetName;
-           
         }
-
-
 
         [RelayCommand]
         //used for the base dock to get the recursive step set up
         public void UpdateName()
         {
-            var dock = MainWindowViewModel.DockContents;
+            var dock = MainWindowViewModel.DockViewModel.InnerContents;
             foreach (var unit in dock)
             {
                 if (unit is DrawerAsContentsViewModel dacvm)
@@ -45,6 +34,7 @@ namespace Armoire.ViewModels
                 }
             }
         }
+
         //recursive calls to all nested drawers
         public void UpdateName(ObservableCollection<ContentsUnitViewModel> Contents)
         {
@@ -61,6 +51,5 @@ namespace Armoire.ViewModels
             }
             MainWindowViewModel.CloseDialog();
         }
-
     }
 }

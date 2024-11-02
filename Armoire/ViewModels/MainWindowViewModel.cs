@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -23,6 +22,14 @@ namespace Armoire.ViewModels
         private NewItemViewModel? currentEntry;
         private Timer _timer;
         private string _currentTime;
+        private static DockViewModel? _dockViewModel;
+        public static DockViewModel DockViewModel
+        {
+            get =>
+                _dockViewModel
+                ?? throw new InvalidOperationException("Invalid access: before MwVm init");
+            private set => _dockViewModel = value;
+        }
 
         public string CurrentTime
         {
@@ -32,8 +39,6 @@ namespace Armoire.ViewModels
 
         [ObservableProperty]
         public static bool _dialogIsOpen;
-
-        public static ObservableCollection<ContentsUnitViewModel> DockContents { get; set; } = [];
 
         private bool CanAddContentsUnit() => true;
 
@@ -45,29 +50,29 @@ namespace Armoire.ViewModels
 
             UpdateTime();
 
-            // Register event handlers.
-            DockContents.CollectionChanged += dc_CollectionChanged;
-            DockContents.CollectionChanged += dc_OnAdd;
+            // Create DockViewModel for the dock and save its corresponding Drawer model to the
+            // database.
+            DockViewModel = new DockViewModel() { Name = "dock" };
+            DockViewModel.SaveToDb();
 
-            // Create DVM for the dock and add it to the DB.
-            // This DVM's `OuterContents` property should be null.
-            var dockDvm = new DrawerViewModel() { Name = "dock" };
-            dockDvm.SaveToDb();
+            // Register event handlers.
+            DockViewModel.InnerContents.CollectionChanged += dc_CollectionChanged;
+            DockViewModel.InnerContents.CollectionChanged += dc_OnAdd;
 
             // Create a sample drawer for the dock.
-            var d1 = new DrawerAsContentsViewModel(dockDvm, "apple");
+            var d1 = new DrawerAsContentsViewModel(DockViewModel, "apple");
             d1.InnerContainer = new DrawerViewModel(1, d1);
             d1.DrawerHierarchy = 0;
 
             // Create another sample drawer for the dock.
-            var d2 = new DrawerAsContentsViewModel(dockDvm, "orange");
+            var d2 = new DrawerAsContentsViewModel(DockViewModel, "orange");
             d2.InnerContainer = new DrawerViewModel(2, d2);
             d2.DrawerHierarchy = 0;
 
             // Add to the dock (this triggers dc_OnAdd).
-            DockContents.Add(d1);
-            DockContents.Add(new ItemViewModel());
-            DockContents.Add(d2);
+            DockViewModel.InnerContents.Add(d1);
+            DockViewModel.InnerContents.Add(new ItemViewModel());
+            DockViewModel.InnerContents.Add(d2);
         }
 
         private void OnTimerElapsed(object sender, ElapsedEventArgs e)
@@ -130,7 +135,7 @@ namespace Armoire.ViewModels
             {
                 case "DeleteMe":
                     if (sender is ContentsUnitViewModel cu)
-                        DockContents.Remove(cu);
+                        DockViewModel.InnerContents.Remove(cu);
                     break;
                 default:
                     Debug.WriteLine("Different property changed.");
@@ -185,8 +190,8 @@ namespace Armoire.ViewModels
         [RelayCommand]
         public void AddDrawerClick()
         {
-            if (DockContents.Count < 10)
-                DockContents.Add(new DrawerAsContentsViewModel());
+            if (DockViewModel.InnerContents.Count < 10)
+                DockViewModel.InnerContents.Add(new DrawerAsContentsViewModel());
             else
                 DialogHost.Show(
                     new ErrorMessageViewModel($"The dock is full, it can\n only hold 10 items.")

@@ -1,27 +1,14 @@
 ﻿//using Windows.Management;
 
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Linq;
-
-using DialogHostAvalonia;
-
 //using Windows.Management;
 
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using Armoire.Interfaces;
-using Armoire.Models;
-using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Controls.Shapes;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Drawing;
+using System.IO;
+using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.Win32;
-using System.Drawing;
 
 namespace Armoire.ViewModels
 {
@@ -51,7 +38,7 @@ namespace Armoire.ViewModels
 
         public NewItemViewModel(int targetDrawerID, int targetDrawerHeirarchy)
         {
-            Dock = MainWindowViewModel.DockContents;
+            Dock = MainWindowViewModel.DockViewModel.InnerContents;
             Executables = new Dictionary<string, string>();
             ExecutableNames = new ObservableCollection<string>();
             Icons = new Dictionary<string, Icon>();
@@ -67,11 +54,17 @@ namespace Armoire.ViewModels
         {
             var targetDrawer = GetTargetDrawer(Dock);
             if (targetDrawer != null)
-
             {
                 if (IsItem)
                 {
-                    targetDrawer.Add(new ItemViewModel(Name, Executables[NewExe], Icons[NewExe].ToBitmap(), TargetDrawerID.ToString()));
+                    targetDrawer.Add(
+                        new ItemViewModel(
+                            Name,
+                            Executables[NewExe],
+                            Icons[NewExe].ToBitmap(),
+                            TargetDrawerID.ToString()
+                        )
+                    );
                 }
                 else
                 {
@@ -115,10 +108,16 @@ namespace Armoire.ViewModels
         public void GetExecutables()
         {
             string directoryPath = @"C:\ProgramData\Microsoft\Windows\Start Menu\Programs";
-           
+
             if (Directory.Exists(directoryPath))
             {
-                foreach (string file in Directory.EnumerateFiles(directoryPath, "*.lnk", SearchOption.AllDirectories))
+                foreach (
+                    string file in Directory.EnumerateFiles(
+                        directoryPath,
+                        "*.lnk",
+                        SearchOption.AllDirectories
+                    )
+                )
                 {
                     if (!Executables.ContainsKey(System.IO.Path.GetFileNameWithoutExtension(file)))
                     {
