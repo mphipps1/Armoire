@@ -83,17 +83,28 @@ namespace Armoire.ViewModels
             var i = 0;
             foreach (var item in newItems)
             {
-                if (item is DrawerAsContentsViewModel deVm)
+                switch (item)
                 {
-                    OutputHelper.DebugPrintJson(deVm, $"deVm{i++}");
-                    var newContentsUnit = deVm.CreateDrawer(context);
-                    context.TryAddDrawer(newContentsUnit);
+                    case DrawerAsContentsViewModel deVm:
+                        OutputHelper.DebugPrintJson(deVm, $"dc_OnAdd-deVm{i++}");
+                        var newContentsUnit = deVm.CreateDrawer(context);
+                        context.TryAddDrawer(newContentsUnit);
+                        break;
+                    case ItemViewModel iVm:
+                        Debug.WriteLine("dc_OnAdd ItemViewModel case placeholder");
+                        break;
+                    default:
+                        Debug.WriteLine("dc_OnAdd encountered unknown contents type");
+                        break;
                 }
             }
-            OutputHelper.DebugPrintJson(context.Drawers, "drawers");
-
-            _onAddCount++;
+            OutputHelper.DebugPrintJson(
+                context.Drawers,
+                $"dc_OnAdd-drawersBeforeSave{_onAddCount}"
+            );
             context.SaveChanges();
+            OutputHelper.DebugPrintJson(context.Drawers, $"dc_OnAdd-drawersAfterSave{_onAddCount}");
+            _onAddCount++;
         }
 
         private void UpdateTime()
@@ -187,11 +198,13 @@ namespace Armoire.ViewModels
         {
             WindowsFunctionalities.LogOff();
         }
+
         [RelayCommand]
         public void Restart()
         {
             WindowsFunctionalities.Restart();
         }
+
         [RelayCommand]
         public void Shutdown()
         {
