@@ -7,13 +7,18 @@ using System.Collections.ObjectModel;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using IWshRuntimeLibrary;
 
 namespace Armoire.ViewModels
 {
     public partial class NewItemViewModel : ViewModelBase
     {
+        public ObservableCollection<WshShortcut> DropCollection { get; set; } = new ObservableCollection<WshShortcut>();
+        [ObservableProperty]
+        public IBrush _borderBackground = Avalonia.Media.Brushes.Transparent;
         public static Dictionary<string, string> Executables { get; set; }
         public static ObservableCollection<string> ExecutableNames { get; set; }
         public static Dictionary<string, Icon> Icons { get; set; }
@@ -32,6 +37,14 @@ namespace Armoire.ViewModels
         [ObservableProperty]
         public bool _isItem;
 
+        [ObservableProperty]
+        public bool _isDragAndDrop;
+        [ObservableProperty]
+        public string _fileDropText = "Drop lnk file here";
+
+        [ObservableProperty]
+        public bool _isPopupRemoveButton;
+
         private int TargetDrawerID;
 
         private int TargetDrawerHeirarchy;
@@ -46,6 +59,7 @@ namespace Armoire.ViewModels
             if (!Executables.Any())
                 GetExecutables();
             IsItem = false;
+            IsDragAndDrop = false;
             TargetDrawerHeirarchy = targetDrawerHeirarchy;
         }
 
@@ -65,6 +79,21 @@ namespace Armoire.ViewModels
                             TargetDrawerID.ToString()
                         )
                     );
+                }
+                else if (IsDragAndDrop)
+                {
+                    var droppedFile = DropCollection.ElementAt(0);
+
+                    var ExeFilePath = droppedFile.TargetPath;
+
+                    var IconLocation = droppedFile.IconLocation;
+
+                    var IconPath = ExeFilePath + IconLocation;
+
+                    targetDrawer.Add(new ItemViewModel("", ExeFilePath, TargetDrawerID.ToString()));
+
+
+
                 }
                 else
                 {
@@ -134,6 +163,26 @@ namespace Armoire.ViewModels
         public void IsItemClicked()
         {
             IsItem = !IsItem;
+        }
+
+        public void IsDragAndDropClicked()
+        {
+            IsDragAndDrop = !IsDragAndDrop;
+        }
+
+        [RelayCommand]
+        public void RemoveFile()
+        {
+
+            DropCollection.RemoveAt(0);
+
+            if (DropCollection.Count == 0)
+            {
+                FileDropText = "Drop lnk file here";
+                IsPopupRemoveButton = false;
+                BorderBackground = Avalonia.Media.Brushes.Transparent;
+            }
+
         }
 
         [RelayCommand]
