@@ -8,8 +8,8 @@ public class Drawer : ContentsUnit
     private static int _drawerId = 1;
 
     // [Key] -> `DrawerId` is the primary key.
-    // NOTE: EF Core ignores read-only properties, so we need the `get` and the `set`, even though
-    // we won't be setting this property outside the constructor.
+    // NOTE: EF Core ignores read-only properties, so we need the `set`, even though we won't be
+    // setting this property outside the constructor.
     // See: https://stackoverflow.com/a/43503578/16458003
     [Key]
     public long DrawerId { get; set; }

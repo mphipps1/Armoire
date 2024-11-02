@@ -17,6 +17,7 @@ public partial class DrawerViewModel : ViewModelBase, IHasId
     public ObservableCollection<ContentsUnitViewModel> InnerContents { get; set; } = [];
 
     // The drawer button that this "drawer as container" issues from.
+    // This should be null for the dock DVM.
     public DrawerAsContentsViewModel? OuterContents { get; set; }
     public int Id { get; set; }
     public long Id3 { get; set; }
