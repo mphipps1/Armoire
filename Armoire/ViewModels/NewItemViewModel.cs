@@ -16,7 +16,9 @@ namespace Armoire.ViewModels
 {
     public partial class NewItemViewModel : ViewModelBase
     {
-        public ObservableCollection<WshShortcut> DropCollection { get; set; } = new ObservableCollection<WshShortcut>();
+        public ObservableCollection<WshShortcut> DropCollection { get; set; } =
+            new ObservableCollection<WshShortcut>();
+
         [ObservableProperty]
         public IBrush _borderBackground = Avalonia.Media.Brushes.Transparent;
         public static Dictionary<string, string> Executables { get; set; }
@@ -39,6 +41,7 @@ namespace Armoire.ViewModels
 
         [ObservableProperty]
         public bool _isDragAndDrop;
+
         [ObservableProperty]
         public string _fileDropText = "Drop lnk file here";
 
@@ -90,14 +93,16 @@ namespace Armoire.ViewModels
 
                     var IconPath = ExeFilePath + IconLocation;
 
-                    var name = Path.GetFileName(droppedFile.FullName).Substring(0, Path.GetFileName(droppedFile.FullName).IndexOf('.'));
+                    var name = Path.GetFileName(droppedFile.FullName)
+                        .Substring(0, Path.GetFileName(droppedFile.FullName).IndexOf('.'));
 
                     var icon = Icon.ExtractAssociatedIcon(ExeFilePath);
 
                     Bitmap bitmap = icon.ToBitmap();
 
-                    targetDrawer.Add(new ItemViewModel(name ,  ExeFilePath, bitmap ,TargetDrawerID.ToString()));
-
+                    targetDrawer.Add(
+                        new ItemViewModel(name, ExeFilePath, bitmap, TargetDrawerID.ToString())
+                    );
                 }
                 else
                 {
@@ -177,7 +182,6 @@ namespace Armoire.ViewModels
         [RelayCommand]
         public void RemoveFile()
         {
-
             DropCollection.RemoveAt(0);
 
             if (DropCollection.Count == 0)
@@ -186,7 +190,6 @@ namespace Armoire.ViewModels
                 IsPopupRemoveButton = false;
                 BorderBackground = Avalonia.Media.Brushes.Transparent;
             }
-
         }
 
         [RelayCommand]
