@@ -6,9 +6,12 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
-using IWshRuntimeLibrary;
+using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Text;
 
 namespace Armoire.Views;
 
@@ -73,18 +76,22 @@ public partial class NewItemView : UserControl
         var items = e.Data.GetFileNames();
         if (items != null)
         {
-            var wsh = new WshShell();
+            Type shellObjectType = Type.GetTypeFromProgID("WScript.Shell");
+            dynamic windowsShell = Activator.CreateInstance(shellObjectType);
+            dynamic shortcut = windowsShell.CreateShortcut(items.ElementAt(0));
+            
+            var file = shortcut.TargetPath;
 
-            var shortcut = (WshShortcut)wsh.CreateShortcut(items.ElementAt(0));
-
+            FileInfo fileInfo = new FileInfo(file);
+          
             if (sender is Border border)
             {
                 if (DataContext is NewItemViewModel itemviewmodel)
                 {
                     itemviewmodel.IsPopupRemoveButton = true;
-                    var dotIndex = Path.GetFileName(shortcut.FullName).IndexOf('.');
+                    var dotIndex = Path.GetFileName(fileInfo.Name).IndexOf('.');
                     border.Background = Brushes.Violet;
-                    itemviewmodel.FileDropText = $"{Path.GetFileName(shortcut.FullName).Substring(0, dotIndex)} dropped";
+                    itemviewmodel.FileDropText = $"{Path.GetFileName(fileInfo.Name).Substring(0, dotIndex)} dropped";
                 }
             }
 
@@ -121,4 +128,32 @@ public partial class NewItemView : UserControl
         var result = await dialog.ShowAsync(window);
 
     }
+
+
+    [DllImport("shell32.dll", CharSet = CharSet.Unicode)]
+    private static extern uint SHGetPathFromIDList(IntPtr pidl, StringBuilder pszPath);
+
+    [DllImport("shell32.dll", CharSet = CharSet.Unicode)]
+    private static extern IntPtr ILCreateFromPathW(string pszPath);
+
+    [DllImport("shell32.dll")]
+    private static extern void ILFree(IntPtr pidl);
+
+    public static string GetLnkTarget(string lnkPath)
+    {
+        IntPtr pidl = ILCreateFromPathW(lnkPath);
+        if (pidl == IntPtr.Zero)
+            throw new InvalidOperationException("Failed to retrieve the item ID list for the shortcut.");
+
+        StringBuilder targetPath = new StringBuilder(260); // MAX_PATH length
+
+        if (SHGetPathFromIDList(pidl, targetPath) == 0)
+            throw new InvalidOperationException("Failed to retrieve the target path from the shortcut.");
+
+        ILFree(pidl);
+
+        return targetPath.ToString();
+    }
+
 }
+

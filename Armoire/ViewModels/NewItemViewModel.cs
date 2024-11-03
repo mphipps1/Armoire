@@ -10,13 +10,13 @@ using System.Linq;
 using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using IWshRuntimeLibrary;
+
 
 namespace Armoire.ViewModels
 {
     public partial class NewItemViewModel : ViewModelBase
     {
-        public ObservableCollection<WshShortcut> DropCollection { get; set; } = new ObservableCollection<WshShortcut>();
+        public ObservableCollection<dynamic> DropCollection { get; set; } = new ObservableCollection<dynamic>();
         [ObservableProperty]
         public IBrush _borderBackground = Avalonia.Media.Brushes.Transparent;
         public static Dictionary<string, string> Executables { get; set; }
