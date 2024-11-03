@@ -3,11 +3,15 @@ function dbs {
     $migrations_dir = ".\Armoire\Migrations"
     $db_path = "$($env:localappdata)\ArmoireData.db"
 
-    Remove-Item -r -fo $migrations_dir
-    Remove-Item $db_path
+    if (Test-Path $migrations_dir) {
+        Remove-Item -r -fo $migrations_dir
+    }
+    if (Test-Path $db_path) {
+        Remove-Item $db_path
+    }
 
-    dotnet ef migrations add InitialCreate --project .\Armoire\Armoire.csproj
-    dotnet ef database update --project .\Armoire\Armoire.csproj
+    dotnet ef migrations add InitialCreate --project .\Armoire\Armoire.csproj --no-build
+    dotnet ef database update --project .\Armoire\Armoire.csproj --no-build
 }
 
 # Delete Logs
