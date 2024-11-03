@@ -130,30 +130,6 @@ public partial class NewItemView : UserControl
     }
 
 
-    [DllImport("shell32.dll", CharSet = CharSet.Unicode)]
-    private static extern uint SHGetPathFromIDList(IntPtr pidl, StringBuilder pszPath);
-
-    [DllImport("shell32.dll", CharSet = CharSet.Unicode)]
-    private static extern IntPtr ILCreateFromPathW(string pszPath);
-
-    [DllImport("shell32.dll")]
-    private static extern void ILFree(IntPtr pidl);
-
-    public static string GetLnkTarget(string lnkPath)
-    {
-        IntPtr pidl = ILCreateFromPathW(lnkPath);
-        if (pidl == IntPtr.Zero)
-            throw new InvalidOperationException("Failed to retrieve the item ID list for the shortcut.");
-
-        StringBuilder targetPath = new StringBuilder(260); // MAX_PATH length
-
-        if (SHGetPathFromIDList(pidl, targetPath) == 0)
-            throw new InvalidOperationException("Failed to retrieve the target path from the shortcut.");
-
-        ILFree(pidl);
-
-        return targetPath.ToString();
-    }
 
 }
 
