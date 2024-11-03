@@ -117,7 +117,7 @@
 					Name="Submit"
 					Margin="10"
 					Padding="0"
-					Command="{Binding Update}">
+					Command="{Binding UpdateCommand}">
 				Submit
 			</Button>
 		</StackPanel>

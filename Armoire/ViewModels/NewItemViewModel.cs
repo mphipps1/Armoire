@@ -117,7 +117,7 @@ namespace Armoire.ViewModels
             {
                 if (unit is DrawerAsContentsViewModel dacvm)
                 {
-                    if (dacvm.Id == TargetDrawerID)
+                    if (dacvm.InnerContainer.Id == TargetDrawerID)
                     {
                         return dacvm.InnerContainer.InnerContents;
                     }

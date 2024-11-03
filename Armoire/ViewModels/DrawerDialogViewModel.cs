@@ -28,7 +28,7 @@ public partial class DrawerDialogViewModel : DrawerViewModel
     private string _drawerName;
     public DrawerDialogViewModel()
     {
-        drawerContents.Add(new DrawerAsContentsViewModel(1, DrawerName, "/Assets/closedGradientDrawer.svg"));
+      //  drawerContents.Add(new DrawerAsContentsViewModel(1, DrawerName, "/Assets/closedGradientDrawer.svg"));
     
     }
 

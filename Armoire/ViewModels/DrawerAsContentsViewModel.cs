@@ -46,12 +46,6 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
         IconPath = "/Assets/closedGradientDrawer.svg";
     }
 
-    public DrawerAsContentsViewModel(int id, string name, string iconPath)
-    {
-        InnerContainer = new DrawerViewModel(id);
-        Name = name;
-        IconPath = iconPath;
-    }
 
     public DrawerAsContentsViewModel(string name, string? iconPath)
     {
@@ -93,7 +87,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
     [RelayCommand]
     public void AddItemClick()
     {
-        DialogHost.Show(new NewItemViewModel(Id, DrawerHierarchy));
+        DialogHost.Show(new NewItemViewModel(InnerContainer.Id, DrawerHierarchy));
     }
 
     [RelayCommand]
