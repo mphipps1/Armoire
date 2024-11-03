@@ -2,9 +2,9 @@
 
 ## Description
 
-A dock for Windows that uses "drawers" to organize apps to fit users' unique workflows (WIP).
+A dock for Windows that helps users organize their apps into "drawers" to fit their unique workflows (WIP).
 
-## Attribution
+## Affiliation
 
 ICSI 499 Capstone at SUNY at Albany
 
