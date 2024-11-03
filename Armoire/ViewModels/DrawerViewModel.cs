@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Diagnostics;
 using Armoire.Interfaces;
 using Armoire.Models;
 using Armoire.Utils;
@@ -10,6 +13,8 @@ namespace Armoire.ViewModels;
 
 public partial class DrawerViewModel : ViewModelBase, IHasId
 {
+    private int _onAddCount = 0;
+
     [ObservableProperty]
     private Orientation _wrapPanelOrientation = Orientation.Horizontal;
 
@@ -28,14 +33,21 @@ public partial class DrawerViewModel : ViewModelBase, IHasId
 
     public DrawerAsContentsViewModel drawerAsContentsViewModel { get; set; }
 
-    public DrawerViewModel() { }
+    public DrawerViewModel()
+    {
+        // Register event handlers.
+        InnerContents.CollectionChanged += dc_CollectionChanged;
+        InnerContents.CollectionChanged += dc_OnAdd;
+    }
 
     public DrawerViewModel(int id)
+        : this() // This calls the parameterless constructor to register the event handlers.
     {
         Id = id;
     }
 
     public DrawerViewModel(int id, DrawerAsContentsViewModel drawerascontentsviewmodel)
+        : this()
     {
         drawerAsContentsViewModel = drawerascontentsviewmodel;
         Id = id;
@@ -64,5 +76,60 @@ public partial class DrawerViewModel : ViewModelBase, IHasId
         context.TryAddDrawer(drawerToAdd);
         context.SaveChanges();
         Id3 = drawerToAdd.DrawerId;
+    }
+
+    private void dc_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        // https://stackoverflow.com/a/8490996/16458003
+        if (e.NewItems != null)
+            foreach (ContentsUnitViewModel item in e.NewItems)
+                item.PropertyChanged += dc_PropertyChanged;
+
+        if (e.OldItems != null)
+            foreach (ContentsUnitViewModel item in e.OldItems)
+                item.PropertyChanged -= dc_PropertyChanged;
+    }
+
+    private void dc_OnAdd(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        using var context = new AppDbContext();
+        if (e.NewItems is not { } newItems)
+            return;
+        var i = 0;
+        foreach (var item in newItems)
+        {
+            switch (item)
+            {
+                case DrawerAsContentsViewModel deVm:
+                    OutputHelper.DebugPrintJson(deVm, $"dc_OnAdd-deVm{i++}");
+                    var newContentsUnit = deVm.CreateDrawer(context);
+                    context.TryAddDrawer(newContentsUnit);
+                    break;
+                case ItemViewModel iVm:
+                    Debug.WriteLine("dc_OnAdd ItemViewModel case placeholder");
+                    break;
+                default:
+                    Debug.WriteLine("dc_OnAdd encountered unknown contents type");
+                    break;
+            }
+        }
+        OutputHelper.DebugPrintJson(context.Drawers, $"dc_OnAdd-drawersBeforeSave{_onAddCount}");
+        context.SaveChanges();
+        OutputHelper.DebugPrintJson(context.Drawers, $"dc_OnAdd-drawersAfterSave{_onAddCount}");
+        _onAddCount++;
+    }
+
+    private void dc_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        switch (e.PropertyName)
+        {
+            case "DeleteMe":
+                if (sender is ContentsUnitViewModel cu)
+                    InnerContents.Remove(cu);
+                break;
+            default:
+                Debug.WriteLine("Different property changed.");
+                break;
+        }
     }
 }
