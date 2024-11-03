@@ -90,9 +90,13 @@ namespace Armoire.ViewModels
 
                     var IconPath = ExeFilePath + IconLocation;
 
-                    targetDrawer.Add(new ItemViewModel("", ExeFilePath, TargetDrawerID.ToString()));
+                    var name = Path.GetFileName(droppedFile.FullName).Substring(0, Path.GetFileName(droppedFile.FullName).IndexOf('.'));
 
+                    var icon = Icon.ExtractAssociatedIcon(ExeFilePath);
 
+                    Bitmap bitmap = icon.ToBitmap();
+
+                    targetDrawer.Add(new ItemViewModel(name ,  ExeFilePath, bitmap ,TargetDrawerID.ToString()));
 
                 }
                 else
