@@ -132,7 +132,8 @@ namespace Armoire.ViewModels
                 if (unit is DrawerAsContentsViewModel dacvm)
                 {
                     var ret = GetTargetDrawer(dacvm.InnerContainer.InnerContents);
-                    return ret;
+                    if(ret != null)
+                        return ret;
                 }
             }
             return null;
