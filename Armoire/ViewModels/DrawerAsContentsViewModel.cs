@@ -24,7 +24,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
     public DrawerAsContentsViewModel(DrawerViewModel outerContainer, string name)
     {
         Name = name;
-        Id = _count;
+        Id = ++_count;
         IconPath = "/Assets/closedGradientDrawer.svg";
         InnerContainer = new DrawerViewModel();
         OuterContainer = outerContainer;
@@ -45,7 +45,6 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
         Id = _count;
         IconPath = "/Assets/closedGradientDrawer.svg";
     }
-
 
     public DrawerAsContentsViewModel(string name, string? iconPath)
     {
