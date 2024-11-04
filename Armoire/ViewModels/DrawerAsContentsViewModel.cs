@@ -87,7 +87,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
     [RelayCommand]
     public void AddItemClick()
     {
-        DialogHost.Show(new NewItemViewModel(InnerContainer.Id, DrawerHierarchy));
+        DialogHost.Show(new NewItemViewModel(Id, DrawerHierarchy));
     }
 
     [RelayCommand]
