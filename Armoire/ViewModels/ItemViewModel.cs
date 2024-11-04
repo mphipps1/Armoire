@@ -29,6 +29,14 @@ public partial class ItemViewModel : ContentsUnitViewModel
             : @"C:\WINDOWS\system32\mspaint.exe";
         IconKind = "Star";
         IconPath = "/Assets/mspaintLogo.svg";
+        var bmp = Icon.ExtractAssociatedIcon(ExecutablePath).ToBitmap();
+        //which can be displayed by loading it into a memory stream to mimic downloading it
+        using (MemoryStream memory = new MemoryStream())
+        {
+            bmp.Save(memory, ImageFormat.Png);
+            memory.Position = 0;
+            IconBmp = new Avalonia.Media.Imaging.Bitmap(memory);
+        }
         Model = new Item(Name, ExecutablePath, "0");
     }
 
