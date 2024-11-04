@@ -10,8 +10,8 @@ function dbs {
         Remove-Item $db_path
     }
 
-    dotnet ef migrations add InitialCreate --project .\Armoire\Armoire.csproj --no-build
-    dotnet ef database update --project .\Armoire\Armoire.csproj --no-build
+    dotnet ef migrations add InitialCreate --project .\Armoire\Armoire.csproj
+    dotnet ef database update --project .\Armoire\Armoire.csproj
 }
 
 # Delete Logs
