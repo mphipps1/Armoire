@@ -33,39 +33,9 @@ public partial class NewItemView : UserControl
 
     }
 
-    private void OnPopupButton_Click(object sender, RoutedEventArgs e)
+    private void OnFileDrop()
     {
-        if (popup.IsOpen)
-        {
-            popup.IsOpen = false;
-            backAndSubmit.Margin = Thickness.Parse("-8 10 10 10");
-            stack.Height = 250;
-        }
-        else
-        {
-            popup.IsOpen = true;
-            backAndSubmit.Margin = Thickness.Parse("0 90 10 10");
-            stack.Height = 300;
-
-        }
-    }
-
-    private void OnPopup_Click(object sender, RoutedEventArgs e)
-    {
-        if (dragAndDropPopup.IsOpen)
-        {
-            dragAndDropPopup.IsOpen = false;
-            backAndSubmit.Margin = Thickness.Parse("-8 10 10 10");
-            stack.Height = 250;
-            stack.Width = 150;
-        }
-        else
-        {
-            dragAndDropPopup.IsOpen = true;
-            backAndSubmit.Margin = Thickness.Parse("50 400 10 10");
-            stack.Height = 600;
-            stack.Width = 300;
-        }
+        backAndSubmit.Margin = Thickness.Parse("-8 70 10 10");
     }
 
 
@@ -90,7 +60,7 @@ public partial class NewItemView : UserControl
                 {
                     itemviewmodel.IsPopupRemoveButton = true;
                     var dotIndex = Path.GetFileName(fileInfo.Name).IndexOf('.');
-                    border.Background = Brushes.Violet;
+                    border.Background = Brushes.DarkViolet;
                     itemviewmodel.FileDropText = $"{Path.GetFileName(fileInfo.Name).Substring(0, dotIndex)} dropped";
                 }
             }

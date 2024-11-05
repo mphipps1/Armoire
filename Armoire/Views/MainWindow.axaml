@@ -87,7 +87,7 @@
 
         <StackPanel
             HorizontalAlignment="Left"
-            VerticalAlignment="Center"
+            VerticalAlignment="Top"
             Spacing="20">
 			<!--  Digital Clock  -->
 			<TextBlock

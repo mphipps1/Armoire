@@ -49,6 +49,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
     public DrawerAsContentsViewModel(string name, string? iconPath)
     {
         InnerContainer = new DrawerViewModel(_count++);
+        Id = _count;
         Name = name;
         if (iconPath == null || iconPath == "")
             IconPath = "/../Assets/closedGradientDrawer.svg";
@@ -86,7 +87,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
     [RelayCommand]
     public void AddItemClick()
     {
-        DialogHost.Show(new NewItemViewModel(Id, DrawerHierarchy));
+        DialogHost.Show(new NewItemViewModel(Id, DrawerHierarchy, true));
     }
 
     [RelayCommand]
@@ -94,20 +95,22 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
     {
         if (InnerContainer.InnerContents.Count < 10)
         {
-            var newDrawer = new DrawerAsContentsViewModel();
-            newDrawer.DrawerHierarchy = DrawerHierarchy + 1;
-            if (newDrawer.DrawerHierarchy <= MAXNESTERDRAWERS)
-            {
-                InnerContainer.InnerContents.Add(newDrawer);
-            }
-            else
-            {
-                DialogHost.Show(
-                    new ErrorMessageViewModel(
-                        $"Maximum drawer nesting level reached. You can only open up to 4 nested drawers."
-                    )
-                );
-            }
+            //var newDrawer = new DrawerAsContentsViewModel();
+            //newDrawer.DrawerHierarchy = DrawerHierarchy + 1;
+            //if (newDrawer.DrawerHierarchy <= MAXNESTERDRAWERS)
+            //{
+            //    InnerContainer.InnerContents.Add(newDrawer);
+            //}
+            //else
+            //{
+            //    DialogHost.Show(
+            //        new ErrorMessageViewModel(
+            //            $"Maximum drawer nesting level reached. You can only open up to 4 nested drawers."
+            //        )
+            //    );
+            //}
+            DialogHost.Show(new NewItemViewModel(Id, DrawerHierarchy, false));
+
         }
         else
             DialogHost.Show(

@@ -38,7 +38,17 @@ namespace Armoire.ViewModels
         public bool _isItem;
 
         [ObservableProperty]
-        public bool _isDragAndDrop;
+        public bool _isDrawer;
+
+        [ObservableProperty]
+        public int _panelHeight;
+
+        [ObservableProperty]
+        public int _panelWidth;
+
+        [ObservableProperty]
+        public string _backgroundColor;
+
         [ObservableProperty]
         public string _fileDropText = "Drop lnk file here";
 
@@ -49,7 +59,7 @@ namespace Armoire.ViewModels
 
         private int TargetDrawerHeirarchy;
 
-        public NewItemViewModel(int targetDrawerID, int targetDrawerHeirarchy)
+        public NewItemViewModel(int targetDrawerID, int targetDrawerHeirarchy, bool isItem)
         {
             Dock = MainWindowViewModel.DockViewModel.InnerContents;
             Executables = new Dictionary<string, string>();
@@ -57,9 +67,20 @@ namespace Armoire.ViewModels
             Icons = new Dictionary<string, Icon>();
             TargetDrawerID = targetDrawerID;
             if (!Executables.Any())
+            {
                 GetExecutables();
-            IsItem = false;
-            IsDragAndDrop = false;
+                ExecutableNames = new ObservableCollection<string>(ExecutableNames.OrderBy(i => i));
+            }
+            IsItem = isItem;
+            IsDrawer = !isItem;
+            if (IsItem)
+                PanelHeight = 400;
+            else
+                PanelHeight = 200;
+            PanelWidth = 400;
+
+            //setting the backgrounds to light gray
+            BackgroundColor = "#c5c7c6";
             TargetDrawerHeirarchy = targetDrawerHeirarchy;
         }
 
@@ -69,7 +90,7 @@ namespace Armoire.ViewModels
             var targetDrawer = GetTargetDrawer(Dock);
             if (targetDrawer != null)
             {
-                if (IsItem)
+                if (NewExe != null)
                 {
                     targetDrawer.Add(
                         new ItemViewModel(
@@ -80,18 +101,13 @@ namespace Armoire.ViewModels
                         )
                     );
                 }
-                else if (IsDragAndDrop)
+                else if (DropCollection.Count > 0)
                 {
                     var droppedFile = DropCollection.ElementAt(0);
-
                     var ExeFilePath = droppedFile.TargetPath;
-
                     var IconLocation = droppedFile.IconLocation;
-
                     var IconPath = ExeFilePath + IconLocation;
-
                     var name = Path.GetFileName(droppedFile.FullName).Substring(0, Path.GetFileName(droppedFile.FullName).IndexOf('.'));
-
                     var icon = Icon.ExtractAssociatedIcon(ExeFilePath);
 
                     Bitmap bitmap = icon.ToBitmap();
@@ -170,24 +186,22 @@ namespace Armoire.ViewModels
             IsItem = !IsItem;
         }
 
-        public void IsDragAndDropClicked()
-        {
-            IsDragAndDrop = !IsDragAndDrop;
-        }
 
         [RelayCommand]
         public void RemoveFile()
         {
-
             DropCollection.RemoveAt(0);
-
             if (DropCollection.Count == 0)
             {
                 FileDropText = "Drop lnk file here";
                 IsPopupRemoveButton = false;
                 BorderBackground = Avalonia.Media.Brushes.Transparent;
             }
+        }
 
+        public bool CheckIsItem()
+        {
+            return IsItem;
         }
 
         [RelayCommand]

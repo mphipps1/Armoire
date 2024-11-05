@@ -119,7 +119,7 @@ namespace Armoire.ViewModels
         [RelayCommand]
         public void AddItemClick()
         {
-            DialogHost.Show(new NewItemViewModel(0, 0));
+            DialogHost.Show(new NewItemViewModel(0, 0, true));
         }
 
         [RelayCommand]
