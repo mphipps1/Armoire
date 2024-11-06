@@ -40,7 +40,10 @@ namespace Armoire.Views
         private void InputElement_OnPointerPressed(object? sender, PointerPressedEventArgs e)
         {
             var point = e.GetCurrentPoint(sender as Control);
-            if (point.Properties.IsRightButtonPressed || e.Source.ToString() != "Avalonia.Controls.Panel")
+            Debug.WriteLine("Mouse click on: " + e.Source.ToString());
+            if (point.Properties.IsRightButtonPressed || 
+                ((e.Source.ToString() != "Avalonia.Controls.Panel") &&
+                (e.Source.ToString() != "Avalonia.Controls.StackPanel")))
                 return;
             
             if (WindowState == WindowState.Maximized || WindowState == WindowState.FullScreen)
