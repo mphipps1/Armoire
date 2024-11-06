@@ -185,6 +185,18 @@
 									</ToolTip>
 								</ToolTip.Tip>
 							</Button>
+
+							<Button Click="OpenFileDialogClick"  Height="40"
+									Width="40">
+								<Button.Content>
+									<avalonia:MaterialIcon Kind="File" Width="32" Height="32"/>
+								</Button.Content>
+								<ToolTip.Tip>
+									<ToolTip Height="40" Width="90" Padding="3" Background="Transparent">
+										<TextBlock Text="File Explorer" Foreground="White" />
+									</ToolTip>
+								</ToolTip.Tip>
+							</Button>
 						</StackPanel>
 					</Flyout>
 				</Button.Flyout>

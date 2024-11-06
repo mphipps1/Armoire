@@ -86,18 +86,7 @@ public partial class NewItemView : UserControl
     }
 
 
-    private async void OnOpenFileDialogClick(object sender, RoutedEventArgs e)
-    {
-        var window = TopLevel.GetTopLevel(this) as Window;
-
-        var dialog = new OpenFileDialog
-        {
-            AllowMultiple = true
-        };
-
-        var result = await dialog.ShowAsync(window);
-
-    }
+   
 
 
 

@@ -159,9 +159,13 @@ namespace Armoire.ViewModels
         [RelayCommand]
         public void OpenWindowsSetting()
         {
+          
 
             Process.Start(new ProcessStartInfo("ms-settings:") { UseShellExecute = true });
 
         }
+
+
+
     }
 }

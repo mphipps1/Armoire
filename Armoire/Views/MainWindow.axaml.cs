@@ -57,5 +57,19 @@ namespace Armoire.Views
         {
             _mouseDownForWindowMoving = false;
         }
+
+
+        private async void OpenFileDialogClick(object sender, RoutedEventArgs e)
+        {
+            var window = TopLevel.GetTopLevel(this) as Window;
+
+            var FileSystemdialog = new OpenFileDialog
+            {
+                AllowMultiple = true
+            };
+
+            var result = await FileSystemdialog.ShowAsync(window);
+
+        }
     }
 }
