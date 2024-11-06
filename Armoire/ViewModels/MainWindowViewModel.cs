@@ -155,5 +155,13 @@ namespace Armoire.ViewModels
         {
             DialogHost.GetDialogSession("MainDialogHost")?.Close(false);
         }
+
+        [RelayCommand]
+        public void OpenWindowsSetting()
+        {
+
+            Process.Start(new ProcessStartInfo("ms-settings:") { UseShellExecute = true });
+
+        }
     }
 }
