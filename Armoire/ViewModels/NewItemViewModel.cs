@@ -94,7 +94,7 @@ namespace Armoire.ViewModels
                 {
                     targetDrawer.Add(
                         new ItemViewModel(
-                            Name,
+                            Name ?? NewExe,
                             Executables[NewExe],
                             Icons[NewExe].ToBitmap(),
                             TargetDrawerID.ToString()
