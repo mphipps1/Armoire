@@ -61,11 +61,7 @@ public partial class DrawerViewModel : ViewModelBase, IHasId
 
     public Drawer CreateDrawer()
     {
-        return new Drawer()
-        {
-            Name = Name,
-            ParentDrawerId = OuterContents?.OuterContainer.Id3 ?? 1
-        };
+        return new Drawer() { Name = Name, ParentId = "default" };
     }
 
     public void SaveToDb()
@@ -75,7 +71,7 @@ public partial class DrawerViewModel : ViewModelBase, IHasId
         OutputHelper.DebugPrintJson(drawerToAdd, "DVM_SaveToDb_drawer");
         context.TryAddDrawer(drawerToAdd);
         context.SaveChanges();
-        Id3 = drawerToAdd.DrawerId;
+        Id3 = drawerToAdd.Id;
     }
 
     private void dc_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -113,9 +109,7 @@ public partial class DrawerViewModel : ViewModelBase, IHasId
                     break;
             }
         }
-        OutputHelper.DebugPrintJson(context.Drawers, $"dc_OnAdd-drawersBeforeSave{_onAddCount}");
         context.SaveChanges();
-        OutputHelper.DebugPrintJson(context.Drawers, $"dc_OnAdd-drawersAfterSave{_onAddCount}");
         _onAddCount++;
     }
 

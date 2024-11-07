@@ -12,6 +12,8 @@ public class AppDbContext : DbContext
     public DbSet<Drawer> Drawers { get; set; }
     public DbSet<Item> Items { get; set; }
     public string DbPath { get; }
+    private const bool CanSave = false;
+    private const bool CanInspect = false;
 
     public AppDbContext()
     {
@@ -31,9 +33,9 @@ public class AppDbContext : DbContext
 
         modelBuilder
             .Entity<Drawer>()
-            .HasOne(d => d.ParentDrawer)
+            .HasOne(d => d.Parent)
             .WithMany(d => d.Drawers)
-            .HasForeignKey(d => d.ParentDrawerId);
+            .HasForeignKey(d => d.ParentId);
 
         modelBuilder
             .Entity<Item>()
@@ -44,12 +46,19 @@ public class AppDbContext : DbContext
 
     public bool TryAddDrawer(Drawer drawer)
     {
-        if (Drawers.Any(d => d.DrawerId == drawer.DrawerId))
+        if (!CanInspect)
+            return false;
+        if (Drawers.Any(d => d.Id == drawer.Id))
         {
             Debug.WriteLine("Drawer already exists; skipping...");
             return false;
         }
         Drawers.Add(drawer);
         return true;
+    }
+
+    public override int SaveChanges()
+    {
+        return !CanSave ? 0 : base.SaveChanges();
     }
 }

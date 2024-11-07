@@ -110,7 +110,6 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
             //    );
             //}
             DialogHost.Show(new NewItemViewModel(Id, DrawerHierarchy, false));
-
         }
         else
             DialogHost.Show(
@@ -133,10 +132,6 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
     {
         OutputHelper.DebugPrintJson(this, "DeVm_CreateDrawer_this");
         OutputHelper.DebugPrintJson(OuterContainer, "DeVm_CreateDrawer_OuterContainer");
-        return new Drawer()
-        {
-            Name = Name,
-            ParentDrawerId = OuterContainer?.FindDrawer(context).DrawerId ?? 1
-        };
+        return new Drawer() { Name = Name, ParentId = "default" };
     }
 }
