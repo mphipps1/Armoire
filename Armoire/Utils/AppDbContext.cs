@@ -39,9 +39,9 @@ public class AppDbContext : DbContext
 
         modelBuilder
             .Entity<Item>()
-            .HasOne(d => d.ParentDrawer)
+            .HasOne(d => d.Parent)
             .WithMany(d => d.Items)
-            .HasForeignKey(d => d.ParentDrawerId);
+            .HasForeignKey(d => d.ParentId);
     }
 
     public bool TryAddDrawer(Drawer drawer)

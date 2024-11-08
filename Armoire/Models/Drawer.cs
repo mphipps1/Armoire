@@ -9,8 +9,9 @@ public class Drawer
     // NOTE: EF Core ignores read-only properties, so we need the `set`, even though we won't be
     // setting this property outside the constructor.
     // See: https://stackoverflow.com/a/43503578/16458003
+    [MaxLength(100)]
     [Key]
-    public long Id { get; set; }
+    public string Id { get; set; } = "default";
 
     public Drawer() { }
 

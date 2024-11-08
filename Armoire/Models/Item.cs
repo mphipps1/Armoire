@@ -6,13 +6,15 @@ using Armoire.Interfaces;
 
 namespace Armoire.Models;
 
-public class Item : ContentsUnit
+public class Item
 {
-    // [Key] -> `DrawerId` is the primary key.
-    // [Database...] -> A new `DrawerId` gets generated for each row inserted.
+    // [Key] -> `Id` is the primary key.
     [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public long ItemId { get; set; }
+    [MaxLength(100)]
+    public string Id { get; set; } = "default";
+
+    [MaxLength(100)]
+    public string Name { get; set; } = "default";
 
     [MaxLength(100)]
     public string ExecutablePath { get; set; } = "default";
@@ -28,6 +30,11 @@ public class Item : ContentsUnit
 
     // Parameterless constructor for EF.
     public Item() { }
+
+    public Drawer Parent { get; set; }
+
+    [MaxLength(100)]
+    public string ParentId { get; set; } = "default";
 
     public Item(string name, string path, string parentDrawer)
     {

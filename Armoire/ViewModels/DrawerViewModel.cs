@@ -71,7 +71,6 @@ public partial class DrawerViewModel : ViewModelBase, IHasId
         OutputHelper.DebugPrintJson(drawerToAdd, "DVM_SaveToDb_drawer");
         context.TryAddDrawer(drawerToAdd);
         context.SaveChanges();
-        Id3 = drawerToAdd.Id;
     }
 
     private void dc_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)

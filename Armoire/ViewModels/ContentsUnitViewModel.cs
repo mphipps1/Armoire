@@ -25,7 +25,7 @@ public partial class ContentsUnitViewModel : ViewModelBase, IHasId
     [ObservableProperty]
     private int _drawerHierarchy;
 
-    public ContentsUnit? Model { get; set; }
+    public Item? Model { get; set; }
 
     public ContentsUnitViewModel()
     {
