@@ -17,9 +17,6 @@ public partial class ContentsUnitViewModel : ViewModelBase
     private string _name;
 
     [ObservableProperty]
-    private string? _iconKind;
-
-    [ObservableProperty]
     private string? _iconPath;
 
     [ObservableProperty]
@@ -28,6 +25,7 @@ public partial class ContentsUnitViewModel : ViewModelBase
     [ObservableProperty]
     private int _drawerHierarchy;
 
+    // TODO: This is a "memory leak"
     public Item? Model { get; set; }
 
     public ContentsUnitViewModel()
@@ -44,7 +42,8 @@ public partial class ContentsUnitViewModel : ViewModelBase
         DeleteMe = true;
     }
 
-    public string Id { get; set; } = "default";
+    public string Id { get; set; } = "CONTENTS_NULL";
+    public string ContainerId { get; set; } = "CONTAINER_NULL";
 
     [RelayCommand]
     public void MoveUp()
