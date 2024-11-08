@@ -1,4 +1,5 @@
-﻿using Armoire.Models;
+﻿using System.Data;
+using Armoire.Models;
 using Armoire.Utils;
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -24,7 +25,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
     public DrawerAsContentsViewModel(DrawerViewModel outerContainer, string name)
     {
         Name = name;
-        Id = ++_count;
+        Id = IdBase + IdCount++;
         IconPath = "/Assets/closedGradientDrawer.svg";
         InnerContainer = new DrawerViewModel();
         OuterContainer = outerContainer;
@@ -33,7 +34,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
     public DrawerAsContentsViewModel()
     {
         Name = "drawer " + ++_count;
-        Id = _count;
+        Id = IdBase + IdCount++;
         IconPath = "/Assets/closedGradientDrawer.svg";
         InnerContainer = new DrawerViewModel();
     }
@@ -42,14 +43,14 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
     {
         DrawerHierarchy = drawerHierarchy;
         Name = "drawer " + ++_count;
-        Id = _count;
+        Id = IdBase + IdCount++;
         IconPath = "/Assets/closedGradientDrawer.svg";
     }
 
     public DrawerAsContentsViewModel(string name, string? iconPath)
     {
         InnerContainer = new DrawerViewModel(_count++);
-        Id = _count;
+        Id = IdBase + IdCount++;
         Name = name;
         if (iconPath == null || iconPath == "")
             IconPath = "/../Assets/closedGradientDrawer.svg";

@@ -119,7 +119,7 @@ namespace Armoire.ViewModels
         [RelayCommand]
         public void AddItemClick()
         {
-            DialogHost.Show(new NewItemViewModel(0, 0, true));
+            DialogHost.Show(new NewItemViewModel("CONTENTS_1", 0, true));
         }
 
         [RelayCommand]
@@ -159,13 +159,7 @@ namespace Armoire.ViewModels
         [RelayCommand]
         public void OpenWindowsSetting()
         {
-          
-
             Process.Start(new ProcessStartInfo("ms-settings:") { UseShellExecute = true });
-
         }
-
-
-
     }
 }

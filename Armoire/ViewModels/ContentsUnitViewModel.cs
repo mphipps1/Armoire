@@ -6,9 +6,10 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace Armoire.ViewModels;
 
-public partial class ContentsUnitViewModel : ViewModelBase, IHasId
+public partial class ContentsUnitViewModel : ViewModelBase
 {
-    private static int _count;
+    protected static int IdCount = 1;
+    protected const string IdBase = "CONTENTS_";
 
     [ObservableProperty]
     private string _name;
@@ -29,7 +30,7 @@ public partial class ContentsUnitViewModel : ViewModelBase, IHasId
 
     public ContentsUnitViewModel()
     {
-        Name = "unit " + ++_count;
+        Name = "unit " + ++IdCount;
     }
 
     [RelayCommand]
@@ -41,7 +42,7 @@ public partial class ContentsUnitViewModel : ViewModelBase, IHasId
         DeleteMe = true;
     }
 
-    public int Id { get; set; }
+    public string Id { get; set; } = "default";
 
     [RelayCommand]
     public void MoveUp()

@@ -11,12 +11,13 @@ using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
-
 namespace Armoire.ViewModels
 {
     public partial class NewItemViewModel : ViewModelBase
     {
-        public ObservableCollection<dynamic> DropCollection { get; set; } = new ObservableCollection<dynamic>();
+        public ObservableCollection<dynamic> DropCollection { get; set; } =
+            new ObservableCollection<dynamic>();
+
         [ObservableProperty]
         public IBrush _borderBackground = Avalonia.Media.Brushes.Transparent;
         public static Dictionary<string, string> Executables { get; set; }
@@ -55,11 +56,11 @@ namespace Armoire.ViewModels
         [ObservableProperty]
         public bool _isPopupRemoveButton;
 
-        private int TargetDrawerID;
+        private string TargetDrawerID;
 
         private int TargetDrawerHeirarchy;
 
-        public NewItemViewModel(int targetDrawerID, int targetDrawerHeirarchy, bool isItem)
+        public NewItemViewModel(string targetDrawerID, int targetDrawerHeirarchy, bool isItem)
         {
             Dock = MainWindowViewModel.DockViewModel.InnerContents;
             Executables = new Dictionary<string, string>();
@@ -107,13 +108,15 @@ namespace Armoire.ViewModels
                     var ExeFilePath = droppedFile.TargetPath;
                     var IconLocation = droppedFile.IconLocation;
                     var IconPath = ExeFilePath + IconLocation;
-                    var name = Path.GetFileName(droppedFile.FullName).Substring(0, Path.GetFileName(droppedFile.FullName).IndexOf('.'));
+                    var name = Path.GetFileName(droppedFile.FullName)
+                        .Substring(0, Path.GetFileName(droppedFile.FullName).IndexOf('.'));
                     var icon = Icon.ExtractAssociatedIcon(ExeFilePath);
 
                     Bitmap bitmap = icon.ToBitmap();
 
-                    targetDrawer.Add(new ItemViewModel(name ,  ExeFilePath, bitmap ,TargetDrawerID.ToString()));
-
+                    targetDrawer.Add(
+                        new ItemViewModel(name, ExeFilePath, bitmap, TargetDrawerID.ToString())
+                    );
                 }
                 else
                 {
@@ -131,7 +134,7 @@ namespace Armoire.ViewModels
             ObservableCollection<ContentsUnitViewModel> currentDrawer
         )
         {
-            if (TargetDrawerID == 0)
+            if (TargetDrawerID == "CONTENTS_1")
                 return Dock;
             foreach (var unit in currentDrawer)
             {
@@ -148,7 +151,7 @@ namespace Armoire.ViewModels
                 if (unit is DrawerAsContentsViewModel dacvm)
                 {
                     var ret = GetTargetDrawer(dacvm.InnerContainer.InnerContents);
-                    if(ret != null)
+                    if (ret != null)
                         return ret;
                 }
             }
@@ -185,7 +188,6 @@ namespace Armoire.ViewModels
         {
             IsItem = !IsItem;
         }
-
 
         [RelayCommand]
         public void RemoveFile()
