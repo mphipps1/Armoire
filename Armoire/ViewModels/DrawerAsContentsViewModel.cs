@@ -126,10 +126,15 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
         //window.Show();
     }
 
-    public Drawer CreateDrawer(AppDbContext context)
+    public Drawer CreateDrawer()
     {
         OutputHelper.DebugPrintJson(this, "DeVm_CreateDrawer_this");
         OutputHelper.DebugPrintJson(Container, "DeVm_CreateDrawer_OuterContainer");
-        return new Drawer() { Name = Name, ParentId = "default" };
+        return new Drawer()
+        {
+            Id = Id,
+            Name = Name,
+            ParentId = ParentId
+        };
     }
 }

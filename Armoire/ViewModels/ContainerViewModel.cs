@@ -66,7 +66,7 @@ public partial class ContainerViewModel : ViewModelBase
             {
                 case DrawerAsContentsViewModel deVm:
                     OutputHelper.DebugPrintJson(deVm, $"dc_OnAdd-deVm{i++}");
-                    var newContentsUnit = deVm.CreateDrawer(context);
+                    var newContentsUnit = deVm.CreateDrawer();
                     context.TryAddDrawer(newContentsUnit);
                     break;
                 case ItemViewModel iVm:

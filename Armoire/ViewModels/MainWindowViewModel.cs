@@ -48,6 +48,7 @@ namespace Armoire.ViewModels
             UpdateTime();
 
             var dockSource = new DrawerAsContentsViewModel();
+            DbHelper.SaveDrawer(dockSource);
 
             // Create DockViewModel for the dock and save its corresponding Drawer model to the
             // database.

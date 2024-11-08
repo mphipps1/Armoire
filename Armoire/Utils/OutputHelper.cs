@@ -10,7 +10,7 @@ public class OutputHelper
     public static string DocPath { get; } =
         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
 
-    public static void DebugPrintJson(object obj, string suffix)
+    public static void DebugPrintJson(object? obj, string suffix)
     {
         var jSets = new JsonSerializerSettings
         {

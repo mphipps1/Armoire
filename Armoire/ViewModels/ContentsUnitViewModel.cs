@@ -12,6 +12,7 @@ public partial class ContentsUnitViewModel : ViewModelBase
     protected const string IdBase = "CONTENTS_";
 
     public ContainerViewModel? Container { get; set; }
+    public ContentsUnitViewModel? Parent { get; set; }
 
     [ObservableProperty]
     private string _name;
@@ -44,6 +45,7 @@ public partial class ContentsUnitViewModel : ViewModelBase
 
     public string Id { get; set; } = "CONTENTS_NULL";
     public string ContainerId { get; set; } = "CONTAINER_NULL";
+    public string ParentId { get; set; } = "CONTENTS_NULL";
 
     [RelayCommand]
     public void MoveUp()

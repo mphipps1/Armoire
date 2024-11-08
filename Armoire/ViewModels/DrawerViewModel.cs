@@ -22,7 +22,6 @@ public partial class DrawerViewModel : ContainerViewModel
     public ObservableCollection<ContentsUnitViewModel> InnerContents { get; set; } = [];
 
     public int Id { get; set; }
-    public long Id3 { get; set; }
     public string Name { get; set; }
 
     [ObservableProperty]
@@ -48,12 +47,6 @@ public partial class DrawerViewModel : ContainerViewModel
     {
         drawerAsContentsViewModel = drawerascontentsviewmodel;
         Id = id;
-    }
-
-    public Drawer FindDrawer(AppDbContext context)
-    {
-        return context.Drawers.Find(Id3)
-            ?? throw new InvalidOperationException($"Drawer with ID {Id3} not found.");
     }
 
     public Drawer CreateDrawer()
@@ -94,7 +87,7 @@ public partial class DrawerViewModel : ContainerViewModel
             {
                 case DrawerAsContentsViewModel deVm:
                     OutputHelper.DebugPrintJson(deVm, $"dc_OnAdd-deVm{i++}");
-                    var newContentsUnit = deVm.CreateDrawer(context);
+                    var newContentsUnit = deVm.CreateDrawer();
                     context.TryAddDrawer(newContentsUnit);
                     break;
                 case ItemViewModel iVm:
