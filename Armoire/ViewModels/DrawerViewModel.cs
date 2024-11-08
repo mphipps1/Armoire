@@ -11,7 +11,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Armoire.ViewModels;
 
-public partial class DrawerViewModel : ViewModelBase, IHasId
+public partial class DrawerViewModel : ContainerViewModel
 {
     private int _onAddCount = 0;
 

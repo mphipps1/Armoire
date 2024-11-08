@@ -13,22 +13,19 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
     private const int MAXNESTERDRAWERS = 4;
     private static int _count;
 
-    // The "drawer as container" that contains this drawer button.
-    public DrawerViewModel OuterContainer { get; set; }
-
     // The "drawer as container" that issues from this drawer button when clicked.
     public DrawerViewModel InnerContainer { get; set; }
 
     [ObservableProperty]
     private PlacementMode _flyoutPlacement = PlacementMode.Right;
 
-    public DrawerAsContentsViewModel(DrawerViewModel outerContainer, string name)
+    public DrawerAsContentsViewModel(DrawerViewModel container, string name)
     {
         Name = name;
         Id = IdBase + IdCount++;
         IconPath = "/Assets/closedGradientDrawer.svg";
         InnerContainer = new DrawerViewModel();
-        OuterContainer = outerContainer;
+        Container = container;
     }
 
     public DrawerAsContentsViewModel()
@@ -132,7 +129,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
     public Drawer CreateDrawer(AppDbContext context)
     {
         OutputHelper.DebugPrintJson(this, "DeVm_CreateDrawer_this");
-        OutputHelper.DebugPrintJson(OuterContainer, "DeVm_CreateDrawer_OuterContainer");
+        OutputHelper.DebugPrintJson(Container, "DeVm_CreateDrawer_OuterContainer");
         return new Drawer() { Name = Name, ParentId = "default" };
     }
 }

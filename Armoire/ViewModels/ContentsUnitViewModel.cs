@@ -11,6 +11,8 @@ public partial class ContentsUnitViewModel : ViewModelBase
     protected static int IdCount = 1;
     protected const string IdBase = "CONTENTS_";
 
+    public ContainerViewModel? Container { get; set; }
+
     [ObservableProperty]
     private string _name;
 
