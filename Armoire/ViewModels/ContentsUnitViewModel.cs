@@ -26,9 +26,11 @@ public partial class ContentsUnitViewModel : ViewModelBase
     [ObservableProperty]
     private int _drawerHierarchy;
 
-    // TODO: This is a "memory leak"
+    // TODO: This is a "memory leak" because the models are part of the database.
+    // They should only be used in the context of a "session with the database".
     public Item? Model { get; set; }
-    public string ParentID;
+
+    public string ParentID { get; set; }
 
     public ContentsUnitViewModel()
     {
@@ -84,7 +86,10 @@ public partial class ContentsUnitViewModel : ViewModelBase
             return contentsIn;
         foreach (var unit in contentsIn)
         {
-            if (unit is DrawerAsContentsViewModel dac && dac.GeneratedDrawer.InnerContents.Contains(target))
+            if (
+                unit is DrawerAsContentsViewModel dac
+                && dac.GeneratedDrawer.InnerContents.Contains(target)
+            )
             {
                 return dac.GeneratedDrawer.InnerContents;
             }
@@ -98,9 +103,10 @@ public partial class ContentsUnitViewModel : ViewModelBase
         }
         return null;
     }
+
     public static void Undo()
     {
-        if(MainWindowViewModel.DeletedUnits.Count == 0)
+        if (MainWindowViewModel.DeletedUnits.Count == 0)
             return;
         ContentsUnitViewModel target = MainWindowViewModel.DeletedUnits.Pop();
         if (target.ParentID == "CONTENT_0")
@@ -112,8 +118,11 @@ public partial class ContentsUnitViewModel : ViewModelBase
         if (ret != null)
             ret.Add(target);
     }
+
     public static ObservableCollection<ContentsUnitViewModel>? FindParentDrawerByID(
-        ObservableCollection<ContentsUnitViewModel> contentsIn, ContentsUnitViewModel target)
+        ObservableCollection<ContentsUnitViewModel> contentsIn,
+        ContentsUnitViewModel target
+    )
     {
         foreach (var unit in contentsIn)
         {
