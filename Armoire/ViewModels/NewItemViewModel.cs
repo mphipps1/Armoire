@@ -135,7 +135,7 @@ namespace Armoire.ViewModels
                 {
                     if (dacvm.Id == TargetDrawerID)
                     {
-                        return dacvm.InnerContainer.InnerContents;
+                        return dacvm.GeneratedDrawer.InnerContents;
                     }
                 }
             }
@@ -143,7 +143,7 @@ namespace Armoire.ViewModels
             {
                 if (unit is DrawerAsContentsViewModel dacvm)
                 {
-                    var ret = GetTargetDrawer(dacvm.InnerContainer.InnerContents);
+                    var ret = GetTargetDrawer(dacvm.GeneratedDrawer.InnerContents);
                     if (ret != null)
                         return ret;
                 }

@@ -59,12 +59,12 @@ namespace Armoire.ViewModels
 
             // Create a sample drawer for the dock.
             var d1 = new DrawerAsContentsViewModel(DockViewModel, "apple", "CONTENT_0");
-            d1.InnerContainer = new DrawerViewModel(1, d1);
+            d1.GeneratedDrawer = new DrawerViewModel(1, d1);
             d1.DrawerHierarchy = 0;
 
             // Create another sample drawer for the dock.
             var d2 = new DrawerAsContentsViewModel(DockViewModel, "orange", "CONTENT_0");
-            d2.InnerContainer = new DrawerViewModel(2, d2);
+            d2.GeneratedDrawer = new DrawerViewModel(2, d2);
             d2.DrawerHierarchy = 0;
 
             // Add to the dock (this triggers dc_OnAdd).

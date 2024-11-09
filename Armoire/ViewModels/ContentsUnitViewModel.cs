@@ -84,16 +84,16 @@ public partial class ContentsUnitViewModel : ViewModelBase
             return contentsIn;
         foreach (var unit in contentsIn)
         {
-            if (unit is DrawerAsContentsViewModel dac && dac.InnerContainer.InnerContents.Contains(target))
+            if (unit is DrawerAsContentsViewModel dac && dac.GeneratedDrawer.InnerContents.Contains(target))
             {
-                return dac.InnerContainer.InnerContents;
+                return dac.GeneratedDrawer.InnerContents;
             }
         }
         foreach (var unit in contentsIn)
         {
             if (unit is DrawerAsContentsViewModel dac)
             {
-                return findParentDrawer(dac.InnerContainer.InnerContents, target);
+                return findParentDrawer(dac.GeneratedDrawer.InnerContents, target);
             }
         }
         return null;
@@ -119,14 +119,14 @@ public partial class ContentsUnitViewModel : ViewModelBase
         {
             if (unit is DrawerAsContentsViewModel dac && dac.Id == target.ParentID.ToString())
             {
-                return dac.InnerContainer.InnerContents;
+                return dac.GeneratedDrawer.InnerContents;
             }
         }
         foreach (var unit in contentsIn)
         {
             if (unit is DrawerAsContentsViewModel dac)
             {
-                return FindParentDrawerByID(dac.InnerContainer.InnerContents, target);
+                return FindParentDrawerByID(dac.GeneratedDrawer.InnerContents, target);
             }
         }
         return null;

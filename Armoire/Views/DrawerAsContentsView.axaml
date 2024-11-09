@@ -51,7 +51,7 @@
             <!--  Make this placement a binding that alternates between right, down, and up depending on where we are in the drawer structure  -->
             <Flyout
 			   Opening="Flyout_Opening"
-                Content="{Binding InnerContainer}"
+                Content="{Binding GeneratedDrawer}"
                 FlyoutPresenterClasses="wider"
                 Placement="{Binding FlyoutPlacement}"
                 VerticalOffset="4" />

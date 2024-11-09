@@ -21,7 +21,7 @@ public class Drawer
     public string Name { get; set; } = "default";
 
     [MaxLength(100)]
-    public string ParentId { get; set; } = "default";
+    public string? ParentId { get; set; } = "default";
 
     public List<Drawer> Drawers { get; set; } = [];
     public List<Item> Items { get; set; } = [];

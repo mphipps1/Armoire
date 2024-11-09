@@ -14,7 +14,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
     private static int _count;
 
     // The "drawer as container" that issues from this drawer button when clicked.
-    public DrawerViewModel InnerContainer { get; set; }
+    public DrawerViewModel GeneratedDrawer { get; set; }
 
     [ObservableProperty]
     private PlacementMode _flyoutPlacement = PlacementMode.Right;
@@ -24,7 +24,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
         Name = name;
         Id = IdBase + IdCount++;
         IconPath = "/Assets/closedGradientDrawer.svg";
-        InnerContainer = new DrawerViewModel();
+        GeneratedDrawer = new DrawerViewModel();
         Container = container;
         ParentID = parentID;
     }
@@ -34,7 +34,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
         Name = "drawer " + ++_count;
         Id = IdBase + IdCount++;
         IconPath = "/Assets/closedGradientDrawer.svg";
-        InnerContainer = new DrawerViewModel();
+        GeneratedDrawer = new DrawerViewModel();
         ParentID = parentID;
     }
 
@@ -48,7 +48,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
 
     public DrawerAsContentsViewModel(string name, string? iconPath, string parentID)
     {
-        InnerContainer = new DrawerViewModel(_count++);
+        GeneratedDrawer = new DrawerViewModel(_count++);
         Id = IdBase + IdCount++;
         Name = name;
         ParentID = parentID;
@@ -63,7 +63,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
     {
         if (parameter is DrawerAsContentsViewModel viewModel)
         {
-            var drawerviewmodel = viewModel.InnerContainer;
+            var drawerviewmodel = viewModel.GeneratedDrawer;
 
             if (viewModel.DrawerHierarchy == 0)
             {
@@ -94,13 +94,13 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
     [RelayCommand]
     public void AddDrawerClick()
     {
-        if (InnerContainer.InnerContents.Count < 10)
+        if (GeneratedDrawer.InnerContents.Count < 10)
         {
             //var newDrawer = new DrawerAsContentsViewModel();
             //newDrawer.DrawerHierarchy = DrawerHierarchy + 1;
             //if (newDrawer.DrawerHierarchy <= MAXNESTERDRAWERS)
             //{
-            //    InnerContainer.InnerContents.Add(newDrawer);
+            //    GeneratedDrawer.InnerContents.Add(newDrawer);
             //}
             //else
             //{
