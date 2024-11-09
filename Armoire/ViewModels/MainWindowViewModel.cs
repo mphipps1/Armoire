@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Timers;
 using Armoire.Utils;
@@ -20,6 +21,7 @@ namespace Armoire.ViewModels
         private Timer _timer;
         private string _currentTime;
         private static DockViewModel? _dockViewModel;
+        public static Stack<ContentsUnitViewModel> DeletedUnits;
         public static DockViewModel DockViewModel
         {
             get =>
@@ -47,7 +49,7 @@ namespace Armoire.ViewModels
 
             UpdateTime();
 
-            var dockSource = new DrawerAsContentsViewModel();
+            var dockSource = new DrawerAsContentsViewModel(0);
             DbHelper.SaveDrawer(dockSource);
 
             // Create DockViewModel for the dock and save its corresponding Drawer model to the
@@ -56,12 +58,12 @@ namespace Armoire.ViewModels
             DockViewModel.SaveToDb();
 
             // Create a sample drawer for the dock.
-            var d1 = new DrawerAsContentsViewModel(DockViewModel, "apple");
+            var d1 = new DrawerAsContentsViewModel(DockViewModel, "apple", 0);
             d1.InnerContainer = new DrawerViewModel(1, d1);
             d1.DrawerHierarchy = 0;
 
             // Create another sample drawer for the dock.
-            var d2 = new DrawerAsContentsViewModel(DockViewModel, "orange");
+            var d2 = new DrawerAsContentsViewModel(DockViewModel, "orange", 0);
             d2.InnerContainer = new DrawerViewModel(2, d2);
             d2.DrawerHierarchy = 0;
 
@@ -69,6 +71,8 @@ namespace Armoire.ViewModels
             DockViewModel.InnerContents.Add(d1);
             DockViewModel.InnerContents.Add(new ItemViewModel());
             DockViewModel.InnerContents.Add(d2);
+            if(DeletedUnits == null)
+                DeletedUnits = new Stack<ContentsUnitViewModel>();
         }
 
         private void OnTimerElapsed(object sender, ElapsedEventArgs e)
@@ -129,7 +133,7 @@ namespace Armoire.ViewModels
         public void AddDrawerClick()
         {
             if (DockViewModel.InnerContents.Count < 10)
-                DockViewModel.InnerContents.Add(new DrawerAsContentsViewModel());
+                DockViewModel.InnerContents.Add(new DrawerAsContentsViewModel(0));
             else
                 DialogHost.Show(
                     new ErrorMessageViewModel($"The dock is full, it can\n only hold 10 items.")

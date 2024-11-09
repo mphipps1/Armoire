@@ -28,6 +28,7 @@ public partial class ContentsUnitViewModel : ViewModelBase
 
     // TODO: This is a "memory leak"
     public Item? Model { get; set; }
+    public int ParentID;
 
     public ContentsUnitViewModel()
     {
@@ -41,6 +42,7 @@ public partial class ContentsUnitViewModel : ViewModelBase
     public virtual void HandleDeleteClick()
     {
         DeleteMe = true;
+        MainWindowViewModel.DeletedUnits.Push(this);
     }
 
     public string Id { get; set; } = "CONTENTS_NULL";
@@ -82,12 +84,9 @@ public partial class ContentsUnitViewModel : ViewModelBase
             return contentsIn;
         foreach (var unit in contentsIn)
         {
-            if (unit is DrawerAsContentsViewModel dac)
+            if (unit is DrawerAsContentsViewModel dac && dac.InnerContainer.InnerContents.Contains(target))
             {
-                if (dac.InnerContainer.InnerContents.Contains(target))
-                {
-                    return dac.InnerContainer.InnerContents;
-                }
+                return dac.InnerContainer.InnerContents;
             }
         }
         foreach (var unit in contentsIn)
@@ -95,6 +94,39 @@ public partial class ContentsUnitViewModel : ViewModelBase
             if (unit is DrawerAsContentsViewModel dac)
             {
                 return findParentDrawer(dac.InnerContainer.InnerContents, target);
+            }
+        }
+        return null;
+    }
+    public static void Undo()
+    {
+        if(MainWindowViewModel.DeletedUnits.Count == 0)
+            return;
+        ContentsUnitViewModel target = MainWindowViewModel.DeletedUnits.Pop();
+        if (target.ParentID == 0)
+        {
+            MainWindowViewModel.DockViewModel.InnerContents.Add(target);
+            return;
+        }
+        var ret = FindParentDrawerByID(MainWindowViewModel.DockViewModel.InnerContents, target);
+        if (ret != null)
+            ret.Add(target);
+    }
+    public static ObservableCollection<ContentsUnitViewModel>? FindParentDrawerByID(
+        ObservableCollection<ContentsUnitViewModel> contentsIn, ContentsUnitViewModel target)
+    {
+        foreach (var unit in contentsIn)
+        {
+            if (unit is DrawerAsContentsViewModel dac && dac.Id == target.ParentID.ToString())
+            {
+                return dac.InnerContainer.InnerContents;
+            }
+        }
+        foreach (var unit in contentsIn)
+        {
+            if (unit is DrawerAsContentsViewModel dac)
+            {
+                return FindParentDrawerByID(dac.InnerContainer.InnerContents, target);
             }
         }
         return null;

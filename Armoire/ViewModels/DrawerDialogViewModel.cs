@@ -56,9 +56,9 @@ public partial class DrawerDialogViewModel : DrawerViewModel
     {
         _drawerName = "Drawer" + _count++;
         await Task.Delay(TimeSpan.FromSeconds(1));
-        drawerContents.Add(
-            new DrawerAsContentsViewModel()
-        ) ;
+        //drawerContents.Add(
+        //    new DrawerAsContentsViewModel()
+        //) ;
     }
     /**
     [RelayCommand]

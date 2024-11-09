@@ -8,6 +8,7 @@ using Armoire.Models;
 using Armoire.Utils;
 using Avalonia.Layout;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 
 namespace Armoire.ViewModels;
 

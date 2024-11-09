@@ -39,19 +39,21 @@ public partial class ItemViewModel : ContentsUnitViewModel
         Model = new Item(Name, ExecutablePath, "0");
     }
 
-    public ItemViewModel(string name, string executablePath, string parentID)
+    public ItemViewModel(string name, string executablePath, int parentID)
     {
         ExecutablePath = executablePath;
-        Model = new Item(name, executablePath, parentID);
+        Model = new Item(name, executablePath, parentID.ToString());
         Name = name;
+        ParentID = parentID;
     }
 
-    public ItemViewModel(string name, string executablePath, string iconPath, string parentID)
+    public ItemViewModel(string name, string executablePath, string iconPath, int parentID)
     {
         ExecutablePath = executablePath;
-        Model = new Item(name, executablePath, parentID);
+        Model = new Item(name, executablePath, parentID.ToString());
         IconPath = iconPath;
         Name = name;
+        ParentID = parentID;
     }
 
     public ItemViewModel(
@@ -60,10 +62,12 @@ public partial class ItemViewModel : ContentsUnitViewModel
         System.Drawing.Bitmap bmp,
         string parentID
     )
+
     {
         ExecutablePath = executablePath;
-        Model = new Item(name, executablePath, parentID);
+        Model = new Item(name, executablePath, parentID.ToString());
         Name = name;
+        ParentID = System.Int32.Parse(parentID);
 
         //the following converts the System.Drawing.Bitmap which cannot
         //be displayed in a view to an Avalonia.Media.Imaging.Bitmap type

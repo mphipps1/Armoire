@@ -98,7 +98,7 @@ namespace Armoire.ViewModels
                             Name ?? NewExe,
                             Executables[NewExe],
                             Icons[NewExe].ToBitmap(),
-                            TargetDrawerID.ToString()
+                            TargetDrawerID
                         )
                     );
                 }
@@ -120,7 +120,7 @@ namespace Armoire.ViewModels
                 }
                 else
                 {
-                    var newDrawer = new DrawerAsContentsViewModel(Name, IconPath);
+                    var newDrawer = new DrawerAsContentsViewModel(Name, IconPath, System.Int32.Parse(TargetDrawerID));
                     newDrawer.DrawerHierarchy = TargetDrawerHeirarchy + 1;
                     targetDrawer.Add(newDrawer);
                 }

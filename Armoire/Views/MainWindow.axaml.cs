@@ -14,6 +14,8 @@ namespace Armoire.Views
 {
     public partial class MainWindow : Window
     {
+
+        public bool CtrlHeld;
         public MainWindow()
         {
             InitializeComponent();
@@ -41,6 +43,8 @@ namespace Armoire.Views
         {
             var point = e.GetCurrentPoint(sender as Control);
             Debug.WriteLine("Mouse click on: " + e.Source.ToString());
+
+            //add controls that we want to be draggable here using the source of what was pressed
             if (point.Properties.IsRightButtonPressed || 
                 ((e.Source.ToString() != "Avalonia.Controls.Panel") &&
                 (e.Source.ToString() != "Avalonia.Controls.StackPanel")))
@@ -70,6 +74,35 @@ namespace Armoire.Views
 
             var result = await FileSystemdialog.ShowAsync(window);
 
+        }
+
+        private void MainWindow_KeyDown(object? sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.LeftCtrl || e.Key == Key.RightCtrl)
+                CtrlHeld = true;
+            
+        }
+
+        private void MainWindow_KeyUp(object? sender, KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case Key.Z:
+                    if (CtrlHeld)
+                    {
+                        ContentsUnitViewModel.Undo();
+                    }
+                    break;
+                case Key.LeftCtrl:
+                    CtrlHeld = false;
+                    break;
+                case Key.RightCtrl:
+                    CtrlHeld = false;
+                    break;
+
+                default:
+                    break;
+            }
         }
     }
 }

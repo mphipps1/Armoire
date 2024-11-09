@@ -12,7 +12,8 @@ public partial class DrawerAsContentsView : UserControl
     public DrawerAsContentsView()
     {
         InitializeComponent();
-        DataContext = new DrawerAsContentsViewModel();  
+        //using parameter as ParentID in undo button, fix this ID later
+        DataContext = new DrawerAsContentsViewModel(-1);  
 
      
     }
