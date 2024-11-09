@@ -49,7 +49,7 @@ namespace Armoire.ViewModels
 
             UpdateTime();
 
-            var dockSource = new DrawerAsContentsViewModel(0);
+            var dockSource = new DrawerAsContentsViewModel("CONTENT_0");
             DbHelper.SaveDrawer(dockSource);
 
             // Create DockViewModel for the dock and save its corresponding Drawer model to the
@@ -58,12 +58,12 @@ namespace Armoire.ViewModels
             DockViewModel.SaveToDb();
 
             // Create a sample drawer for the dock.
-            var d1 = new DrawerAsContentsViewModel(DockViewModel, "apple", 0);
+            var d1 = new DrawerAsContentsViewModel(DockViewModel, "apple", "CONTENT_0");
             d1.InnerContainer = new DrawerViewModel(1, d1);
             d1.DrawerHierarchy = 0;
 
             // Create another sample drawer for the dock.
-            var d2 = new DrawerAsContentsViewModel(DockViewModel, "orange", 0);
+            var d2 = new DrawerAsContentsViewModel(DockViewModel, "orange", "CONTENT_0");
             d2.InnerContainer = new DrawerViewModel(2, d2);
             d2.DrawerHierarchy = 0;
 
@@ -71,8 +71,12 @@ namespace Armoire.ViewModels
             DockViewModel.InnerContents.Add(d1);
             DockViewModel.InnerContents.Add(new ItemViewModel());
             DockViewModel.InnerContents.Add(d2);
+
             if(DeletedUnits == null)
                 DeletedUnits = new Stack<ContentsUnitViewModel>();
+
+            //getting the list of apps in the start menu here instead of in the NewItemViewModel contructor to avoid lag
+            NewItemViewModel.GetExecutables();
         }
 
         private void OnTimerElapsed(object sender, ElapsedEventArgs e)
@@ -133,7 +137,7 @@ namespace Armoire.ViewModels
         public void AddDrawerClick()
         {
             if (DockViewModel.InnerContents.Count < 10)
-                DockViewModel.InnerContents.Add(new DrawerAsContentsViewModel(0));
+                DockViewModel.InnerContents.Add(new DrawerAsContentsViewModel("CONTENT_0"));
             else
                 DialogHost.Show(
                     new ErrorMessageViewModel($"The dock is full, it can\n only hold 10 items.")

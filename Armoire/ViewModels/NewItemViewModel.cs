@@ -20,11 +20,13 @@ namespace Armoire.ViewModels
 
         [ObservableProperty]
         public IBrush _borderBackground = Avalonia.Media.Brushes.Transparent;
-        public static Dictionary<string, string> Executables { get; set; }
-        public static ObservableCollection<string> ExecutableNames { get; set; }
-        public static Dictionary<string, Icon> Icons { get; set; }
 
-        private ObservableCollection<ContentsUnitViewModel> Dock { get; set; }
+        //the following are declared in GetExecutables() so they're populated before a user goes to add a new unit
+        public static Dictionary<string, string>? Executables { get; set; }
+        public static ObservableCollection<string>? ExecutableNames { get; set; }
+        public static Dictionary<string, Icon>? Icons { get; set; }
+
+        private static ObservableCollection<ContentsUnitViewModel>? Dock { get; set; }
 
         [ObservableProperty]
         public string _name;
@@ -62,16 +64,7 @@ namespace Armoire.ViewModels
 
         public NewItemViewModel(string targetDrawerID, int targetDrawerHeirarchy, bool isItem)
         {
-            Dock = MainWindowViewModel.DockViewModel.InnerContents;
-            Executables = new Dictionary<string, string>();
-            ExecutableNames = new ObservableCollection<string>();
-            Icons = new Dictionary<string, Icon>();
             TargetDrawerID = targetDrawerID;
-            if (!Executables.Any())
-            {
-                GetExecutables();
-                ExecutableNames = new ObservableCollection<string>(ExecutableNames.OrderBy(i => i));
-            }
             IsItem = isItem;
             IsDrawer = !isItem;
             if (IsItem)
@@ -120,7 +113,7 @@ namespace Armoire.ViewModels
                 }
                 else
                 {
-                    var newDrawer = new DrawerAsContentsViewModel(Name, IconPath, System.Int32.Parse(TargetDrawerID));
+                    var newDrawer = new DrawerAsContentsViewModel(Name, IconPath, TargetDrawerID);
                     newDrawer.DrawerHierarchy = TargetDrawerHeirarchy + 1;
                     targetDrawer.Add(newDrawer);
                 }
@@ -158,8 +151,12 @@ namespace Armoire.ViewModels
             return null;
         }
 
-        public void GetExecutables()
+        public static void GetExecutables()
         {
+            Dock = MainWindowViewModel.DockViewModel.InnerContents;
+            Executables = new Dictionary<string, string>();
+            ExecutableNames = new ObservableCollection<string>();
+            Icons = new Dictionary<string, Icon>();
             string directoryPath = @"C:\ProgramData\Microsoft\Windows\Start Menu\Programs";
 
             if (Directory.Exists(directoryPath))
@@ -181,6 +178,7 @@ namespace Armoire.ViewModels
                     }
                 }
             }
+            ExecutableNames = new ObservableCollection<string>(ExecutableNames.OrderBy(i => i));
         }
 
         [RelayCommand]

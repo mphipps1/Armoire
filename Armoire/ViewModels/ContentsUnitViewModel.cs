@@ -28,7 +28,7 @@ public partial class ContentsUnitViewModel : ViewModelBase
 
     // TODO: This is a "memory leak"
     public Item? Model { get; set; }
-    public int ParentID;
+    public string ParentID;
 
     public ContentsUnitViewModel()
     {
@@ -103,7 +103,7 @@ public partial class ContentsUnitViewModel : ViewModelBase
         if(MainWindowViewModel.DeletedUnits.Count == 0)
             return;
         ContentsUnitViewModel target = MainWindowViewModel.DeletedUnits.Pop();
-        if (target.ParentID == 0)
+        if (target.ParentID == "CONTENT_0")
         {
             MainWindowViewModel.DockViewModel.InnerContents.Add(target);
             return;

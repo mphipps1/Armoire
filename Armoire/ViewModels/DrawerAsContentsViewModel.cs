@@ -19,10 +19,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
     [ObservableProperty]
     private PlacementMode _flyoutPlacement = PlacementMode.Right;
 
-    public int ParentID { get; set; }
-
-
-    public DrawerAsContentsViewModel(DrawerViewModel container, string name, int parentID)
+    public DrawerAsContentsViewModel(DrawerViewModel container, string name, string parentID)
     {
         Name = name;
         Id = IdBase + IdCount++;
@@ -32,7 +29,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
         ParentID = parentID;
     }
 
-    public DrawerAsContentsViewModel(int parentID)
+    public DrawerAsContentsViewModel(string parentID)
     {
         Name = "drawer " + ++_count;
         Id = IdBase + IdCount++;
@@ -49,7 +46,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
         IconPath = "/Assets/closedGradientDrawer.svg";
     }
 
-    public DrawerAsContentsViewModel(string name, string? iconPath, int parentID)
+    public DrawerAsContentsViewModel(string name, string? iconPath, string parentID)
     {
         InnerContainer = new DrawerViewModel(_count++);
         Id = IdBase + IdCount++;
