@@ -24,7 +24,7 @@ public partial class DrawerAsContentsView : UserControl
       
             if (DataContext is DrawerAsContentsViewModel viewModel)
             {
-                viewModel.CheckDraweModel(DataContext);
+                viewModel.CheckDraweModel(viewModel);
             }
     }
 }
