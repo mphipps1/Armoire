@@ -59,9 +59,9 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
     }
 
     [RelayCommand]
-    public void CheckDraweModel(object parameter)
+    public void CheckDraweModel(object typeviewModel)
     {
-        if (parameter is DrawerAsContentsViewModel viewModel)
+        if (typeviewModel is DrawerAsContentsViewModel viewModel)
         {
             var drawerviewmodel = viewModel.GeneratedDrawer;
 
