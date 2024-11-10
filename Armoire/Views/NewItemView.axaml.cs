@@ -47,8 +47,21 @@ public partial class NewItemView : UserControl
         string fileExtension = "";
           fileExtension =  items.ElementAt(0).Substring(items.ElementAt(0).IndexOf('.')+1);
 
-        if (fileExtension.Equals("jpg"))
+        if (fileExtension.Equals("jpg") || fileExtension.Equals("png"))
         {
+            FileInfo fileInfo = new FileInfo(items.ElementAt(0));
+
+            if (sender is Border border)
+            {
+                if (DataContext is NewItemViewModel itemviewmodel)
+                {
+                    itemviewmodel.IsPopupRemoveButton = true;
+                    var dotIndex = Path.GetFileName(fileInfo.Name).IndexOf('.');
+                    border.Background = Brushes.DarkViolet;
+                    itemviewmodel.FileDropText = $"{Path.GetFileName(fileInfo.Name).Substring(0, dotIndex)} dropped";
+                }
+            }
+
             if (DataContext is NewItemViewModel viewModel)
             {
                 if (viewModel.ImageDropCollection.Count < 1)
