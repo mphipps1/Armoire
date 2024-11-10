@@ -107,21 +107,22 @@ namespace Armoire.ViewModels
                     if (ImageDropCollection.Count > 0)
                     {
                         var droppedFile = ImageDropCollection.ElementAt(0);
-                        var fileExtension = droppedFile.Substring(droppedFile.IndexOf('.') + 1);
+                        string fileExtension = droppedFile.Substring(droppedFile.IndexOf('.') + 1);
 
-         
-                        FileInfo fileInfo = new FileInfo(droppedFile);
+                  
 
-                       var name = fileInfo.Name.Substring(0, fileInfo.Name.IndexOf('.'));
+                            FileInfo fileInfo = new FileInfo(droppedFile);
 
-                        var icon = Icon.ExtractAssociatedIcon(droppedFile);
+                            var name = fileInfo.Name.Substring(0, fileInfo.Name.IndexOf('.'));
 
-                        System.Drawing.Bitmap bitmap = icon.ToBitmap();
+                            var icon = Icon.ExtractAssociatedIcon(droppedFile);
 
-                        targetDrawer.Add(
-                           new ItemViewModel(name, droppedFile, bitmap, TargetDrawerID.ToString())
-                       );
+                            System.Drawing.Bitmap bitmap = icon.ToBitmap();
 
+                            targetDrawer.Add(
+                               new ItemViewModel(name, droppedFile, bitmap, TargetDrawerID.ToString())
+                           );
+                        
 
 
 
