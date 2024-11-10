@@ -12,6 +12,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Collections;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -25,6 +26,7 @@ public partial class NewItemView : UserControl
     private Popup dragAndDropPopup;
     private TextBox typedAppName;
     private string currentTypedAppName;
+    private Controls originalList;
     public NewItemView()
     {
         InitializeComponent();
@@ -35,7 +37,7 @@ public partial class NewItemView : UserControl
         DropBorder.AddHandler(DragDrop.DropEvent, OnDrop);
         typedAppName = this.Find<TextBox>("TypedAppName");
         currentTypedAppName = "";
-
+        //originalList = new Controls();
     }
 
     private void OnFileDrop()
@@ -43,6 +45,7 @@ public partial class NewItemView : UserControl
         backAndSubmit.Margin = Thickness.Parse("-8 70 10 10");
     }
 
+    //makes buttons out of the list of executables
     public void PopulateExecutableList(object source, RoutedEventArgs args)
     {
         StackPanel? exeList = this.Find<StackPanel>("ExecutableList");
@@ -52,6 +55,7 @@ public partial class NewItemView : UserControl
         {
             Button button = new Button();
             button.Content = name;
+            //set NewExe and close the popup
             button.Click += (s, e) =>
             {
                 NewItemViewModel.NewExe = (s as Button).Content as string;
@@ -69,20 +73,37 @@ public partial class NewItemView : UserControl
             RowDefinition rowDefinition = new RowDefinition();
             exeList.Children.Add(button);
         }
+        originalList = new Controls(exeList.Children);
     }
 
     public void KeyUp(object sender, KeyEventArgs e)
     {
         if (typedAppName.Text == currentTypedAppName)
             return;
+        if (!popup.IsOpen) {
+            PopulateExecutableList(null, null);
+            popup.IsOpen = true;
+        }
         StackPanel? exeList = this.Find<StackPanel>("ExecutableList");
-        if (exeList == null || exeList.Children.Count == 0)
-            return;
+        //if (exeList == null || exeList.Children.Count == 0)
+        //    return;
         currentTypedAppName = typedAppName.Text;
+
+        if(e.Key == Key.Back) {
+            exeList.Children.Clear();
+            foreach(var button in originalList)
+            {
+                exeList.Children.Add((Button)button);
+            }
+        }
+
+        if (typedAppName.Text == "")
+            return;
+
         foreach (var entry in exeList.Children.ToList<Control>())
         {
             Button button = entry as Button;
-            if(!button.Content.ToString().Contains(currentTypedAppName))
+            if(!button.Content.ToString().ToLower().Contains(currentTypedAppName.ToLower()))
                 exeList.Children.Remove(button);
         }
     }
