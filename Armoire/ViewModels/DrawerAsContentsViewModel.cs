@@ -21,7 +21,12 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
     [ObservableProperty]
     private PlacementMode _flyoutPlacement = PlacementMode.Right;
 
-    public DrawerAsContentsViewModel(DrawerViewModel container, string name, string parentID, int drawerHierarchy)
+    public DrawerAsContentsViewModel(
+        DrawerViewModel container,
+        string name,
+        string? parentID,
+        int drawerHierarchy
+    )
     {
         Name = name;
         IconPath = "/Assets/closedGradientDrawer.svg";
@@ -30,12 +35,12 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
         ParentId = parentID;
         DrawerHierarchy = drawerHierarchy;
         SetMoveDirections(this);
+        _count++;
     }
 
-    public DrawerAsContentsViewModel(string parentID, int drawerHierarchy)
+    public DrawerAsContentsViewModel(string? parentID, int drawerHierarchy)
     {
-        Name = "drawer " + ++_count;
-        Id = IdBase + IdCount++;
+        Name = "drawer " + _count++;
         IconPath = "/Assets/closedGradientDrawer.svg";
         GeneratedDrawer = new DrawerViewModel();
         ParentId = parentID;
@@ -43,21 +48,15 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
         SetMoveDirections(this);
     }
 
-    public DrawerAsContentsViewModel(int id, int drawerHierarchy)
-    {
-        DrawerHierarchy = drawerHierarchy;
-        Name = "drawer " + ++_count;
-        Id = IdBase + IdCount++;
-        IconPath = "/Assets/closedGradientDrawer.svg";
-        DrawerHierarchy = drawerHierarchy;
-        SetMoveDirections(this);
-    }
-
-    public DrawerAsContentsViewModel(string name, string? iconPath, string parentID, int drawerHierarchy)
+    public DrawerAsContentsViewModel(
+        string name,
+        string? iconPath,
+        string? parentID,
+        int drawerHierarchy
+    )
     {
         GeneratedDrawer = new DrawerViewModel(_count++);
         Name = name;
-
         ParentId = parentID;
         DrawerHierarchy = drawerHierarchy;
         if (iconPath == null || iconPath == "")
@@ -67,7 +66,6 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
         _count++;
         SetMoveDirections(this);
     }
-
 
     [RelayCommand]
     public void CheckDraweModel(object typeviewModel)
