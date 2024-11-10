@@ -22,13 +22,16 @@ namespace Armoire.ViewModels
         private string _currentTime;
         private static DockViewModel? _dockViewModel;
         public static Stack<ContentsUnitViewModel> DeletedUnits;
-        public static DockViewModel ActiveDockViewModel
-        {
-            get =>
-                _dockViewModel
-                ?? throw new InvalidOperationException("Invalid access: before MwVm init");
-            private set => _dockViewModel = value;
-        }
+
+        //temp
+        public static DrawerViewModel ActiveDockViewModel { get; set; }
+        //public static DockViewModel ActiveDockViewModel
+        //{
+        //    get =>
+        //        _dockViewModel
+        //        ?? throw new InvalidOperationException("Invalid access: before MwVm init");
+        //    private set => _dockViewModel = value;
+        //}
 
         public string CurrentTime
         {
@@ -48,22 +51,16 @@ namespace Armoire.ViewModels
             _timer.Start();
 
             UpdateTime();
-
-            var dockSource = new DrawerAsContentsViewModel(null);
-            ActiveDockViewModel = (DockViewModel)dockSource.GeneratedDrawer;
+            var dockSource = new DrawerAsContentsViewModel(null, 0);
+            //ActiveDockViewModel = (DockViewModel)dockSource.GeneratedDrawer;
+            ActiveDockViewModel = dockSource.GeneratedDrawer;
             DbHelper.SaveDrawer(dockSource);
 
             // Create a sample drawer for the dock.
-            var d1 = new DrawerAsContentsViewModel(ActiveDockViewModel, "sample 1", dockSource.Id)
-            {
-                DrawerHierarchy = 0
-            };
+            var d1 = new DrawerAsContentsViewModel(dockSource.GeneratedDrawer, "sample 1", dockSource.Id, 0);
 
             // Create another sample drawer for the dock.
-            var d2 = new DrawerAsContentsViewModel(ActiveDockViewModel, "sample 2", dockSource.Id)
-            {
-                DrawerHierarchy = 0
-            };
+            var d2 = new DrawerAsContentsViewModel(dockSource.GeneratedDrawer, "sample 2", dockSource.Id, 0);
 
             // Add to the dock (this triggers dc_OnAdd).
             ActiveDockViewModel.InnerContents.Add(d1);
@@ -134,8 +131,9 @@ namespace Armoire.ViewModels
         [RelayCommand]
         public void AddDrawerClick()
         {
+
             if (ActiveDockViewModel.InnerContents.Count < 10)
-                ActiveDockViewModel.InnerContents.Add(new DrawerAsContentsViewModel("CONTENT_0"));
+                ActiveDockViewModel.InnerContents.Add(new DrawerAsContentsViewModel("CONTENT_0", 0));
             else
                 DialogHost.Show(
                     new ErrorMessageViewModel($"The dock is full, it can\n only hold 10 items.")

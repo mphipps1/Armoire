@@ -127,8 +127,8 @@
 						Kind="PowerSettings" />
 				</Button.Content>
 				<ToolTip.Tip>
-					<ToolTip Height="40" Width="100" Padding="3" Background="Transparent">
-						<TextBlock Text="Power Settings" Foreground="White" />
+					<ToolTip Height="40" Width="100" Padding="3" Background="LightGray" Foreground="Black">
+						<TextBlock Text="Power Settings" />
 					</ToolTip>
 				</ToolTip.Tip>
 				<Button.Flyout>
@@ -146,8 +146,8 @@
 										Kind="Logout"/>
 								</Button.Content>
 								<ToolTip.Tip>
-									<ToolTip Height="40" Width="90" Padding="3" Background="Transparent">
-										<TextBlock Text="Log Off" Foreground="White" />
+									<ToolTip Height="40" Width="90" Padding="3" Background="LightGray" Foreground="Black">
+										<TextBlock Text="Log Off" />
 									</ToolTip>
 								</ToolTip.Tip>
 							</Button>
@@ -161,8 +161,8 @@
 										Kind="Restart"/>
 								</Button.Content>
 								<ToolTip.Tip>
-									<ToolTip Height="40" Width="90" Padding="3" Background="Transparent">
-										<TextBlock Text="Restart" Foreground="White" />
+									<ToolTip Height="40" Width="90" Padding="3" Background="LightGray" Foreground="Black">
+										<TextBlock Text="Restart" />
 									</ToolTip>
 								</ToolTip.Tip>
 							</Button>
@@ -176,8 +176,8 @@
 										Kind="Shutdown"/>
 								</Button.Content>
 								<ToolTip.Tip>
-									<ToolTip Height="40" Width="90" Padding="3" Background="Transparent">
-										<TextBlock Text="Shut Down" Foreground="White" />
+									<ToolTip Height="40" Width="90" Padding="3" Background="LightGray" Foreground="Black">
+										<TextBlock Text="Shut Down"/>
 									</ToolTip>
 								</ToolTip.Tip>
 							</Button>
@@ -187,8 +187,8 @@
 									<avalonia:MaterialIcon Kind="Settings" Width="32" Height="32"/>
 								</Button.Content>
 								<ToolTip.Tip>
-									<ToolTip Height="40" Width="90" Padding="3" Background="Transparent">
-										<TextBlock Text="Settings" Foreground="White" />
+									<ToolTip Height="40" Width="90" Padding="3" Background="LightGray">
+										<TextBlock Text="Settings" />
 									</ToolTip>
 								</ToolTip.Tip>
 							</Button>
@@ -199,8 +199,8 @@
 									<avalonia:MaterialIcon Kind="File" Width="32" Height="32"/>
 								</Button.Content>
 								<ToolTip.Tip>
-									<ToolTip Height="40" Width="90" Padding="3" Background="Transparent">
-										<TextBlock Text="File Explorer" Foreground="White" />
+									<ToolTip Height="40" Width="90" Padding="3" Background="LightGray" Foreground="Black">
+										<TextBlock Text="File Explorer"/>
 									</ToolTip>
 								</ToolTip.Tip>
 							</Button>

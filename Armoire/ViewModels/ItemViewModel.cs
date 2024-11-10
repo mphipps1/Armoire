@@ -37,38 +37,47 @@ public partial class ItemViewModel : ContentsUnitViewModel
             IconBmp = new Avalonia.Media.Imaging.Bitmap(memory);
         }
         Model = new Item(Name, ExecutablePath, "0");
+        DrawerHierarchy = 0;
+        SetMoveDirections(this);
     }
 
-    public ItemViewModel(string name, string executablePath, string parentID)
+    public ItemViewModel(string name, string executablePath, string parentID, int drawerHierarchy)
     {
         ExecutablePath = executablePath;
         Model = new Item(name, executablePath, parentID.ToString());
         Name = name;
         ParentId = parentID;
+        DrawerHierarchy = drawerHierarchy;
+        SetMoveDirections(this);
     }
 
-    public ItemViewModel(string name, string executablePath, string iconPath, string parentID)
+    public ItemViewModel(string name, string executablePath, string iconPath, string parentID, int drawerHierarchy)
     {
         ExecutablePath = executablePath;
         Model = new Item(name, executablePath, parentID.ToString());
         IconPath = iconPath;
         Name = name;
         ParentId = parentID;
+        DrawerHierarchy = drawerHierarchy;
+        SetMoveDirections(this);
     }
 
     public ItemViewModel(
         string name,
         string executablePath,
         System.Drawing.Bitmap bmp,
-        string parentID
+        string parentID,
+        int drawerHierarchy
     )
 
     {
         ExecutablePath = executablePath;
         Model = new Item(name, executablePath, parentID.ToString());
         Name = name;
-        ParentId = parentID;
 
+        ParentId = parentID;
+        DrawerHierarchy = drawerHierarchy;
+        SetMoveDirections(this);
         //the following converts the System.Drawing.Bitmap which cannot
         //be displayed in a view to an Avalonia.Media.Imaging.Bitmap type
         //which can be displayed by loading it into a memory stream to mimic downloading it

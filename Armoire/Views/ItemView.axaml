@@ -22,8 +22,12 @@
     <Button Margin="5" Command="{Binding HandleContentsClickCommand}"
 >
 		<ToolTip.Tip>
-			<ToolTip Height="40" Width="90" Padding="3" Background="Transparent">
-				<TextBlock Text="{Binding Name}" Foreground="White" />
+			<ToolTip Height="40"
+					 Width="90"
+					 Padding="3"
+					 Background="LightGray"
+					 Foreground="Black">
+				<TextBlock Text="{Binding Name}" />
 			</ToolTip>
 		</ToolTip.Tip>
 		<Button.Content>
@@ -42,8 +46,8 @@
         <Button.ContextMenu>
             <ContextMenu>
                 <MenuItem Command="{Binding HandleDeleteClickCommand}" Header="Delete" />
-				<MenuItem Command="{Binding MoveUpCommand}" Header="Move Up/Left" />
-				<MenuItem Command="{Binding MoveDownCommand}" Header="Move Down/Right" />
+				<MenuItem Command="{Binding MoveUpCommand}" Header="{Binding MoveBackDirection}" />
+				<MenuItem Command="{Binding MoveDownCommand}" Header="{Binding MoveForwardDirection}" />
 			</ContextMenu>
         </Button.ContextMenu>
     </Button>

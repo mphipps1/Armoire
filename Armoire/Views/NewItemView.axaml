@@ -1,66 +1,79 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="600"
-			 xmlns:vm="using:Armoire.ViewModels"
-             x:Class="Armoire.Views.NewItemView"
-			 x:DataType="vm:NewItemViewModel">
+<UserControl
+    x:Class="Armoire.Views.NewItemView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:v="using:Armoire.Views"
+    xmlns:vm="using:Armoire.ViewModels"
+    d:DesignHeight="600"
+    d:DesignWidth="300"
+    x:DataType="vm:NewItemViewModel"
+    mc:Ignorable="d"
+	KeyUp="KeyUp">
 
-	<UserControl.Styles>
-		<Style Selector="TextBox">
-			<Setter Property="BorderThickness" Value="1" />
-			<Setter Property="BorderBrush" Value="Purple" />
-			<Setter Property="Margin" Value="0 10 0 5" />
-			<Setter Property="Height" Value="40" />
-			<Setter Property="Width" Value="200" />
-			<Setter Property="Background" Value="{Binding BackgroundColor}" />
-			<Setter Property="Foreground" Value="Black" />
-			<Setter Property="CornerRadius" Value="8" />
-		</Style>
-		<Style Selector="TextBlock">
-			<Setter Property="Margin" Value="0" />
-		</Style>
-
-		<Style Selector="ComboBox">
-			<Setter Property="BorderThickness" Value="1" />
-			<Setter Property="BorderBrush" Value="Purple" />
-			<Setter Property="IsTextSearchEnabled" Value="True" />
-			<Setter Property="HorizontalAlignment" Value="Center" />
-			<Setter Property="VerticalAlignment" Value="Center" />
-			<Setter Property="HorizontalContentAlignment" Value="Center" />
-			<Setter Property="VerticalContentAlignment" Value="Center" />
-		</Style>
-	</UserControl.Styles>
-	<StackPanel HorizontalAlignment="Right"
-				VerticalAlignment="Center"
-				Width="{Binding PanelWidth}"
-				Height="{Binding PanelHeight}"
-				Name="Stack"
-				Background="Transparent"
-				Margin="20">
-		<!-- The Margin is set like this to properly align 
-		'Name' on the left side of the TextBox below it -->
-		<TextBlock Margin="0 5 155 -10"
-				   HorizontalAlignment="Center">Name: </TextBlock>
-		<TextBox Watermark="Paint"
-				 Text="{Binding Name}"
-				 Height="30"></TextBox>
-		<!-- The Margin is set like this to properly align 
-		'Icon Path' on the left side of the TextBox below it -->
-		<TextBlock IsVisible="{Binding IsDrawer}"
-				   HorizontalAlignment="Center"
-				Margin="0 5 135 -10">Icon Path: </TextBlock>
-		<TextBox IsVisible="{Binding IsDrawer}" 
-				 Watermark="Path"
-				 Text="{Binding IconPath}"
-				 Height="30"
-				 Name="temp"></TextBox>
-		<StackPanel IsVisible="{Binding IsItem}"
-					Spacing="10">
-			<StackPanel Width="150">
-				<TextBlock
-					Margin="5">Choose App Name: </TextBlock>
+    <UserControl.Styles>
+        <Style Selector="TextBox">
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="BorderBrush" Value="Purple" />
+            <Setter Property="Margin" Value="0 10 0 5" />
+            <Setter Property="Height" Value="40" />
+            <Setter Property="Width" Value="200" />
+            <Setter Property="Background" Value="{Binding BackgroundColor}" />
+            <Setter Property="Foreground" Value="Black" />
+            <Setter Property="CornerRadius" Value="8" />
+        </Style>
+        <Style Selector="TextBlock">
+            <Setter Property="Margin" Value="0" />
+        </Style>
+        <Style Selector="ComboBox">
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="BorderBrush" Value="Purple" />
+            <Setter Property="IsTextSearchEnabled" Value="True" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+    </UserControl.Styles>
+    <StackPanel
+        Name="Stack"
+        Width="{Binding PanelWidth}"
+        Height="{Binding PanelHeight}"
+        Margin="20"
+        HorizontalAlignment="Right"
+        VerticalAlignment="Center"
+        Background="Transparent">
+        <!--
+            The Margin is set like this to properly align
+            'Name' on the left side of the TextBox below it
+        -->
+        <TextBlock Margin="0,5,155,-10" HorizontalAlignment="Center">Name:</TextBlock>
+        <TextBox
+            Height="30"
+            Text="{Binding Name}"
+            Watermark="Paint" />
+        <!--
+            The Margin is set like this to properly align
+            'Icon Path' on the left side of the TextBox below it
+        -->
+        <TextBlock
+            Margin="0,5,135,-10"
+            HorizontalAlignment="Center"
+            IsVisible="{Binding IsDrawer}">
+            Icon Path:
+        </TextBlock>
+        <TextBox
+            Name="temp"
+            Height="30"
+            IsVisible="{Binding IsDrawer}"
+            Text="{Binding IconPath}"
+            Watermark="Path" />
+        <StackPanel IsVisible="{Binding IsItem}" Spacing="10">
+            <StackPanel Width="150">
+                <TextBlock Margin="5">Choose App Name:</TextBlock>
+                <!--
 				<ComboBox
 					SelectedItem="{Binding NewExe}"
 					ItemsSource ="{Binding ExecutableNames}"
@@ -77,62 +90,115 @@
 						</ItemsPanelTemplate>
 					</ComboBox.ItemsPanel>
 				</ComboBox>
+				-->
+                <Button
+                    Width="200"
+                    Height="30"
+                    Background="{Binding BackgroundColor}"
+                    Command="{Binding ToggleExeDropDown}"
+					Padding="0"
+					Click="PopulateExecutableList">
+					<StackPanel Orientation="Horizontal"
+								Spacing="12"
+								Margin="4"
+								Background="{Binding BackgroundColor}">
+						<TextBox Foreground="Black"
+								 Watermark="App Name Here"
+							    Name="TypedAppName"
+								 Height="25"
+								 Width="150"
+								 Background="LightGray"
+								 Margin="0"></TextBox>
+						<avalonia:MaterialIcon
+						Width="18"
+						Height="18"
+						Kind="{Binding DropDownIcon}"
+						Foreground="Black"/>
+					</StackPanel>
+				</Button>
+				<Popup IsOpen="{Binding ExePopUpOpen}"
+	                PlacementMode="Bottom"
+	                Name="Popup">
+					<ScrollViewer Height="300"
+								  Width="230"
+								  Name="leftBarScroll"
+								  VerticalScrollBarVisibility="Auto"
+								  HorizontalScrollBarVisibility="Disabled">
+						<StackPanel HorizontalAlignment="Stretch"
+									VerticalAlignment="Stretch"
+									Width="200"
+									Name="ExecutableList"
+									Orientation="Vertical"
+									 Margin="0">
+						</StackPanel>
+					</ScrollViewer>
+				</Popup>
 			</StackPanel>
 			<TextBlock HorizontalAlignment="Center">or</TextBlock>
-			<StackPanel HorizontalAlignment="Center"
-						VerticalAlignment="Center"
-						Spacing="10" Background="Transparent">
-				<DockPanel>
-					<Grid>
-						<Border DragDrop.AllowDrop="true"
-								Name="DropBorder"
-								BorderThickness="1"
-								BorderBrush="Purple"
-								Background="{Binding BorderBackground}"
-								HorizontalAlignment="Center"
-								VerticalAlignment="Center"
-								Width="200" Height="100"
-								CornerRadius="8">
-							<TextBlock  Name="DropText"
-										HorizontalAlignment="Center"
-										VerticalAlignment="Center"
-										>Drop .lnk Here </TextBlock>
-						</Border>
-					</Grid>
-				</DockPanel>
-				<Popup PlacementMode="Bottom" IsOpen="{Binding IsPopupRemoveButton}">
-					<Button  Content="Remove File" Command="{Binding RemoveFileCommand}"/>
+            <StackPanel
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Background="Transparent"
+                Spacing="10">
+                <DockPanel>
+                    <Grid>
+                        <Border
+                            Name="DropBorder"
+                            Width="200"
+                            Height="100"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Background="{Binding BorderBackground}"
+                            BorderBrush="Purple"
+                            BorderThickness="1"
+                            CornerRadius="8"
+                            DragDrop.AllowDrop="true">
+                            <TextBlock
+                                Name="DropText"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center">
+                                Drop .lnk Here
+                            </TextBlock>
+                        </Border>
+                    </Grid>
+                </DockPanel>
+                <Popup IsOpen="{Binding IsPopupRemoveButton}"
+					   PlacementMode="Bottom">
+                    <Button Command="{Binding RemoveFileCommand}"
+							Content="Remove File" />
 
-				</Popup>
-				<!--
+                </Popup>
+                <!--
 				<Button Content="Open File System"
 				 Click="OnOpenFileDialogClick"
 				 Width="150"
-				 Margin="5"/>
--->
-			</StackPanel>
-		</StackPanel>
+				 Margin="5"/>                -->
+            </StackPanel>
+        </StackPanel>
 
-		<StackPanel Orientation="Horizontal"
-					Name="BackAndSubmit"
-					Margin="10 40 10 10"
-					HorizontalAlignment="Center">
-			<Button Width="60"
-					Name="Back"
-					Margin="10"
-					Padding="0"
-					Command="{Binding CloseDialog}">
-				Back
-			</Button>
-			
-			<Button Width="60"
-					Height="30"
-					Name="Submit"
-					Margin="10"
-					Padding="0"
-					Command="{Binding UpdateCommand}">
-				Submit
-			</Button>
-		</StackPanel>
-	</StackPanel>
+        <StackPanel
+            Name="BackAndSubmit"
+            Margin="10,40,10,10"
+            HorizontalAlignment="Center"
+            Orientation="Horizontal">
+            <Button
+                Name="Back"
+                Width="60"
+                Margin="10"
+                Padding="0"
+                Command="{Binding CloseDialog}">
+                Cancel
+            </Button>
+
+            <Button
+                Name="Submit"
+                Width="60"
+                Height="30"
+                Margin="10"
+                Padding="0"
+                Command="{Binding UpdateCommand}">
+                Save
+            </Button>
+        </StackPanel>
+    </StackPanel>
 </UserControl>

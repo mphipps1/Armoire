@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using Armoire.Interfaces;
 using Armoire.Models;
+using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -24,7 +25,13 @@ public partial class ContentsUnitViewModel : ViewModelBase
     private bool _deleteMe;
 
     [ObservableProperty]
-    private int _drawerHierarchy;
+    protected int _drawerHierarchy;
+
+    [ObservableProperty]
+    private string _moveBackDirection;
+
+    [ObservableProperty]
+    private string _moveForwardDirection;
 
     // TODO: This is a "memory leak" because the models are part of the database.
     // They should only be used in the context of a "session with the database".
@@ -142,5 +149,30 @@ public partial class ContentsUnitViewModel : ViewModelBase
             }
         }
         return null;
+    }
+
+    [RelayCommand]
+    public void SetMoveDirections(object parameter)
+    {
+        if (parameter is not ContentsUnitViewModel)
+            return;
+        if (parameter is ContentsUnitViewModel unit)
+        {
+            if (unit.DrawerHierarchy == 0)
+            {
+                MoveForwardDirection = "Move Down";
+                MoveBackDirection = "Move Up";
+            }
+            else if (unit.DrawerHierarchy % 2 == 1)
+            {
+                MoveForwardDirection = "Move Right";
+                MoveBackDirection = "Move Left";
+            }
+            else
+            {
+                MoveForwardDirection = "Move Down";
+                MoveBackDirection = "Move Up";
+            }
+        }
     }
 }

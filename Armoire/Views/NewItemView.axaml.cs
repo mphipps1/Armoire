@@ -4,8 +4,10 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
+using Avalonia.Metadata;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -21,6 +23,8 @@ public partial class NewItemView : UserControl
     private StackPanel backAndSubmit;
     private StackPanel stack;
     private Popup dragAndDropPopup;
+    private TextBox typedAppName;
+    private string currentTypedAppName;
     public NewItemView()
     {
         InitializeComponent();
@@ -29,7 +33,8 @@ public partial class NewItemView : UserControl
         stack = this.Find<StackPanel>("Stack");
         dragAndDropPopup = this.FindControl<Popup>("DragDropArea");
         DropBorder.AddHandler(DragDrop.DropEvent, OnDrop);
-
+        typedAppName = this.Find<TextBox>("TypedAppName");
+        currentTypedAppName = "";
 
     }
 
@@ -38,6 +43,49 @@ public partial class NewItemView : UserControl
         backAndSubmit.Margin = Thickness.Parse("-8 70 10 10");
     }
 
+    public void PopulateExecutableList(object source, RoutedEventArgs args)
+    {
+        StackPanel? exeList = this.Find<StackPanel>("ExecutableList");
+        if (exeList == null || exeList.Children.Count > 0)
+            return;
+        foreach (var name in NewItemViewModel.ExecutableNames)
+        {
+            Button button = new Button();
+            button.Content = name;
+            button.Click += (s, e) =>
+            {
+                NewItemViewModel.NewExe = (s as Button).Content as string;
+                this.Find<Popup>("Popup").IsOpen = false;
+            };
+            button.Height = 25;
+            button.Padding = Thickness.Parse("10 0 0 0");
+            button.BorderThickness = Thickness.Parse("0");
+            button.HorizontalContentAlignment = Avalonia.Layout.HorizontalAlignment.Left;
+            button.FontWeight = Avalonia.Media.FontWeight.Normal;
+            button.FontSize = 14;
+            button.Foreground = Avalonia.Media.Brush.Parse("Black");
+            button.Background = Avalonia.Media.Brush.Parse("LightGray");
+            button.CornerRadius = Avalonia.CornerRadius.Parse("0");
+            RowDefinition rowDefinition = new RowDefinition();
+            exeList.Children.Add(button);
+        }
+    }
+
+    public void KeyUp(object sender, KeyEventArgs e)
+    {
+        if (typedAppName.Text == currentTypedAppName)
+            return;
+        StackPanel? exeList = this.Find<StackPanel>("ExecutableList");
+        if (exeList == null || exeList.Children.Count == 0)
+            return;
+        currentTypedAppName = typedAppName.Text;
+        foreach (var entry in exeList.Children.ToList<Control>())
+        {
+            Button button = entry as Button;
+            if(!button.Content.ToString().Contains(currentTypedAppName))
+                exeList.Children.Remove(button);
+        }
+    }
 
     private void OnDrop(object? sender, DragEventArgs e)
     {

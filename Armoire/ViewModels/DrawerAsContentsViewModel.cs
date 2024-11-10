@@ -1,4 +1,6 @@
 ﻿using System.Data;
+using System.Data.Common;
+using System.Reflection.Metadata;
 using Armoire.Models;
 using Armoire.Utils;
 using Avalonia.Controls;
@@ -19,43 +21,53 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
     [ObservableProperty]
     private PlacementMode _flyoutPlacement = PlacementMode.Right;
 
-    public DrawerAsContentsViewModel(DrawerViewModel container, string name, string parentID)
+    public DrawerAsContentsViewModel(DrawerViewModel container, string name, string parentID, int drawerHierarchy)
     {
         Name = name;
         IconPath = "/Assets/closedGradientDrawer.svg";
         GeneratedDrawer = new DrawerViewModel();
         Container = container;
         ParentId = parentID;
-        _count++;
+        DrawerHierarchy = drawerHierarchy;
+        SetMoveDirections(this);
     }
 
-    public DrawerAsContentsViewModel(string? parentID)
+    public DrawerAsContentsViewModel(string parentID, int drawerHierarchy)
     {
+        Name = "drawer " + ++_count;
+        Id = IdBase + IdCount++;
         IconPath = "/Assets/closedGradientDrawer.svg";
+        GeneratedDrawer = new DrawerViewModel();
         ParentId = parentID;
-        if (parentID is null)
-        {
-            Name = "dock";
-            GeneratedDrawer = new DockViewModel();
-        }
-        else
-        {
-            Name = "drawer " + _count++;
-            GeneratedDrawer = new DrawerViewModel();
-        }
+        DrawerHierarchy = drawerHierarchy;
+        SetMoveDirections(this);
     }
 
-    public DrawerAsContentsViewModel(string name, string? iconPath, string parentID)
+    public DrawerAsContentsViewModel(int id, int drawerHierarchy)
+    {
+        DrawerHierarchy = drawerHierarchy;
+        Name = "drawer " + ++_count;
+        Id = IdBase + IdCount++;
+        IconPath = "/Assets/closedGradientDrawer.svg";
+        DrawerHierarchy = drawerHierarchy;
+        SetMoveDirections(this);
+    }
+
+    public DrawerAsContentsViewModel(string name, string? iconPath, string parentID, int drawerHierarchy)
     {
         GeneratedDrawer = new DrawerViewModel(_count++);
         Name = name;
+
         ParentId = parentID;
+        DrawerHierarchy = drawerHierarchy;
         if (iconPath == null || iconPath == "")
             IconPath = "/../Assets/closedGradientDrawer.svg";
         else
             IconPath = iconPath;
         _count++;
+        SetMoveDirections(this);
     }
+
 
     [RelayCommand]
     public void CheckDraweModel(object typeviewModel)

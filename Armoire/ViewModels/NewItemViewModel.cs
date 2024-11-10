@@ -40,8 +40,7 @@ namespace Armoire.ViewModels
         [ObservableProperty]
         public string _iconPath;
 
-        [ObservableProperty]
-        public string _newExe;
+        public static string? NewExe;
 
         [ObservableProperty]
         public bool _isItem;
@@ -64,6 +63,12 @@ namespace Armoire.ViewModels
         [ObservableProperty]
         public bool _isPopupRemoveButton;
 
+        [ObservableProperty]
+        public bool _exePopUpOpen;
+
+        [ObservableProperty]
+        public string _dropDownIcon;
+
         private string TargetDrawerID;
 
         private int TargetDrawerHeirarchy;
@@ -82,6 +87,8 @@ namespace Armoire.ViewModels
             //setting the backgrounds to light gray
             BackgroundColor = "#c5c7c6";
             TargetDrawerHeirarchy = targetDrawerHeirarchy;
+
+            DropDownIcon = "ArrowBottomDropCircleOutline";
         }
 
         [RelayCommand]
@@ -97,7 +104,8 @@ namespace Armoire.ViewModels
                             Name ?? NewExe,
                             Executables[NewExe],
                             Icons[NewExe].ToBitmap(),
-                            TargetDrawerID
+                            TargetDrawerID,
+                            TargetDrawerHeirarchy + 1
                         )
                     );
                 }
@@ -120,7 +128,7 @@ namespace Armoire.ViewModels
                             System.Drawing.Bitmap bitmap = icon.ToBitmap();
 
                             targetDrawer.Add(
-                               new ItemViewModel(name, droppedFile, bitmap, TargetDrawerID.ToString())
+                               new ItemViewModel(name, droppedFile, bitmap, TargetDrawerID.ToString(), TargetDrawerHeirarchy)
                            );
                         
 
@@ -140,21 +148,20 @@ namespace Armoire.ViewModels
                        System.Drawing.Bitmap bitmap = icon.ToBitmap();
 
                         targetDrawer.Add(
-                            new ItemViewModel(name, ExeFilePath, bitmap, TargetDrawerID.ToString())
+                            new ItemViewModel(name, ExeFilePath, bitmap, TargetDrawerID, TargetDrawerHeirarchy)
                         );
                     }
-                   
                 }
                 else
                 {
-                    var newDrawer = new DrawerAsContentsViewModel(Name, IconPath, TargetDrawerID);
-                    newDrawer.DrawerHierarchy = TargetDrawerHeirarchy + 1;
+                    var newDrawer = new DrawerAsContentsViewModel(Name, IconPath, TargetDrawerID, TargetDrawerHeirarchy + 1);
                     targetDrawer.Add(newDrawer);
                 }
             }
 
             //MainWindowViewModel._dialogIsOpen = false;
             MainWindowViewModel.CloseDialog();
+            NewExe = null;
         }
 
         private ObservableCollection<ContentsUnitViewModel>? GetTargetDrawer(
@@ -239,6 +246,18 @@ namespace Armoire.ViewModels
                 IsPopupRemoveButton = false;
                 BorderBackground = Avalonia.Media.Brushes.Transparent;
             }
+        }
+
+        [RelayCommand]
+        public void ToggleExeDropDown()
+        {
+            ExePopUpOpen = !ExePopUpOpen;
+            if (ExePopUpOpen)
+                DropDownIcon = "ArrowBottomDropCircleOutline";
+            else
+                DropDownIcon = "ArrowTopDropCircleOutline";
+
+
         }
 
         public bool CheckIsItem()

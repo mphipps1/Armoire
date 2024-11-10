@@ -15,7 +15,6 @@ public partial class DrawerAsContentsView : UserControl
         //using parameter as ParentId in undo button, fix this ID later
        // DataContext = new DrawerAsContentsViewModel("CONTENTS_-1");  
 
-     
     }
 
 
