@@ -8,6 +8,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using Avalonia.Media;
+using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -15,8 +16,13 @@ namespace Armoire.ViewModels
 {
     public partial class NewItemViewModel : ViewModelBase
     {
-        public ObservableCollection<dynamic> DropCollection { get; set; } =
+        public ObservableCollection<dynamic> lnkDropCollection { get; set; } =
             new ObservableCollection<dynamic>();
+
+
+        public ObservableCollection<dynamic> ImageDropCollection { get; set; } =
+            new ObservableCollection<dynamic>();
+
 
         [ObservableProperty]
         public IBrush _borderBackground = Avalonia.Media.Brushes.Transparent;
@@ -95,21 +101,48 @@ namespace Armoire.ViewModels
                         )
                     );
                 }
-                else if (DropCollection.Count > 0)
+                else if (lnkDropCollection.Count > 0 || ImageDropCollection.Count > 0)
                 {
-                    var droppedFile = DropCollection.ElementAt(0);
-                    var ExeFilePath = droppedFile.TargetPath;
-                    var IconLocation = droppedFile.IconLocation;
-                    var IconPath = ExeFilePath + IconLocation;
-                    var name = Path.GetFileName(droppedFile.FullName)
-                        .Substring(0, Path.GetFileName(droppedFile.FullName).IndexOf('.'));
-                    var icon = Icon.ExtractAssociatedIcon(ExeFilePath);
 
-                    Bitmap bitmap = icon.ToBitmap();
+                    if (ImageDropCollection.Count > 0)
+                    {
+                        var droppedFile = ImageDropCollection.ElementAt(0);
+                        var fileExtension = droppedFile.Substring(droppedFile.IndexOf('.') + 1);
 
-                    targetDrawer.Add(
-                        new ItemViewModel(name, ExeFilePath, bitmap, TargetDrawerID.ToString())
-                    );
+         
+                        FileInfo fileInfo = new FileInfo(droppedFile);
+
+                       var name = fileInfo.Name.Substring(0, fileInfo.Name.IndexOf('.'));
+
+                        var icon = Icon.ExtractAssociatedIcon(droppedFile);
+
+                        System.Drawing.Bitmap bitmap = icon.ToBitmap();
+
+                        targetDrawer.Add(
+                           new ItemViewModel(name, droppedFile, bitmap, TargetDrawerID.ToString())
+                       );
+
+
+
+
+                    }
+                    else if (lnkDropCollection.Count > 0)
+                    {
+                        var droppedFile = lnkDropCollection.ElementAt(0);
+                        var ExeFilePath = droppedFile.TargetPath;
+                        var IconLocation = droppedFile.IconLocation;
+                        var IconPath = ExeFilePath + IconLocation;
+                        var name = Path.GetFileName(droppedFile.FullName)
+                            .Substring(0, Path.GetFileName(droppedFile.FullName).IndexOf('.'));
+                        var icon = Icon.ExtractAssociatedIcon(ExeFilePath);
+
+                       System.Drawing.Bitmap bitmap = icon.ToBitmap();
+
+                        targetDrawer.Add(
+                            new ItemViewModel(name, ExeFilePath, bitmap, TargetDrawerID.ToString())
+                        );
+                    }
+                   
                 }
                 else
                 {
@@ -190,8 +223,16 @@ namespace Armoire.ViewModels
         [RelayCommand]
         public void RemoveFile()
         {
-            DropCollection.RemoveAt(0);
-            if (DropCollection.Count == 0)
+            if (ImageDropCollection.Count > 0)
+            {
+                ImageDropCollection.RemoveAt(0);
+            }
+            else if (lnkDropCollection.Count > 0)
+            {
+                lnkDropCollection.RemoveAt(0);
+            }
+
+            if (lnkDropCollection.Count == 0 && ImageDropCollection.Count == 0 )
             {
                 FileDropText = "Drop lnk file here";
                 IsPopupRemoveButton = false;

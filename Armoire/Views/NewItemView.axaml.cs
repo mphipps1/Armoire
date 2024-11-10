@@ -44,32 +44,16 @@ public partial class NewItemView : UserControl
         //https://github.com/AvaloniaUI/Avalonia.Xaml.Behaviors/discussions/118
 
         var items = e.Data.GetFileNames();
-        if (items != null)
+        string fileExtension = "";
+          fileExtension =  items.ElementAt(0).Substring(items.ElementAt(0).IndexOf('.')+1);
+
+        if (fileExtension.Equals("jpg"))
         {
-            Type shellObjectType = Type.GetTypeFromProgID("WScript.Shell");
-            dynamic windowsShell = Activator.CreateInstance(shellObjectType);
-            dynamic shortcut = windowsShell.CreateShortcut(items.ElementAt(0));
-            
-            var file = shortcut.TargetPath;
-
-            FileInfo fileInfo = new FileInfo(file);
-          
-            if (sender is Border border)
-            {
-                if (DataContext is NewItemViewModel itemviewmodel)
-                {
-                    itemviewmodel.IsPopupRemoveButton = true;
-                    var dotIndex = Path.GetFileName(fileInfo.Name).IndexOf('.');
-                    border.Background = Brushes.DarkViolet;
-                    itemviewmodel.FileDropText = $"{Path.GetFileName(fileInfo.Name).Substring(0, dotIndex)} dropped";
-                }
-            }
-
             if (DataContext is NewItemViewModel viewModel)
             {
-                if (viewModel.DropCollection.Count < 1)
+                if (viewModel.ImageDropCollection.Count < 1)
                 {
-                    viewModel.DropCollection.Add(shortcut);
+                    viewModel.ImageDropCollection.Add(items.ElementAt(0));
                     viewModel.BorderBackground = Brushes.Violet;
                 }
                 else
@@ -79,6 +63,50 @@ public partial class NewItemView : UserControl
                     {
                         dropareaborder.Background = Brushes.Transparent;
                         viewModel.FileDropText = "Remove the dropped file first";
+                    }
+                }
+            }
+
+
+        }
+        else if (fileExtension.Equals("lnk"))
+        {
+            if (items != null)
+            {
+                Type shellObjectType = Type.GetTypeFromProgID("WScript.Shell");
+                dynamic windowsShell = Activator.CreateInstance(shellObjectType);
+                dynamic shortcut = windowsShell.CreateShortcut(items.ElementAt(0));
+
+                var file = shortcut.TargetPath;
+
+                FileInfo fileInfo = new FileInfo(file);
+
+                if (sender is Border border)
+                {
+                    if (DataContext is NewItemViewModel itemviewmodel)
+                    {
+                        itemviewmodel.IsPopupRemoveButton = true;
+                        var dotIndex = Path.GetFileName(fileInfo.Name).IndexOf('.');
+                        border.Background = Brushes.DarkViolet;
+                        itemviewmodel.FileDropText = $"{Path.GetFileName(fileInfo.Name).Substring(0, dotIndex)} dropped";
+                    }
+                }
+
+                if (DataContext is NewItemViewModel viewModel)
+                {
+                    if (viewModel.lnkDropCollection.Count < 1)
+                    {
+                        viewModel.lnkDropCollection.Add(shortcut);
+                        viewModel.BorderBackground = Brushes.Violet;
+                    }
+                    else
+                    {
+
+                        if (sender is Border dropareaborder)
+                        {
+                            dropareaborder.Background = Brushes.Transparent;
+                            viewModel.FileDropText = "Remove the dropped file first";
+                        }
                     }
                 }
             }
