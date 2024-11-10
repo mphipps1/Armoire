@@ -78,7 +78,7 @@ public partial class NewItemView : UserControl
 
     public void KeyUp(object sender, KeyEventArgs e)
     {
-        if (typedAppName.Text == currentTypedAppName)
+        if (typedAppName.Text == currentTypedAppName || typedAppName.Text == null)
             return;
         if (!popup.IsOpen) {
             PopulateExecutableList(null, null);
