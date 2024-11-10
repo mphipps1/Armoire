@@ -21,7 +21,7 @@ namespace Armoire.ViewModels
         //used for the base dock to get the recursive step set up
         public void UpdateName()
         {
-            var dock = MainWindowViewModel.DockViewModel.InnerContents;
+            var dock = MainWindowViewModel.ActiveDockViewModel.InnerContents;
             foreach (var unit in dock)
             {
                 if (unit is DrawerAsContentsViewModel dacvm)

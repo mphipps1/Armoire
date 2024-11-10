@@ -11,7 +11,7 @@ namespace Armoire.ViewModels;
 public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
 {
     private const int MAXNESTERDRAWERS = 4;
-    private static int _count;
+    private static int _count = 1;
 
     // The "drawer as container" that issues from this drawer button when clicked.
     public DrawerViewModel GeneratedDrawer { get; set; }
@@ -22,40 +22,39 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
     public DrawerAsContentsViewModel(DrawerViewModel container, string name, string parentID)
     {
         Name = name;
-        Id = IdBase + IdCount++;
         IconPath = "/Assets/closedGradientDrawer.svg";
         GeneratedDrawer = new DrawerViewModel();
         Container = container;
-        ParentID = parentID;
+        ParentId = parentID;
+        _count++;
     }
 
-    public DrawerAsContentsViewModel(string parentID)
+    public DrawerAsContentsViewModel(string? parentID)
     {
-        Name = "drawer " + ++_count;
-        Id = IdBase + IdCount++;
         IconPath = "/Assets/closedGradientDrawer.svg";
-        GeneratedDrawer = new DrawerViewModel();
-        ParentID = parentID;
-    }
-
-    public DrawerAsContentsViewModel(int id, int drawerHierarchy)
-    {
-        DrawerHierarchy = drawerHierarchy;
-        Name = "drawer " + ++_count;
-        Id = IdBase + IdCount++;
-        IconPath = "/Assets/closedGradientDrawer.svg";
+        ParentId = parentID;
+        if (parentID is null)
+        {
+            Name = "dock";
+            GeneratedDrawer = new DockViewModel();
+        }
+        else
+        {
+            Name = "drawer " + _count++;
+            GeneratedDrawer = new DrawerViewModel();
+        }
     }
 
     public DrawerAsContentsViewModel(string name, string? iconPath, string parentID)
     {
         GeneratedDrawer = new DrawerViewModel(_count++);
-        Id = IdBase + IdCount++;
         Name = name;
-        ParentID = parentID;
+        ParentId = parentID;
         if (iconPath == null || iconPath == "")
             IconPath = "/../Assets/closedGradientDrawer.svg";
         else
             IconPath = iconPath;
+        _count++;
     }
 
     [RelayCommand]

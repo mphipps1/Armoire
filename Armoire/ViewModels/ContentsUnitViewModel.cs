@@ -30,11 +30,12 @@ public partial class ContentsUnitViewModel : ViewModelBase
     // They should only be used in the context of a "session with the database".
     public Item? Model { get; set; }
 
-    public string ParentID { get; set; }
+    public string? ParentId { get; set; }
 
     public ContentsUnitViewModel()
     {
-        Name = "unit " + ++IdCount;
+        Id = IdBase + IdCount++;
+        Name = "unit " + IdCount;
     }
 
     [RelayCommand]
@@ -49,12 +50,11 @@ public partial class ContentsUnitViewModel : ViewModelBase
 
     public string Id { get; set; } = "CONTENTS_NULL";
     public string ContainerId { get; set; } = "CONTAINER_NULL";
-    public string ParentId { get; set; } = "CONTENTS_NULL";
 
     [RelayCommand]
     public void MoveUp()
     {
-        var drawer = findParentDrawer(MainWindowViewModel.DockViewModel.InnerContents, this);
+        var drawer = findParentDrawer(MainWindowViewModel.ActiveDockViewModel.InnerContents, this);
         if (drawer == null)
             return;
         int indexOfMe = drawer.IndexOf(this);
@@ -67,7 +67,7 @@ public partial class ContentsUnitViewModel : ViewModelBase
     [RelayCommand]
     public void MoveDown()
     {
-        var drawer = findParentDrawer(MainWindowViewModel.DockViewModel.InnerContents, this);
+        var drawer = findParentDrawer(MainWindowViewModel.ActiveDockViewModel.InnerContents, this);
         if (drawer == null)
             return;
         //using c# tuple to swap the drawerAsContents this function was called from and the DrawerAsConetnts before it
@@ -109,12 +109,15 @@ public partial class ContentsUnitViewModel : ViewModelBase
         if (MainWindowViewModel.DeletedUnits.Count == 0)
             return;
         ContentsUnitViewModel target = MainWindowViewModel.DeletedUnits.Pop();
-        if (target.ParentID == "CONTENT_0")
+        if (target.ParentId == "CONTENTS_1")
         {
-            MainWindowViewModel.DockViewModel.InnerContents.Add(target);
+            MainWindowViewModel.ActiveDockViewModel.InnerContents.Add(target);
             return;
         }
-        var ret = FindParentDrawerByID(MainWindowViewModel.DockViewModel.InnerContents, target);
+        var ret = FindParentDrawerByID(
+            MainWindowViewModel.ActiveDockViewModel.InnerContents,
+            target
+        );
         if (ret != null)
             ret.Add(target);
     }
@@ -126,7 +129,7 @@ public partial class ContentsUnitViewModel : ViewModelBase
     {
         foreach (var unit in contentsIn)
         {
-            if (unit is DrawerAsContentsViewModel dac && dac.Id == target.ParentID.ToString())
+            if (unit is DrawerAsContentsViewModel dac && dac.Id == target.ParentId)
             {
                 return dac.GeneratedDrawer.InnerContents;
             }

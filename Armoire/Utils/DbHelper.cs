@@ -9,7 +9,7 @@ public class DbHelper
         using var context = new AppDbContext();
         var drawerToAdd = dacVm.CreateDrawer();
         OutputHelper.DebugPrintJson(drawerToAdd, "DbHelper_SaveDrawer_drawerToAdd");
-        context.TryAddDrawer(dacVm.CreateDrawer());
+        context.TryAddDrawer(drawerToAdd);
         context.SaveChanges();
     }
 }

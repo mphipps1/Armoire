@@ -186,7 +186,7 @@ namespace Armoire.ViewModels
 
         public static void GetExecutables()
         {
-            Dock = MainWindowViewModel.DockViewModel.InnerContents;
+            Dock = MainWindowViewModel.ActiveDockViewModel.InnerContents;
             Executables = new Dictionary<string, string>();
             ExecutableNames = new ObservableCollection<string>();
             Icons = new Dictionary<string, Icon>();

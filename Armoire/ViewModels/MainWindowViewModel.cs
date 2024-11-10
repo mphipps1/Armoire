@@ -22,7 +22,7 @@ namespace Armoire.ViewModels
         private string _currentTime;
         private static DockViewModel? _dockViewModel;
         public static Stack<ContentsUnitViewModel> DeletedUnits;
-        public static DockViewModel DockViewModel
+        public static DockViewModel ActiveDockViewModel
         {
             get =>
                 _dockViewModel
@@ -49,30 +49,28 @@ namespace Armoire.ViewModels
 
             UpdateTime();
 
-            var dockSource = new DrawerAsContentsViewModel("CONTENT_0");
+            var dockSource = new DrawerAsContentsViewModel(null);
+            ActiveDockViewModel = (DockViewModel)dockSource.GeneratedDrawer;
             DbHelper.SaveDrawer(dockSource);
 
-            // Create DockViewModel for the dock and save its corresponding Drawer model to the
-            // database.
-            DockViewModel = new DockViewModel() { Name = "dock" };
-            DockViewModel.SaveToDb();
-
             // Create a sample drawer for the dock.
-            var d1 = new DrawerAsContentsViewModel(DockViewModel, "apple", "CONTENT_0");
-            d1.GeneratedDrawer = new DrawerViewModel(1, d1);
-            d1.DrawerHierarchy = 0;
+            var d1 = new DrawerAsContentsViewModel(ActiveDockViewModel, "sample 1", dockSource.Id)
+            {
+                DrawerHierarchy = 0
+            };
 
             // Create another sample drawer for the dock.
-            var d2 = new DrawerAsContentsViewModel(DockViewModel, "orange", "CONTENT_0");
-            d2.GeneratedDrawer = new DrawerViewModel(2, d2);
-            d2.DrawerHierarchy = 0;
+            var d2 = new DrawerAsContentsViewModel(ActiveDockViewModel, "sample 2", dockSource.Id)
+            {
+                DrawerHierarchy = 0
+            };
 
             // Add to the dock (this triggers dc_OnAdd).
-            DockViewModel.InnerContents.Add(d1);
-            DockViewModel.InnerContents.Add(new ItemViewModel());
-            DockViewModel.InnerContents.Add(d2);
+            ActiveDockViewModel.InnerContents.Add(d1);
+            ActiveDockViewModel.InnerContents.Add(new ItemViewModel());
+            ActiveDockViewModel.InnerContents.Add(d2);
 
-            if(DeletedUnits == null)
+            if (DeletedUnits == null)
                 DeletedUnits = new Stack<ContentsUnitViewModel>();
 
             //getting the list of apps in the start menu here instead of in the NewItemViewModel contructor to avoid lag
@@ -136,8 +134,8 @@ namespace Armoire.ViewModels
         [RelayCommand]
         public void AddDrawerClick()
         {
-            if (DockViewModel.InnerContents.Count < 10)
-                DockViewModel.InnerContents.Add(new DrawerAsContentsViewModel("CONTENT_0"));
+            if (ActiveDockViewModel.InnerContents.Count < 10)
+                ActiveDockViewModel.InnerContents.Add(new DrawerAsContentsViewModel("CONTENT_0"));
             else
                 DialogHost.Show(
                     new ErrorMessageViewModel($"The dock is full, it can\n only hold 10 items.")

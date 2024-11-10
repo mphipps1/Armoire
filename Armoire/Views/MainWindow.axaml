@@ -112,7 +112,7 @@
                             Kind="Wrench" />
                     </Button>
                 </StackPanel>
-            <ItemsControl ItemsSource="{Binding DockViewModel.InnerContents}">
+            <ItemsControl ItemsSource="{Binding ActiveDockViewModel.InnerContents}">
                 <ItemsControl.ItemTemplate>
                     <armoire:ViewLocator />
                 </ItemsControl.ItemTemplate>
