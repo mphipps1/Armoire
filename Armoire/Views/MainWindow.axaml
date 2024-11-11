@@ -117,6 +117,13 @@
                     <armoire:ViewLocator />
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
+			<Button Height="40" Width="40">
+				<Button.Flyout>
+					<Flyout>
+						
+					</Flyout>
+				</Button.Flyout>
+			</Button>
 			<!-- Power settings button which displays a flyout for buttons to logoff, restart or shutdown-->
 			<Button Height="40"
 					Width="40">
