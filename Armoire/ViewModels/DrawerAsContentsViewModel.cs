@@ -132,7 +132,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
     [RelayCommand]
     public void ChangeDrawerName()
     {
-        var view = new ChangeDrawerNameViewModel(Name);
+        var view = new EditViewModel(Name);
         DialogHost.Show(view);
         //var window = new ChangeDrawerNameView();
         //window.Show();

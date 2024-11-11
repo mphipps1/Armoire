@@ -133,7 +133,7 @@ namespace Armoire.ViewModels
         {
 
             if (ActiveDockViewModel.InnerContents.Count < 10)
-                ActiveDockViewModel.InnerContents.Add(new DrawerAsContentsViewModel("CONTENT_0", 0));
+                DialogHost.Show(new NewItemViewModel("CONTENTS_1", 0, false));
             else
                 DialogHost.Show(
                     new ErrorMessageViewModel($"The dock is full, it can\n only hold 10 items.")

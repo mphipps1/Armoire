@@ -4,7 +4,7 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace Armoire.ViewModels
 {
-    public partial class ChangeDrawerNameViewModel : ViewModelBase
+    public partial class EditViewModel : ViewModelBase
     {
         [ObservableProperty]
         private string? _newName;
@@ -12,7 +12,7 @@ namespace Armoire.ViewModels
         private string TargetName;
         private string DialogHostName;
 
-        public ChangeDrawerNameViewModel(string targetName)
+        public EditViewModel(string targetName)
         {
             TargetName = targetName;
         }
@@ -49,6 +49,12 @@ namespace Armoire.ViewModels
                     UpdateName(dacvm.GeneratedDrawer.InnerContents);
                 }
             }
+            MainWindowViewModel.CloseDialog();
+        }
+
+        [RelayCommand]
+        public void Cancel()
+        {
             MainWindowViewModel.CloseDialog();
         }
     }

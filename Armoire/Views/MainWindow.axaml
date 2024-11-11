@@ -83,7 +83,7 @@
 		</Style>
     </Window.Styles>
 	<Window.ContextMenu>
-		<ContextMenu>
+		<ContextMenu Name="MainWindowContextMenu">
 			<MenuItem Command="{Binding AddDrawerClickCommand}" Header="Add Drawer" />
 			<MenuItem Command="{Binding AddItemClickCommand}" Header="Add Item" />
 		</ContextMenu>

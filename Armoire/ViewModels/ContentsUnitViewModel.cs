@@ -120,7 +120,6 @@ public partial class ContentsUnitViewModel : ViewModelBase
         if (target.ParentId == "CONTENTS_1")
         {
             MainWindowViewModel.ActiveDockViewModel.InnerContents.Add(target);
-            //target.DeleteMe = false;
             return;
         }
         var ret = FindParentDrawerByID(
@@ -129,7 +128,6 @@ public partial class ContentsUnitViewModel : ViewModelBase
         );
         if (ret != null)
             ret.Add(target);
-       // target.DeleteMe = false;
     }
 
     public static ObservableCollection<ContentsUnitViewModel>? FindParentDrawerByID(
