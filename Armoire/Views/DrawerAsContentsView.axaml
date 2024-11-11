@@ -51,7 +51,8 @@
         </Button.Content>
         <Button.Flyout>
             <!--  Make this placement a binding that alternates between right, down, and up depending on where we are in the drawer structure  -->
-            <Flyout
+			<Flyout
+				OverlayDismissEventPassThrough="True"
 			    Opening="Flyout_Opening"
                 Content="{Binding GeneratedDrawer}"
                 FlyoutPresenterClasses="wider"

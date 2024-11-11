@@ -118,10 +118,11 @@
 				</Button>
 				<Popup IsOpen="{Binding ExePopUpOpen}"
 	                PlacementMode="Bottom"
-	                Name="Popup">
-					<ScrollViewer Height="300"
+	                Name="Popup"
+					OverlayDismissEventPassThrough="True">
+					<ScrollViewer Height="190"
 								  Width="230"
-								  Name="leftBarScroll"
+								  Name="BarScroll"
 								  VerticalScrollBarVisibility="Auto"
 								  HorizontalScrollBarVisibility="Disabled">
 						<StackPanel HorizontalAlignment="Stretch"

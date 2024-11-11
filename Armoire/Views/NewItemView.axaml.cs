@@ -103,7 +103,7 @@ public partial class NewItemView : UserControl
         foreach (var entry in exeList.Children.ToList<Control>())
         {
             Button button = entry as Button;
-            if(!button.Content.ToString().ToLower().Contains(currentTypedAppName.ToLower()))
+            if (!button.Content.ToString().ToLower().Contains(currentTypedAppName.ToLower()))
                 exeList.Children.Remove(button);
         }
     }
