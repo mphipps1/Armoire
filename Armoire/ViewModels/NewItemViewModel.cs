@@ -43,12 +43,6 @@ namespace Armoire.ViewModels
         public static string? NewExe;
 
         [ObservableProperty]
-        public bool _isItem;
-
-        [ObservableProperty]
-        public bool _isDrawer;
-
-        [ObservableProperty]
         public int _panelHeight;
 
         [ObservableProperty]
@@ -73,15 +67,11 @@ namespace Armoire.ViewModels
 
         private int TargetDrawerHeirarchy;
 
-        public NewItemViewModel(string targetDrawerID, int targetDrawerHeirarchy, bool isItem)
+        public NewItemViewModel(string targetDrawerID, int targetDrawerHeirarchy)
         {
             TargetDrawerID = targetDrawerID;
-            IsItem = isItem;
-            IsDrawer = !isItem;
-            if (IsItem)
-                PanelHeight = 400;
-            else
-                PanelHeight = 200;
+ 
+            PanelHeight = 400;
             PanelWidth = 400;
 
             //setting the backgrounds to light gray
@@ -222,11 +212,6 @@ namespace Armoire.ViewModels
             ExecutableNames = new ObservableCollection<string>(ExecutableNames.OrderBy(i => i));
         }
 
-        [RelayCommand]
-        public void IsItemClicked()
-        {
-            IsItem = !IsItem;
-        }
 
         [RelayCommand]
         public void RemoveFile()
@@ -253,16 +238,11 @@ namespace Armoire.ViewModels
         {
             ExePopUpOpen = !ExePopUpOpen;
             if (ExePopUpOpen)
-                DropDownIcon = "ArrowBottomDropCircleOutline";
-            else
                 DropDownIcon = "ArrowTopDropCircleOutline";
+            else
+                DropDownIcon = "ArrowBottomDropCircleOutline";
 
 
-        }
-
-        public bool CheckIsItem()
-        {
-            return IsItem;
         }
 
         [RelayCommand]

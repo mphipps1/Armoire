@@ -85,47 +85,9 @@ namespace Armoire.ViewModels
         }
 
         [RelayCommand]
-        public void HandleWrenchClick()
-        {
-            // TODO: This approach is Anti-MVVM. The ViewModel should be unaware of the View.
-            if (_devDrawerView is null)
-            {
-                _devDrawerView = new DevDrawerView();
-                var vm = new DevDrawerViewModel();
-                _devDrawerView.DataContext = vm;
-                //w.Position = vm.Point;
-                _devDrawerView.Show();
-                foreach (var vc in _devDrawerView.GetVisualChildren())
-                {
-                    Debug.WriteLine("Reporting from HandleWrenchClick depth 1: " + vc);
-                    foreach (var vc2 in vc.GetVisualChildren())
-                    {
-                        Debug.WriteLine("Reporting from HandleWrenchClick depth 2: " + vc2);
-                        foreach (var vc3 in vc2.GetVisualChildren())
-                        {
-                            Debug.WriteLine("Reporting from HandleWrenchClick depth 3: " + vc3);
-                            foreach (var vc4 in vc3.GetVisualChildren())
-                            {
-                                // One of these is the Canvas
-                                Debug.WriteLine("Reporting from HandleWrenchClick depth 4: " + vc4);
-                            }
-                        }
-                    }
-                }
-            }
-            else
-            {
-                _devDrawerView.Close();
-                _devDrawerView = null;
-            }
-            //DialogHost.Show(new DevDialogViewModel());
-            //DialogHost.Show(new SqlDialogViewModel(new SqlDialog()));
-        }
-
-        [RelayCommand]
         public void AddItemClick()
         {
-            DialogHost.Show(new NewItemViewModel("CONTENTS_1", 0, true));
+            DialogHost.Show(new NewItemViewModel("CONTENTS_1", 0));
         }
 
         [RelayCommand]
@@ -133,7 +95,7 @@ namespace Armoire.ViewModels
         {
 
             if (ActiveDockViewModel.InnerContents.Count < 10)
-                DialogHost.Show(new NewItemViewModel("CONTENTS_1", 0, false));
+                DialogHost.Show(new NewDrawerViewModel("CONTENTS_1", 0));
             else
                 DialogHost.Show(
                     new ErrorMessageViewModel($"The dock is full, it can\n only hold 10 items.")

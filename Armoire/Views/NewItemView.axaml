@@ -54,23 +54,7 @@
             Height="30"
             Text="{Binding Name}"
             Watermark="Paint" />
-        <!--
-            The Margin is set like this to properly align
-            'Icon Path' on the left side of the TextBox below it
-        -->
-        <TextBlock
-            Margin="0,5,135,-10"
-            HorizontalAlignment="Center"
-            IsVisible="{Binding IsDrawer}">
-            Icon Path:
-        </TextBlock>
-        <TextBox
-            Name="temp"
-			Height="30"
-            IsVisible="{Binding IsDrawer}"
-            Text="{Binding IconPath}"
-            Watermark="Path" />
-        <StackPanel IsVisible="{Binding IsItem}" Spacing="10">
+        <StackPanel Spacing="10">
             <StackPanel Width="150">
                 <TextBlock Margin="5">Choose App Name:</TextBlock>
                 <Button

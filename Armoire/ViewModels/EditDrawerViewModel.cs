@@ -4,7 +4,7 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace Armoire.ViewModels
 {
-    public partial class EditViewModel : ViewModelBase
+    public partial class EditDrawerViewModel : ViewModelBase
     {
         [ObservableProperty]
         private string? _newName;
@@ -12,7 +12,7 @@ namespace Armoire.ViewModels
         private string TargetName;
         private string DialogHostName;
 
-        public EditViewModel(string targetName)
+        public EditDrawerViewModel(string targetName)
         {
             TargetName = targetName;
         }

@@ -1,5 +1,5 @@
 <UserControl     
-	x:Class="Armoire.Views.EditView"
+	x:Class="Armoire.Views.EditDrawerView"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -7,7 +7,7 @@
     xmlns:vm="clr-namespace:Armoire.ViewModels"
     d:DesignHeight="450"
     d:DesignWidth="400"
-    x:DataType="vm:EditViewModel"
+    x:DataType="vm:EditDrawerViewModel"
     mc:Ignorable="d">
 	<Canvas Margin="10"
 			Width="280"
