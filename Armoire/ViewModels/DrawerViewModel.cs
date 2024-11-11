@@ -28,26 +28,12 @@ public partial class DrawerViewModel : ContainerViewModel
     [ObservableProperty]
     private int _ParentdrawerhierarchyPosition;
 
-    public DrawerAsContentsViewModel drawerAsContentsViewModel { get; set; }
-
-    public DrawerViewModel()
+    public DrawerViewModel(DrawerAsContentsViewModel dacVm)
+        : base(dacVm) // This calls the ContainerViewModel constructor.
     {
         // Register event handlers.
         InnerContents.CollectionChanged += dc_CollectionChanged;
         InnerContents.CollectionChanged += dc_OnAdd;
-    }
-
-    public DrawerViewModel(int id)
-        : this() // This calls the parameterless constructor to register the event handlers.
-    {
-        Id = id;
-    }
-
-    public DrawerViewModel(int id, DrawerAsContentsViewModel drawerascontentsviewmodel)
-        : this()
-    {
-        drawerAsContentsViewModel = drawerascontentsviewmodel;
-        Id = id;
     }
 
     public Drawer CreateDrawer()

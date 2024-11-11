@@ -12,8 +12,8 @@ public class AppDbContext : DbContext
     public DbSet<Drawer> Drawers { get; set; }
     public DbSet<Item> Items { get; set; }
     public string DbPath { get; }
-    private const bool CanSave = false;
-    private const bool CanInspect = false;
+    private const bool CanSave = true;
+    private const bool CanInspect = true;
 
     public AppDbContext()
     {

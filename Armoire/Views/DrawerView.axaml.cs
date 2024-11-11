@@ -10,6 +10,5 @@ public partial class DrawerView : UserControl
     public DrawerView()
     {
         InitializeComponent();
-        DataContext = new DrawerViewModel();
     }
 }

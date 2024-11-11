@@ -30,7 +30,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
     {
         Name = name;
         IconPath = "/Assets/closedGradientDrawer.svg";
-        GeneratedDrawer = new DrawerViewModel();
+        GeneratedDrawer = new DrawerViewModel(this);
         Container = container;
         ParentId = parentID;
         DrawerHierarchy = drawerHierarchy;
@@ -42,7 +42,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
     {
         Name = "drawer " + _count++;
         IconPath = "/Assets/closedGradientDrawer.svg";
-        GeneratedDrawer = new DrawerViewModel();
+        GeneratedDrawer = new DrawerViewModel(this);
         ParentId = parentID;
         DrawerHierarchy = drawerHierarchy;
         SetMoveDirections(this);
@@ -55,7 +55,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
         int drawerHierarchy
     )
     {
-        GeneratedDrawer = new DrawerViewModel(_count++);
+        GeneratedDrawer = new DrawerViewModel(this);
         Name = name;
         ParentId = parentID;
         DrawerHierarchy = drawerHierarchy;

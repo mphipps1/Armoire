@@ -2,5 +2,6 @@
 
 public class DockViewModel : DrawerViewModel
 {
-    public DockViewModel() { }
+    public DockViewModel(DrawerAsContentsViewModel dacVm)
+        : base(dacVm) { }
 }

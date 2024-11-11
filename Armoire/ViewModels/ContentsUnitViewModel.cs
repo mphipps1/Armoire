@@ -55,7 +55,7 @@ public partial class ContentsUnitViewModel : ViewModelBase
         MainWindowViewModel.DeletedUnits.Push(this);
     }
 
-    public string Id { get; set; } = "CONTENTS_NULL";
+    public string Id { get; set; }
     public string ContainerId { get; set; } = "CONTAINER_NULL";
 
     [RelayCommand]
