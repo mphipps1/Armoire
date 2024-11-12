@@ -19,6 +19,7 @@ public partial class ContainerViewModel : ViewModelBase
     private static long _id = 1;
 
     public string Id { get; set; }
+    public string Name { get; set; } = "default";
 
     public ContainerViewModel() { }
 
@@ -26,7 +27,7 @@ public partial class ContainerViewModel : ViewModelBase
     {
         Id = IdBase + _id++;
         SourceDrawer = sourceDrawer;
-        //SourceDrawerId = sourceDrawer.Id;
+        SourceDrawerId = sourceDrawer.Id;
 
         // Register event handlers.
         Contents.CollectionChanged += contents_CollectionChanged;

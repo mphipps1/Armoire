@@ -1,11 +1,6 @@
-﻿using System.Data;
-using System.Data.Common;
-using System.Drawing.Imaging;
-using System.Drawing;
+﻿using System.Drawing.Imaging;
 using System.IO;
-using System.Reflection.Metadata;
 using Armoire.Models;
-using Armoire.Utils;
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -35,7 +30,11 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
     )
     {
         Name = name;
-        FileStream fs = new FileStream("./../../../Assets/tempDrawer.jpg", FileMode.Open, FileAccess.Read);
+        FileStream fs = new FileStream(
+            "./../../../Assets/tempDrawer.jpg",
+            FileMode.Open,
+            FileAccess.Read
+        );
         System.Drawing.Image image = System.Drawing.Image.FromStream(fs);
         System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(image, 60, 60);
         using (MemoryStream memory = new MemoryStream())
@@ -55,7 +54,11 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
     public DrawerAsContentsViewModel(string? parentID, int drawerHierarchy)
     {
         Name = "drawer " + _count++;
-        FileStream fs = new FileStream("./../../../Assets/tempDrawer.jpg", FileMode.Open, FileAccess.Read);
+        FileStream fs = new FileStream(
+            "./../../../Assets/tempDrawer.jpg",
+            FileMode.Open,
+            FileAccess.Read
+        );
         System.Drawing.Image image = System.Drawing.Image.FromStream(fs);
         System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(image, 60, 60);
         using (MemoryStream memory = new MemoryStream())
@@ -75,7 +78,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
         System.Drawing.Bitmap bmp,
         string parentID,
         int drawerHierarchy
-        )
+    )
     {
         GeneratedDrawer = new DrawerViewModel(this);
         Name = name;
@@ -186,8 +189,6 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
 
     public Drawer CreateDrawer()
     {
-        OutputHelper.DebugPrintJson(this, "DeVm_CreateDrawer_this");
-        OutputHelper.DebugPrintJson(Container, "DeVm_CreateDrawer_OuterContainer");
         return new Drawer()
         {
             Id = Id,
