@@ -166,7 +166,7 @@ namespace Armoire.ViewModels
                 {
                     if (dacvm.Id == TargetDrawerID)
                     {
-                        return dacvm.GeneratedDrawer.InnerContents;
+                        return dacvm.GeneratedDrawer.Contents;
                     }
                 }
             }
@@ -174,7 +174,7 @@ namespace Armoire.ViewModels
             {
                 if (unit is DrawerAsContentsViewModel dacvm)
                 {
-                    var ret = GetTargetDrawer(dacvm.GeneratedDrawer.InnerContents);
+                    var ret = GetTargetDrawer(dacvm.GeneratedDrawer.Contents);
                     if (ret != null)
                         return ret;
                 }
@@ -184,7 +184,7 @@ namespace Armoire.ViewModels
 
         public static void GetExecutables()
         {
-            Dock = MainWindowViewModel.ActiveDockViewModel.InnerContents;
+            Dock = MainWindowViewModel.ActiveDockViewModel.Contents;
             Executables = new Dictionary<string, string>();
             ExecutableNames = new ObservableCollection<string>();
             Icons = new Dictionary<string, Icon>();

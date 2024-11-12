@@ -63,9 +63,9 @@ namespace Armoire.ViewModels
             var d2 = new DrawerAsContentsViewModel(dockSource.GeneratedDrawer, "sample 2", dockSource.Id, 0);
 
             // Add to the dock (this triggers dc_OnAdd).
-            ActiveDockViewModel.InnerContents.Add(d1);
-            ActiveDockViewModel.InnerContents.Add(new ItemViewModel());
-            ActiveDockViewModel.InnerContents.Add(d2);
+            ActiveDockViewModel.Contents.Add(d1);
+            ActiveDockViewModel.Contents.Add(new ItemViewModel());
+            ActiveDockViewModel.Contents.Add(d2);
 
             if (DeletedUnits == null)
                 DeletedUnits = new Stack<ContentsUnitViewModel>();
@@ -94,7 +94,7 @@ namespace Armoire.ViewModels
         public void AddDrawerClick()
         {
 
-            if (ActiveDockViewModel.InnerContents.Count < 10)
+            if (ActiveDockViewModel.Contents.Count < 10)
                 DialogHost.Show(new NewDrawerViewModel("CONTENTS_1", 0));
             else
                 DialogHost.Show(

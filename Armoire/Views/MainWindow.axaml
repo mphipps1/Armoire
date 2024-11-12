@@ -103,7 +103,7 @@
 				FontSize="18"
 				Foreground="White"
 				Text="{Binding CurrentTime}" />
-            <ItemsControl ItemsSource="{Binding ActiveDockViewModel.InnerContents}">
+            <ItemsControl ItemsSource="{Binding ActiveDockViewModel.Contents}">
                 <ItemsControl.ItemTemplate>
                     <armoire:ViewLocator />
                 </ItemsControl.ItemTemplate>

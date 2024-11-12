@@ -21,7 +21,7 @@ namespace Armoire.ViewModels
         //used for the base dock to get the recursive step set up
         public void UpdateName()
         {
-            var dock = MainWindowViewModel.ActiveDockViewModel.InnerContents;
+            var dock = MainWindowViewModel.ActiveDockViewModel.Contents;
             foreach (var unit in dock)
             {
                 if (unit is DrawerAsContentsViewModel dacvm)
@@ -30,7 +30,7 @@ namespace Armoire.ViewModels
                     {
                         dacvm.Name = NewName;
                     }
-                    UpdateName(dacvm.GeneratedDrawer.InnerContents);
+                    UpdateName(dacvm.GeneratedDrawer.Contents);
                 }
             }
         }
@@ -46,7 +46,7 @@ namespace Armoire.ViewModels
                     {
                         dacvm.Name = NewName;
                     }
-                    UpdateName(dacvm.GeneratedDrawer.InnerContents);
+                    UpdateName(dacvm.GeneratedDrawer.Contents);
                 }
             }
             MainWindowViewModel.CloseDialog();

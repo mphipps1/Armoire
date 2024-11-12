@@ -152,7 +152,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
     [RelayCommand]
     public void AddDrawerClick()
     {
-        if (GeneratedDrawer.InnerContents.Count < 10)
+        if (GeneratedDrawer.Contents.Count < 10)
         {
             //var newDrawer = new DrawerAsContentsViewModel();
             //newDrawer.DrawerHierarchy = DrawerHierarchy + 1;
