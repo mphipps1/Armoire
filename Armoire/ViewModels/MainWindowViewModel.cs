@@ -25,6 +25,7 @@ namespace Armoire.ViewModels
 
         //temp
         public static DrawerViewModel ActiveDockViewModel { get; set; }
+
         //public static DockViewModel ActiveDockViewModel
         //{
         //    get =>
@@ -57,21 +58,53 @@ namespace Armoire.ViewModels
             DbHelper.SaveDrawer(dockSource);
 
             // Create a sample drawer for the dock.
-            var d1 = new DrawerAsContentsViewModel(dockSource.GeneratedDrawer, "sample 1", dockSource.Id, 0);
+            var d1 = new DrawerAsContentsViewModel(
+                dockSource.GeneratedDrawer,
+                "sample 1",
+                dockSource.Id,
+                0
+            );
 
             // Create another sample drawer for the dock.
-            var d2 = new DrawerAsContentsViewModel(dockSource.GeneratedDrawer, "sample 2", dockSource.Id, 0);
+            var d2 = new DrawerAsContentsViewModel(
+                dockSource.GeneratedDrawer,
+                "sample 2",
+                dockSource.Id,
+                0
+            );
 
-            // Add to the dock (this triggers dc_OnAdd).
+            // Add sample drawer 1 to the dock.
             ActiveDockViewModel.Contents.Add(d1);
-            ActiveDockViewModel.Contents.Add(new ItemViewModel());
-            ActiveDockViewModel.Contents.Add(d2);
 
             if (DeletedUnits == null)
                 DeletedUnits = new Stack<ContentsUnitViewModel>();
 
             //getting the list of apps in the start menu here instead of in the NewItemViewModel contructor to avoid lag
             NewItemViewModel.GetExecutables();
+
+            // Add sample item to the dock.
+            if (
+                NewItemViewModel.ExecutableNames is { } exeNames
+                && NewItemViewModel.Executables is { } exes
+                && NewItemViewModel.Icons is { } icons
+            )
+            {
+                var rnd = new Random();
+                var sampleItemIdx = rnd.Next(exeNames.Count);
+                var sampleItemName = exeNames[sampleItemIdx];
+                ActiveDockViewModel.Contents.Add(
+                    new ItemViewModel(
+                        sampleItemName,
+                        exes[sampleItemName],
+                        icons[sampleItemName].ToBitmap(),
+                        dockSource.Id,
+                        0
+                    )
+                );
+            }
+
+            // Add sample drawer 2 to the dock.
+            ActiveDockViewModel.Contents.Add(d2);
         }
 
         private void OnTimerElapsed(object sender, ElapsedEventArgs e)
@@ -93,7 +126,6 @@ namespace Armoire.ViewModels
         [RelayCommand]
         public void AddDrawerClick()
         {
-
             if (ActiveDockViewModel.Contents.Count < 10)
                 DialogHost.Show(new NewDrawerViewModel("CONTENTS_1", 0));
             else

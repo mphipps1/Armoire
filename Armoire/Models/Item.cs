@@ -28,7 +28,7 @@ public class Item
         process.Start();
     }
 
-    // Parameterless constructor for EF.
+    // Parameterless constructor needed so EF can build the schema.
     public Item() { }
 
     public Drawer Parent { get; set; }
@@ -36,23 +36,15 @@ public class Item
     [MaxLength(100)]
     public string ParentId { get; set; } = "default";
 
-    public Item(string name, string path, string parentDrawer)
+    public Item(string id, string name, string exePath, string parentId)
+        : this(name, exePath, parentId)
     {
-        Name = name;
-        //make a new process out of the path
-        //the old method gave an error when accessing other folders
-        //this method also doesnt require proper quoting around folders or the executable name if it has a space in it
-        //System.Diagnostics.Process.Start(path);
-        process = new Process();
-        process.StartInfo.FileName = path;
-        process.StartInfo.UseShellExecute = true;
+        Id = id;
     }
 
-    public Item(string name, string path, string parentDrawer, Icon icon)
+    public Item(string name, string path, string parentId)
     {
         Name = name;
-        AppIcon = icon;
-
         //make a new process out of the path
         //the old method gave an error when accessing other folders
         //this method also doesnt require proper quoting around folders or the executable name if it has a space in it
@@ -60,5 +52,7 @@ public class Item
         process = new Process();
         process.StartInfo.FileName = path;
         process.StartInfo.UseShellExecute = true;
+        ExecutablePath = path;
+        ParentId = parentId;
     }
 }

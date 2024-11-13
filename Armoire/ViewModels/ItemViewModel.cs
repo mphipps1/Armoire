@@ -41,27 +41,6 @@ public partial class ItemViewModel : ContentsUnitViewModel
         SetMoveDirections(this);
     }
 
-    public ItemViewModel(string name, string executablePath, string parentID, int drawerHierarchy)
-    {
-        ExecutablePath = executablePath;
-        Model = new Item(name, executablePath, parentID.ToString());
-        Name = name;
-        ParentId = parentID;
-        DrawerHierarchy = drawerHierarchy;
-        SetMoveDirections(this);
-    }
-
-    public ItemViewModel(string name, string executablePath, string iconPath, string parentID, int drawerHierarchy)
-    {
-        ExecutablePath = executablePath;
-        Model = new Item(name, executablePath, parentID.ToString());
-        IconPath = iconPath;
-        Name = name;
-        ParentId = parentID;
-        DrawerHierarchy = drawerHierarchy;
-        SetMoveDirections(this);
-    }
-
     public ItemViewModel(
         string name,
         string executablePath,
@@ -69,7 +48,6 @@ public partial class ItemViewModel : ContentsUnitViewModel
         string parentID,
         int drawerHierarchy
     )
-
     {
         ExecutablePath = executablePath;
         Model = new Item(name, executablePath, parentID.ToString());
@@ -92,5 +70,10 @@ public partial class ItemViewModel : ContentsUnitViewModel
     public override void HandleContentsClick()
     {
         (Model as Item)?.Execute();
+    }
+
+    public Item CreateItem()
+    {
+        return new Item(Id, Name, ExecutablePath, ParentId ?? "MALFORMED_ITEM");
     }
 }
