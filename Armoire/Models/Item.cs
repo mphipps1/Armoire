@@ -1,8 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics;
 using System.Drawing;
 using Armoire.Interfaces;
+using Armoire.ViewModels;
 
 namespace Armoire.Models;
 
@@ -54,5 +56,19 @@ public class Item
         process.StartInfo.UseShellExecute = true;
         ExecutablePath = path;
         ParentId = parentId;
+
+        process.EnableRaisingEvents = true;
+        process.Exited += (sender, e) =>
+        {
+            Console.WriteLine($"Process {process.Id} exited.");
+        };
+        var ProcessID = process.Id;
+
+
+        if (Process.GetProcessById(ProcessID) != null)
+        {
+            ApplicationMonitorViewModel.processMap.Add(ProcessID, process.StartInfo.FileName);
+            ApplicationMonitorViewModel.Pids.Add(ProcessID);
+        }
     }
 }
