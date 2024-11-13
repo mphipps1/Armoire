@@ -1,8 +1,6 @@
-﻿using System.Data;
-using System.Data.Common;
-using System.Reflection.Metadata;
+﻿using System.Drawing.Imaging;
+using System.IO;
 using Armoire.Models;
-using Armoire.Utils;
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -21,6 +19,9 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
     [ObservableProperty]
     private PlacementMode _flyoutPlacement = PlacementMode.Right;
 
+    [ObservableProperty]
+    private Avalonia.Media.Imaging.Bitmap _iconBmp;
+
     public DrawerAsContentsViewModel(
         DrawerViewModel container,
         string name,
@@ -29,7 +30,19 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
     )
     {
         Name = name;
-        IconPath = "/Assets/closedGradientDrawer.svg";
+        FileStream fs = new FileStream(
+            "./../../../Assets/tempDrawer.jpg",
+            FileMode.Open,
+            FileAccess.Read
+        );
+        System.Drawing.Image image = System.Drawing.Image.FromStream(fs);
+        System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(image, 60, 60);
+        using (MemoryStream memory = new MemoryStream())
+        {
+            bmp.Save(memory, ImageFormat.Png);
+            memory.Position = 0;
+            IconBmp = new Avalonia.Media.Imaging.Bitmap(memory);
+        }
         GeneratedDrawer = new DrawerViewModel(this);
         Container = container;
         ParentId = parentID;
@@ -41,11 +54,47 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
     public DrawerAsContentsViewModel(string? parentID, int drawerHierarchy)
     {
         Name = "drawer " + _count++;
-        IconPath = "/Assets/closedGradientDrawer.svg";
+        FileStream fs = new FileStream(
+            "./../../../Assets/tempDrawer.jpg",
+            FileMode.Open,
+            FileAccess.Read
+        );
+        System.Drawing.Image image = System.Drawing.Image.FromStream(fs);
+        System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(image, 60, 60);
+        using (MemoryStream memory = new MemoryStream())
+        {
+            bmp.Save(memory, ImageFormat.Png);
+            memory.Position = 0;
+            IconBmp = new Avalonia.Media.Imaging.Bitmap(memory);
+        }
         GeneratedDrawer = new DrawerViewModel(this);
         ParentId = parentID;
         DrawerHierarchy = drawerHierarchy;
         SetMoveDirections(this);
+    }
+
+    public DrawerAsContentsViewModel(
+        string name,
+        System.Drawing.Bitmap bmp,
+        string parentID,
+        int drawerHierarchy
+    )
+    {
+        GeneratedDrawer = new DrawerViewModel(this);
+        Name = name;
+
+        ParentId = parentID;
+        DrawerHierarchy = drawerHierarchy;
+        SetMoveDirections(this);
+        //the following converts the System.Drawing.Bitmap which cannot
+        //be displayed in a view to an Avalonia.Media.Imaging.Bitmap type
+        //which can be displayed by loading it into a memory stream to mimic downloading it
+        using (MemoryStream memory = new MemoryStream())
+        {
+            bmp.Save(memory, ImageFormat.Png);
+            memory.Position = 0;
+            IconBmp = new Avalonia.Media.Imaging.Bitmap(memory);
+        }
     }
 
     public DrawerAsContentsViewModel(
@@ -97,13 +146,13 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
     [RelayCommand]
     public void AddItemClick()
     {
-        DialogHost.Show(new NewItemViewModel(Id, DrawerHierarchy, true));
+        DialogHost.Show(new NewItemViewModel(Id, DrawerHierarchy));
     }
 
     [RelayCommand]
     public void AddDrawerClick()
     {
-        if (GeneratedDrawer.InnerContents.Count < 10)
+        if (GeneratedDrawer.Contents.Count < 10)
         {
             //var newDrawer = new DrawerAsContentsViewModel();
             //newDrawer.DrawerHierarchy = DrawerHierarchy + 1;
@@ -119,7 +168,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
             //        )
             //    );
             //}
-            DialogHost.Show(new NewItemViewModel(Id, DrawerHierarchy, false));
+            DialogHost.Show(new NewDrawerViewModel(Id, DrawerHierarchy));
         }
         else
             DialogHost.Show(
@@ -132,7 +181,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
     [RelayCommand]
     public void ChangeDrawerName()
     {
-        var view = new ChangeDrawerNameViewModel(Name);
+        var view = new EditDrawerViewModel(Name);
         DialogHost.Show(view);
         //var window = new ChangeDrawerNameView();
         //window.Show();
@@ -140,8 +189,6 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
 
     public Drawer CreateDrawer()
     {
-        OutputHelper.DebugPrintJson(this, "DeVm_CreateDrawer_this");
-        OutputHelper.DebugPrintJson(Container, "DeVm_CreateDrawer_OuterContainer");
         return new Drawer()
         {
             Id = Id,

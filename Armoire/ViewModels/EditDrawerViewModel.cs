@@ -4,7 +4,7 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace Armoire.ViewModels
 {
-    public partial class ChangeDrawerNameViewModel : ViewModelBase
+    public partial class EditDrawerViewModel : ViewModelBase
     {
         [ObservableProperty]
         private string? _newName;
@@ -12,7 +12,7 @@ namespace Armoire.ViewModels
         private string TargetName;
         private string DialogHostName;
 
-        public ChangeDrawerNameViewModel(string targetName)
+        public EditDrawerViewModel(string targetName)
         {
             TargetName = targetName;
         }
@@ -21,7 +21,7 @@ namespace Armoire.ViewModels
         //used for the base dock to get the recursive step set up
         public void UpdateName()
         {
-            var dock = MainWindowViewModel.ActiveDockViewModel.InnerContents;
+            var dock = MainWindowViewModel.ActiveDockViewModel.Contents;
             foreach (var unit in dock)
             {
                 if (unit is DrawerAsContentsViewModel dacvm)
@@ -30,7 +30,7 @@ namespace Armoire.ViewModels
                     {
                         dacvm.Name = NewName;
                     }
-                    UpdateName(dacvm.GeneratedDrawer.InnerContents);
+                    UpdateName(dacvm.GeneratedDrawer.Contents);
                 }
             }
         }
@@ -46,9 +46,15 @@ namespace Armoire.ViewModels
                     {
                         dacvm.Name = NewName;
                     }
-                    UpdateName(dacvm.GeneratedDrawer.InnerContents);
+                    UpdateName(dacvm.GeneratedDrawer.Contents);
                 }
             }
+            MainWindowViewModel.CloseDialog();
+        }
+
+        [RelayCommand]
+        public void Cancel()
+        {
             MainWindowViewModel.CloseDialog();
         }
     }

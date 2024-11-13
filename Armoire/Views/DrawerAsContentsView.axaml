@@ -12,8 +12,8 @@
     mc:Ignorable="d">
     <UserControl.Styles>
         <Style Selector="Button">
-            <Setter Property="Width" Value="60" />
-            <Setter Property="Height" Value="60" />
+            <Setter Property="Width" Value="50" />
+            <Setter Property="Height" Value="50" />
             <Setter Property="Padding" Value="-15" />
             <Setter Property="Background" Value="White" />
         </Style>
@@ -34,7 +34,6 @@
         CommandParameter="{Binding}">
         <ToolTip.Tip>
             <ToolTip
-                Width="90"
                 Height="40"
                 Padding="3"
                 Background="LightGray">
@@ -42,12 +41,16 @@
             </ToolTip>
         </ToolTip.Tip>
         <Button.Content>
-            <Viewbox Stretch="Fill">
+            <Viewbox Stretch="None">
+				<!--
                 <Svg
                     Name="OpenDrawer"
                     Height="100"
                     Path="{Binding IconPath}" />
-            </Viewbox>
+				-->
+				<Image Source="{Binding IconBmp}" Height="48" Width="48" />
+
+			</Viewbox>
         </Button.Content>
         <Button.Flyout>
             <!--  Make this placement a binding that alternates between right, down, and up depending on where we are in the drawer structure  -->
@@ -66,7 +69,7 @@
                 <MenuItem Command="{Binding HandleDeleteClickCommand}" Header="Delete" />
                 <MenuItem Command="{Binding AddItemClickCommand}" Header="Add Item" />
                 <MenuItem Command="{Binding AddDrawerClickCommand}" Header="Add Drawer" />
-                <MenuItem Command="{Binding ChangeDrawerNameCommand}" Header="Change Name" />
+                <MenuItem Command="{Binding ChangeDrawerNameCommand}" Header="Edit Drawer" />
                 <MenuItem Command="{Binding MoveUpCommand}" Header="{Binding MoveBackDirection}" />
                 <MenuItem Command="{Binding MoveDownCommand}" Header="{Binding MoveForwardDirection}" />
             </ContextMenu>

@@ -1,0 +1,49 @@
+<UserControl     
+	x:Class="Armoire.Views.EditDrawerView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="clr-namespace:Armoire.ViewModels"
+    d:DesignHeight="450"
+    d:DesignWidth="400"
+    x:DataType="vm:EditDrawerViewModel"
+    mc:Ignorable="d">
+	<Canvas Margin="10"
+			Width="280"
+			Height="80">
+			<StackPanel Width="280"
+						Height="300"
+						Spacing="10"
+						Margin="5 5 5 50">
+				<TextBox
+				Watermark="New Name"
+				Background="White"
+				Foreground="Black"
+				CornerRadius="4"
+				Height="30"
+				Width="200"
+				HorizontalAlignment="Right"
+				Text="{Binding NewName}"></TextBox>
+				<StackPanel Orientation="Horizontal"
+							Spacing="20"
+							HorizontalAlignment="Right"
+							Margin="10 0">
+				<Button Width="70"
+						Margin="5 5 5 5"
+						HorizontalAlignment="Right"
+						Padding="0"
+						Command="{Binding CancelCommand}">
+					Cancel
+				</Button>
+				<Button Width="70"
+						Margin="5 5 5 5"
+						HorizontalAlignment="Right"
+						Command="{Binding UpdateNameCommand}">
+					Save
+				</Button>
+				</StackPanel>
+			</StackPanel>
+	</Canvas>
+
+</UserControl>

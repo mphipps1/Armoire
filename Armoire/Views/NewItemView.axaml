@@ -54,43 +54,9 @@
             Height="30"
             Text="{Binding Name}"
             Watermark="Paint" />
-        <!--
-            The Margin is set like this to properly align
-            'Icon Path' on the left side of the TextBox below it
-        -->
-        <TextBlock
-            Margin="0,5,135,-10"
-            HorizontalAlignment="Center"
-            IsVisible="{Binding IsDrawer}">
-            Icon Path:
-        </TextBlock>
-        <TextBox
-            Name="temp"
-            Height="30"
-            IsVisible="{Binding IsDrawer}"
-            Text="{Binding IconPath}"
-            Watermark="Path" />
-        <StackPanel IsVisible="{Binding IsItem}" Spacing="10">
+        <StackPanel Spacing="10">
             <StackPanel Width="150">
                 <TextBlock Margin="5">Choose App Name:</TextBlock>
-                <!--
-				<ComboBox
-					SelectedItem="{Binding NewExe}"
-					ItemsSource ="{Binding ExecutableNames}"
-					Width="200"
-					Height="50"
-					IsTextSearchEnabled="True"
-					CornerRadius="8"
-					Foreground="Black">
-					<ComboBox.ItemsPanel>
-						<ItemsPanelTemplate>
-							<StackPanel
-								Width="200"
-								Background="{Binding BackgroundColor}"/>
-						</ItemsPanelTemplate>
-					</ComboBox.ItemsPanel>
-				</ComboBox>
-				-->
                 <Button
                     Width="200"
                     Height="30"

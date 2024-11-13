@@ -49,7 +49,11 @@ namespace Armoire.Views
                 ((e.Source.ToString() != "Avalonia.Controls.Panel") &&
                 (e.Source.ToString() != "Avalonia.Controls.StackPanel")))
                 return;
-            
+
+            ContextMenu cm = this.Find<ContextMenu>("MainWindowContextMenu");
+            if (cm.IsOpen)
+                cm.Close();
+
             if (WindowState == WindowState.Maximized || WindowState == WindowState.FullScreen)
                 return;
 

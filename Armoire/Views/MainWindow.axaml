@@ -83,7 +83,7 @@
 		</Style>
     </Window.Styles>
 	<Window.ContextMenu>
-		<ContextMenu>
+		<ContextMenu Name="MainWindowContextMenu">
 			<MenuItem Command="{Binding AddDrawerClickCommand}" Header="Add Drawer" />
 			<MenuItem Command="{Binding AddItemClickCommand}" Header="Add Item" />
 		</ContextMenu>
@@ -96,23 +96,14 @@
 			<!--  Digital Clock  -->
 			<TextBlock
 				Grid.Column="2"
-				Margin="0,10,20,0"
+				Margin="20,10,20,0"
 				Padding="20, 0"
-				HorizontalAlignment="Right"
+				HorizontalAlignment="Center"
 				VerticalAlignment="Top"
 				FontSize="18"
 				Foreground="White"
 				Text="{Binding CurrentTime}" />
-
-                <StackPanel Grid.Column="1" Spacing="10">
-                    <Button Margin="5,0" Command="{Binding HandleWrenchClickCommand}" Padding="5" HorizontalAlignment="Center">
-                        <avalonia:MaterialIcon
-                            Width="20"
-                            Height="20"
-                            Kind="Wrench" />
-                    </Button>
-                </StackPanel>
-            <ItemsControl ItemsSource="{Binding ActiveDockViewModel.InnerContents}">
+            <ItemsControl ItemsSource="{Binding ActiveDockViewModel.Contents}">
                 <ItemsControl.ItemTemplate>
                     <armoire:ViewLocator />
                 </ItemsControl.ItemTemplate>

@@ -23,7 +23,6 @@
 >
 		<ToolTip.Tip>
 			<ToolTip Height="40"
-					 Width="90"
 					 Padding="3"
 					 Background="LightGray"
 					 Foreground="Black">

@@ -40,11 +40,6 @@ public partial class NewItemView : UserControl
         //originalList = new Controls();
     }
 
-    private void OnFileDrop()
-    {
-        backAndSubmit.Margin = Thickness.Parse("-8 70 10 10");
-    }
-
     //makes buttons out of the list of executables
     public void PopulateExecutableList(object source, RoutedEventArgs args)
     {

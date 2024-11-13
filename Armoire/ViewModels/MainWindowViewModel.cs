@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Threading.Tasks;
 using System.Timers;
 using Armoire.Utils;
 using Armoire.Views;
@@ -26,6 +25,7 @@ namespace Armoire.ViewModels
 
         //temp
         public static DrawerViewModel ActiveDockViewModel { get; set; }
+
         //public static DockViewModel ActiveDockViewModel
         //{
         //    get =>
@@ -58,15 +58,23 @@ namespace Armoire.ViewModels
             DbHelper.SaveDrawer(dockSource);
 
             // Create a sample drawer for the dock.
-            var d1 = new DrawerAsContentsViewModel(dockSource.GeneratedDrawer, "sample 1", dockSource.Id, 0);
+            var d1 = new DrawerAsContentsViewModel(
+                dockSource.GeneratedDrawer,
+                "sample 1",
+                dockSource.Id,
+                0
+            );
 
             // Create another sample drawer for the dock.
-            var d2 = new DrawerAsContentsViewModel(dockSource.GeneratedDrawer, "sample 2", dockSource.Id, 0);
+            var d2 = new DrawerAsContentsViewModel(
+                dockSource.GeneratedDrawer,
+                "sample 2",
+                dockSource.Id,
+                0
+            );
 
-            // Add to the dock (this triggers dc_OnAdd).
-            ActiveDockViewModel.InnerContents.Add(d1);
-            ActiveDockViewModel.InnerContents.Add(new ItemViewModel());
-            ActiveDockViewModel.InnerContents.Add(d2);
+            // Add sample drawer 1 to the dock.
+            ActiveDockViewModel.Contents.Add(d1);
 
             if (DeletedUnits == null)
                 DeletedUnits = new Stack<ContentsUnitViewModel>();
@@ -74,7 +82,29 @@ namespace Armoire.ViewModels
             //getting the list of apps in the start menu here instead of in the NewItemViewModel contructor to avoid lag
             NewItemViewModel.GetExecutables();
 
-              Task.Run (() => ApplicationMonitorViewModel.CheckRunningApplication());
+            // Add sample item to the dock.
+            if (
+                NewItemViewModel.ExecutableNames is { } exeNames
+                && NewItemViewModel.Executables is { } exes
+                && NewItemViewModel.Icons is { } icons
+            )
+            {
+                var rnd = new Random();
+                var sampleItemIdx = rnd.Next(exeNames.Count);
+                var sampleItemName = exeNames[sampleItemIdx];
+                ActiveDockViewModel.Contents.Add(
+                    new ItemViewModel(
+                        sampleItemName,
+                        exes[sampleItemName],
+                        icons[sampleItemName].ToBitmap(),
+                        dockSource.Id,
+                        0
+                    )
+                );
+            }
+
+            // Add sample drawer 2 to the dock.
+            ActiveDockViewModel.Contents.Add(d2);
         }
 
         private void OnTimerElapsed(object sender, ElapsedEventArgs e)
@@ -88,55 +118,16 @@ namespace Armoire.ViewModels
         }
 
         [RelayCommand]
-        public void HandleWrenchClick()
-        {
-            // TODO: This approach is Anti-MVVM. The ViewModel should be unaware of the View.
-            if (_devDrawerView is null)
-            {
-                _devDrawerView = new DevDrawerView();
-                var vm = new DevDrawerViewModel();
-                _devDrawerView.DataContext = vm;
-                //w.Position = vm.Point;
-                _devDrawerView.Show();
-                foreach (var vc in _devDrawerView.GetVisualChildren())
-                {
-                    Debug.WriteLine("Reporting from HandleWrenchClick depth 1: " + vc);
-                    foreach (var vc2 in vc.GetVisualChildren())
-                    {
-                        Debug.WriteLine("Reporting from HandleWrenchClick depth 2: " + vc2);
-                        foreach (var vc3 in vc2.GetVisualChildren())
-                        {
-                            Debug.WriteLine("Reporting from HandleWrenchClick depth 3: " + vc3);
-                            foreach (var vc4 in vc3.GetVisualChildren())
-                            {
-                                // One of these is the Canvas
-                                Debug.WriteLine("Reporting from HandleWrenchClick depth 4: " + vc4);
-                            }
-                        }
-                    }
-                }
-            }
-            else
-            {
-                _devDrawerView.Close();
-                _devDrawerView = null;
-            }
-            //DialogHost.Show(new DevDialogViewModel());
-            //DialogHost.Show(new SqlDialogViewModel(new SqlDialog()));
-        }
-
-        [RelayCommand]
         public void AddItemClick()
         {
-            DialogHost.Show(new NewItemViewModel("CONTENTS_1", 0, true));
+            DialogHost.Show(new NewItemViewModel("CONTENTS_1", 0));
         }
 
         [RelayCommand]
         public void AddDrawerClick()
         {
-
-            if (ActiveDockViewModel.InnerContents.Count < 10)
-                ActiveDockViewModel.InnerContents.Add(new DrawerAsContentsViewModel("CONTENT_0", 0));
+            if (ActiveDockViewModel.Contents.Count < 10)
+                DialogHost.Show(new NewDrawerViewModel("CONTENTS_1", 0));
             else
                 DialogHost.Show(
                     new ErrorMessageViewModel($"The dock is full, it can\n only hold 10 items.")

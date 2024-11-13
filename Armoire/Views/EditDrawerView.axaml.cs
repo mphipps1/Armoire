@@ -4,9 +4,9 @@ using Avalonia.Markup.Xaml;
 
 namespace Armoire.Views;
 
-public partial class ChangeDrawerNameView : UserControl
+public partial class EditDrawerView : UserControl
 {
-    public ChangeDrawerNameView()
+    public EditDrawerView()
     {
         InitializeComponent();
     }

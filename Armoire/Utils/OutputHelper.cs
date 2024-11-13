@@ -25,7 +25,7 @@ public class OutputHelper
     public static void DebugPrintJsonOutput(string output, string suffix)
     {
         using var outputFile = new StreamWriter(
-            Path.Combine(DocPath, "ArmoireDebugOutput-" + suffix + ".json")
+            Path.Combine(DocPath, "ArmoireDebugOutput_" + suffix + ".json")
         );
         outputFile.WriteLine(output);
     }
