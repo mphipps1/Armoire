@@ -9,6 +9,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModels="clr-namespace:Armoire.ViewModels"
     xmlns:vm="using:Armoire.ViewModels"
+	xmlns:v="using:Armoire.Views"
     Title="Armoire"
     d:DesignHeight="700"
     d:DesignWidth="300"
@@ -206,6 +207,7 @@
 					</Flyout>
 				</Button.Flyout>
 			</Button>
+			<v:ApplicationMonitorView/>
         </StackPanel>
 		<dialogHostAvalonia:DialogHost
 			DisableOpeningAnimation="True"

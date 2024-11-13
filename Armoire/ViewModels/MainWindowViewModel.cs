@@ -105,6 +105,8 @@ namespace Armoire.ViewModels
 
             // Add sample drawer 2 to the dock.
             ActiveDockViewModel.Contents.Add(d2);
+           
+            ApplicationMonitorViewModel.CheckRunningApplication();
         }
 
         private void OnTimerElapsed(object sender, ElapsedEventArgs e)
