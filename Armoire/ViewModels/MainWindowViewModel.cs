@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using System.Timers;
 using Armoire.Utils;
 using Armoire.Views;
@@ -72,6 +73,8 @@ namespace Armoire.ViewModels
 
             //getting the list of apps in the start menu here instead of in the NewItemViewModel contructor to avoid lag
             NewItemViewModel.GetExecutables();
+
+              Task.Run (() => ApplicationMonitorViewModel.CheckRunningApplication());
         }
 
         private void OnTimerElapsed(object sender, ElapsedEventArgs e)

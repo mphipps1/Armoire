@@ -1,8 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics;
 using System.Drawing;
+using System.Threading.Tasks;
 using Armoire.Interfaces;
+using Armoire.ViewModels;
 
 namespace Armoire.Models;
 
@@ -23,9 +26,26 @@ public class Item
 
     private Icon? AppIcon { get; set; }
 
+    
+
     public void Execute()
     {
+        process.EnableRaisingEvents = true;
+        process.Exited += (sender, e) =>
+        {
+            Console.WriteLine($"Process {process.Id} exited.");
+        };
+
         process.Start();
+        var ProcessID = process.Id;
+       
+
+        if (Process.GetProcessById(ProcessID) != null)
+        {
+            ApplicationMonitorViewModel.processMap.Add(ProcessID, process.StartInfo.FileName);
+            ApplicationMonitorViewModel.Pids.Add(ProcessID);
+        }
+
     }
 
     // Parameterless constructor for EF.
@@ -39,19 +59,23 @@ public class Item
     public Item(string name, string path, string parentDrawer)
     {
         Name = name;
+        ExecutablePath = path;
         //make a new process out of the path
         //the old method gave an error when accessing other folders
         //this method also doesnt require proper quoting around folders or the executable name if it has a space in it
         //System.Diagnostics.Process.Start(path);
-        process = new Process();
+         process = new Process();
         process.StartInfo.FileName = path;
         process.StartInfo.UseShellExecute = true;
+       
     }
 
     public Item(string name, string path, string parentDrawer, Icon icon)
     {
         Name = name;
         AppIcon = icon;
+        
+   
 
         //make a new process out of the path
         //the old method gave an error when accessing other folders

@@ -127,9 +127,14 @@ namespace Armoire.ViewModels
 
                             System.Drawing.Bitmap bitmap = icon.ToBitmap();
 
-                            targetDrawer.Add(
+                        var b = ApplicationMonitorViewModel.isRunning;
+                        var x = ApplicationMonitorViewModel.runningApplications;
+
+                        targetDrawer.Add(
                                new ItemViewModel(name, droppedFile, bitmap, TargetDrawerID.ToString(), TargetDrawerHeirarchy)
                            );
+
+
                         
 
 

@@ -91,6 +91,11 @@ public partial class ItemViewModel : ContentsUnitViewModel
 
     public override void HandleContentsClick()
     {
+        if (Model is Item)
+        {
+            ApplicationMonitorViewModel.runningApplications.Add(Model);
+        }
         (Model as Item)?.Execute();
+
     }
 }
