@@ -27,7 +27,22 @@ public class Item
 
     public void Execute()
     {
+        process.EnableRaisingEvents = true;
+        process.Exited += (sender, e) =>
+        {
+            Console.WriteLine($"Process {process.Id} exited.");
+        };
+     
+
         process.Start();
+
+        var ProcessID = process.Id;
+
+        if (Process.GetProcessById(ProcessID) != null)
+        {
+            ApplicationMonitorViewModel.processMap.Add(ProcessID, process.StartInfo.FileName);
+            ApplicationMonitorViewModel.Pids.Add(ProcessID);
+        }
     }
 
     // Parameterless constructor needed so EF can build the schema.
@@ -57,18 +72,6 @@ public class Item
         ExecutablePath = path;
         ParentId = parentId;
 
-        process.EnableRaisingEvents = true;
-        process.Exited += (sender, e) =>
-        {
-            Console.WriteLine($"Process {process.Id} exited.");
-        };
-        var ProcessID = process.Id;
-
-
-        if (Process.GetProcessById(ProcessID) != null)
-        {
-            ApplicationMonitorViewModel.processMap.Add(ProcessID, process.StartInfo.FileName);
-            ApplicationMonitorViewModel.Pids.Add(ProcessID);
-        }
+     
     }
 }
