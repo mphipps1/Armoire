@@ -15,6 +15,9 @@ public partial class ContentsUnitViewModel : ViewModelBase
     public ContainerViewModel? Container { get; set; }
     public ContentsUnitViewModel? Parent { get; set; }
 
+    // Expression-bodied property.
+    public int? Position => Container?.Contents.IndexOf(this);
+
     [ObservableProperty]
     private string _name;
 
@@ -122,10 +125,7 @@ public partial class ContentsUnitViewModel : ViewModelBase
             MainWindowViewModel.ActiveDockViewModel.Contents.Add(target);
             return;
         }
-        var ret = FindParentDrawerByID(
-            MainWindowViewModel.ActiveDockViewModel.Contents,
-            target
-        );
+        var ret = FindParentDrawerByID(MainWindowViewModel.ActiveDockViewModel.Contents, target);
         if (ret != null)
             ret.Add(target);
     }

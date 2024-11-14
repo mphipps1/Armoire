@@ -1,6 +1,7 @@
 ﻿using System.Drawing.Imaging;
 using System.IO;
 using Armoire.Models;
+using Armoire.Utils;
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -13,7 +14,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
     private const int MAXNESTERDRAWERS = 4;
     private static int _count = 1;
 
-    // The "drawer as container" that issues from this drawer button when clicked.
+    // The "drawer as container" that generates from this drawer button when clicked.
     public DrawerViewModel GeneratedDrawer { get; set; }
 
     [ObservableProperty]
@@ -51,6 +52,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
         _count++;
     }
 
+    // Dock source constructor (leaves some properties null on purpose).
     public DrawerAsContentsViewModel(string? parentID, int drawerHierarchy)
     {
         Name = "drawer " + _count++;
@@ -77,7 +79,8 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
         string name,
         System.Drawing.Bitmap bmp,
         string parentID,
-        int drawerHierarchy
+        int drawerHierarchy,
+        ContainerViewModel? cvm = null
     )
     {
         GeneratedDrawer = new DrawerViewModel(this);
@@ -95,13 +98,16 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
             memory.Position = 0;
             IconBmp = new Avalonia.Media.Imaging.Bitmap(memory);
         }
+
+        Container = cvm;
     }
 
     public DrawerAsContentsViewModel(
         string name,
         string? iconPath,
         string? parentID,
-        int drawerHierarchy
+        int drawerHierarchy,
+        ContainerViewModel? cvm = null
     )
     {
         GeneratedDrawer = new DrawerViewModel(this);
@@ -114,6 +120,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
             IconPath = iconPath;
         _count++;
         SetMoveDirections(this);
+        Container = cvm;
     }
 
     [RelayCommand]
@@ -146,7 +153,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
     [RelayCommand]
     public void AddItemClick()
     {
-        DialogHost.Show(new NewItemViewModel(Id, DrawerHierarchy));
+        DialogHost.Show(new NewItemViewModel(Id, DrawerHierarchy, GeneratedDrawer));
     }
 
     [RelayCommand]
@@ -168,7 +175,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
             //        )
             //    );
             //}
-            DialogHost.Show(new NewDrawerViewModel(Id, DrawerHierarchy));
+            DialogHost.Show(new NewDrawerViewModel(Id, DrawerHierarchy, GeneratedDrawer));
         }
         else
             DialogHost.Show(
@@ -189,11 +196,13 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
 
     public Drawer CreateDrawer()
     {
+        OutputHelper.DebugPrintJson(this, $"DACVM-CreateDrawer-this-{Id}");
         return new Drawer()
         {
             Id = Id,
             Name = Name,
-            ParentId = ParentId
+            ParentId = ParentId,
+            Position = Position
         };
     }
 }

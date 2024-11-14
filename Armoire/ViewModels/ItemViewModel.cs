@@ -18,39 +18,17 @@ public partial class ItemViewModel : ContentsUnitViewModel
     [ObservableProperty]
     public Avalonia.Media.Imaging.Bitmap _iconBmp;
 
-    public ItemViewModel()
-    {
-        Name = "Paint";
-        ExecutablePath = OsUtils.IsWindows11()
-            ? Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                @"Microsoft\WindowsApps\mspaint.exe"
-            )
-            : @"C:\WINDOWS\system32\mspaint.exe";
-        IconPath = "/Assets/mspaintLogo.svg";
-        var bmp = Icon.ExtractAssociatedIcon(ExecutablePath).ToBitmap();
-        //which can be displayed by loading it into a memory stream to mimic downloading it
-        using (MemoryStream memory = new MemoryStream())
-        {
-            bmp.Save(memory, ImageFormat.Png);
-            memory.Position = 0;
-            IconBmp = new Avalonia.Media.Imaging.Bitmap(memory);
-        }
-        Model = new Item(Name, ExecutablePath, "0");
-        DrawerHierarchy = 0;
-        SetMoveDirections(this);
-    }
-
     public ItemViewModel(
         string name,
         string executablePath,
         System.Drawing.Bitmap bmp,
         string parentID,
-        int drawerHierarchy
+        int drawerHierarchy,
+        ContainerViewModel? container = null
     )
     {
         ExecutablePath = executablePath;
-        Model = new Item(name, executablePath, parentID.ToString());
+        Model = new Item(name, executablePath, parentID.ToString(), Position);
         Name = name;
 
         ParentId = parentID;
@@ -65,6 +43,8 @@ public partial class ItemViewModel : ContentsUnitViewModel
             memory.Position = 0;
             IconBmp = new Avalonia.Media.Imaging.Bitmap(memory);
         }
+
+        Container = container;
     }
 
     public override void HandleContentsClick()
@@ -74,11 +54,11 @@ public partial class ItemViewModel : ContentsUnitViewModel
             ApplicationMonitorViewModel.runningApplications.Add(Model);
         }
         (Model as Item)?.Execute();
-
     }
 
     public Item CreateItem()
     {
-        return new Item(Id, Name, ExecutablePath, ParentId ?? "MALFORMED_ITEM");
+        OutputHelper.DebugPrintJson(this, $"IVM-CreateItem-this-{Id}");
+        return new Item(Id, Name, ExecutablePath, ParentId ?? "MALFORMED_ITEM", Position);
     }
 }

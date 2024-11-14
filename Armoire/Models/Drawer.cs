@@ -17,6 +17,8 @@ public class Drawer
 
     public Drawer? Parent { get; set; }
 
+    public int? Position { get; set; }
+
     [MaxLength(100)]
     public string Name { get; set; } = "default";
 

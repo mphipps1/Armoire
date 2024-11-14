@@ -15,4 +15,13 @@ public class DbHelper
         context.TryAddDrawer(drawerToAdd);
         context.SaveChanges();
     }
+
+    public static void SaveItem(ItemViewModel iVm)
+    {
+        using var context = new AppDbContext();
+        var itemToAdd = iVm.CreateItem();
+        OutputHelper.DebugPrintJson(itemToAdd, $"DbHelper-SaveItem-itemToAdd-{itemToAdd.Id}");
+        context.TryAddItem(itemToAdd);
+        context.SaveChanges();
+    }
 }

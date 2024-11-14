@@ -15,7 +15,6 @@ namespace Armoire.ViewModels
         public ObservableCollection<dynamic> ImageDropCollection { get; set; } =
             new ObservableCollection<dynamic>();
 
-
         [ObservableProperty]
         public IBrush _borderBackground = Avalonia.Media.Brushes.Transparent;
 
@@ -52,7 +51,13 @@ namespace Armoire.ViewModels
 
         private int TargetDrawerHeirarchy;
 
-        public NewDrawerViewModel(string targetDrawerID, int targetDrawerHeirarchy)
+        private ContainerViewModel? ActiveContainerViewModel { get; }
+
+        public NewDrawerViewModel(
+            string targetDrawerID,
+            int targetDrawerHeirarchy,
+            ContainerViewModel? cvm = null
+        )
         {
             TargetDrawerID = targetDrawerID;
             PanelHeight = 400;
@@ -64,6 +69,7 @@ namespace Armoire.ViewModels
 
             Dock = MainWindowViewModel.ActiveDockViewModel.Contents;
             DropDownIcon = "ArrowBottomDropCircleOutline";
+            ActiveContainerViewModel = cvm;
         }
 
         [RelayCommand]
@@ -77,19 +83,31 @@ namespace Armoire.ViewModels
                     var droppedFile = ImageDropCollection.ElementAt(0);
                     string fileExtension = droppedFile.Substring(droppedFile.IndexOf('.') + 1);
                     FileInfo fileInfo = new FileInfo(droppedFile);
-                    if(Name == null || Name == "")
+                    if (Name == null || Name == "")
                         Name = fileInfo.Name.Substring(0, fileInfo.Name.IndexOf('.'));
                     //var icon = Icon.ExtractAssociatedIcon(droppedFile);
                     //System.Drawing.Bitmap bitmap = icon.ToBitmap();
 
                     Image image = Image.FromFile(fileInfo.FullName);
                     targetDrawer.Add(
-                       new DrawerAsContentsViewModel(Name, new System.Drawing.Bitmap(image, 60, 60), TargetDrawerID.ToString(), TargetDrawerHeirarchy)
-                   );
+                        new DrawerAsContentsViewModel(
+                            Name,
+                            new System.Drawing.Bitmap(image, 60, 60),
+                            TargetDrawerID.ToString(),
+                            TargetDrawerHeirarchy,
+                            ActiveContainerViewModel
+                        )
+                    );
                 }
                 else
                 {
-                    var newDrawer = new DrawerAsContentsViewModel(Name, "./../../../Assets/tempDrawer.jpg", TargetDrawerID, TargetDrawerHeirarchy + 1);
+                    var newDrawer = new DrawerAsContentsViewModel(
+                        Name,
+                        "./../../../Assets/tempDrawer.jpg",
+                        TargetDrawerID,
+                        TargetDrawerHeirarchy + 1,
+                        ActiveContainerViewModel
+                    );
                     targetDrawer.Add(newDrawer);
                 }
             }

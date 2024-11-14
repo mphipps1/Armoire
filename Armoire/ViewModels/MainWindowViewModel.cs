@@ -57,23 +57,13 @@ namespace Armoire.ViewModels
             ActiveDockViewModel = dockSource.GeneratedDrawer;
             DbHelper.SaveDrawer(dockSource);
 
-            // Create a sample drawer for the dock.
+            // Create sample drawer 1 and add it to the dock.
             var d1 = new DrawerAsContentsViewModel(
                 dockSource.GeneratedDrawer,
                 "sample 1",
                 dockSource.Id,
                 0
             );
-
-            // Create another sample drawer for the dock.
-            var d2 = new DrawerAsContentsViewModel(
-                dockSource.GeneratedDrawer,
-                "sample 2",
-                dockSource.Id,
-                0
-            );
-
-            // Add sample drawer 1 to the dock.
             ActiveDockViewModel.Contents.Add(d1);
 
             if (DeletedUnits == null)
@@ -82,7 +72,7 @@ namespace Armoire.ViewModels
             //getting the list of apps in the start menu here instead of in the NewItemViewModel contructor to avoid lag
             NewItemViewModel.GetExecutables();
 
-            // Add sample item to the dock.
+            // Create random sample item and add it to the dock.
             if (
                 NewItemViewModel.ExecutableNames is { } exeNames
                 && NewItemViewModel.Executables is { } exes
@@ -98,14 +88,21 @@ namespace Armoire.ViewModels
                         exes[sampleItemName],
                         icons[sampleItemName].ToBitmap(),
                         dockSource.Id,
-                        0
+                        0,
+                        ActiveDockViewModel
                     )
                 );
             }
 
-            // Add sample drawer 2 to the dock.
+            // Create sample drawer 2 and add it to the dock.
+            var d2 = new DrawerAsContentsViewModel(
+                dockSource.GeneratedDrawer,
+                "sample 2",
+                dockSource.Id,
+                0
+            );
             ActiveDockViewModel.Contents.Add(d2);
-           
+
             ApplicationMonitorViewModel.CheckRunningApplication();
         }
 
@@ -122,14 +119,14 @@ namespace Armoire.ViewModels
         [RelayCommand]
         public void AddItemClick()
         {
-            DialogHost.Show(new NewItemViewModel("CONTENTS_1", 0));
+            DialogHost.Show(new NewItemViewModel("CONTENTS_1", 0, ActiveDockViewModel));
         }
 
         [RelayCommand]
         public void AddDrawerClick()
         {
             if (ActiveDockViewModel.Contents.Count < 10)
-                DialogHost.Show(new NewDrawerViewModel("CONTENTS_1", 0));
+                DialogHost.Show(new NewDrawerViewModel("CONTENTS_1", 0, ActiveDockViewModel));
             else
                 DialogHost.Show(
                     new ErrorMessageViewModel($"The dock is full, it can\n only hold 10 items.")

@@ -57,6 +57,19 @@ public class AppDbContext : DbContext
         return true;
     }
 
+    public bool TryAddItem(Item item)
+    {
+        if (!CanInspect)
+            return false;
+        if (Items.Any(i => i.Id == item.Id))
+        {
+            Debug.WriteLine("Item already exists; skipping...");
+            return false;
+        }
+        Items.Add(item);
+        return true;
+    }
+
     public override int SaveChanges()
     {
         return !CanSave ? 0 : base.SaveChanges();

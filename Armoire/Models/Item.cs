@@ -25,6 +25,8 @@ public class Item
 
     private Icon? AppIcon { get; set; }
 
+    public int? Position { get; set; }
+
     public void Execute()
     {
         process.EnableRaisingEvents = true;
@@ -32,7 +34,6 @@ public class Item
         {
             Console.WriteLine($"Process {process.Id} exited.");
         };
-     
 
         process.Start();
 
@@ -53,13 +54,13 @@ public class Item
     [MaxLength(100)]
     public string ParentId { get; set; } = "default";
 
-    public Item(string id, string name, string exePath, string parentId)
-        : this(name, exePath, parentId)
+    public Item(string id, string name, string exePath, string parentId, int? position)
+        : this(name, exePath, parentId, position)
     {
         Id = id;
     }
 
-    public Item(string name, string path, string parentId)
+    public Item(string name, string path, string parentId, int? position = null)
     {
         Name = name;
         //make a new process out of the path
@@ -71,7 +72,6 @@ public class Item
         process.StartInfo.UseShellExecute = true;
         ExecutablePath = path;
         ParentId = parentId;
-
-     
+        Position = position;
     }
 }
