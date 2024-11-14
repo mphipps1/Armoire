@@ -43,7 +43,10 @@ namespace Armoire.Views
         {
             var point = e.GetCurrentPoint(sender as Control);
             Debug.WriteLine("Mouse click on: " + e.Source.ToString());
-
+            if (StartMenuItemView.popup != null && StartMenuItemView.popup.IsOpen)
+                      StartMenuItemView.popup.IsOpen = false;
+            if(NewItemView.popup != null && NewItemView.popup.IsOpen)
+                NewItemView.popup.IsOpen = false;
             //add controls that we want to be draggable here using the source of what was pressed
             if (point.Properties.IsRightButtonPressed || 
                 ((e.Source.ToString() != "Avalonia.Controls.Panel") &&

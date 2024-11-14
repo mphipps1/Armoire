@@ -103,7 +103,13 @@ namespace Armoire.ViewModels
             );
             ActiveDockViewModel.Contents.Add(d2);
 
+<<<<<<< Updated upstream
             ApplicationMonitorViewModel.CheckRunningApplication();
+=======
+            ActiveDockViewModel.Contents.Add(new StartMenuItemViewModel());
+           
+            //ApplicationMonitorViewModel.CheckRunningApplication();
+>>>>>>> Stashed changes
         }
 
         private void OnTimerElapsed(object sender, ElapsedEventArgs e)

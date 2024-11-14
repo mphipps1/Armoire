@@ -20,13 +20,13 @@ namespace Armoire.Views;
 
 public partial class NewItemView : UserControl
 {
-    private Popup popup;
+    public static Popup popup;
     private StackPanel backAndSubmit;
     private StackPanel stack;
     private Popup dragAndDropPopup;
     private TextBox typedAppName;
     private string currentTypedAppName;
-    private Controls originalList;
+    public static Controls originalList;
     public NewItemView()
     {
         InitializeComponent();
