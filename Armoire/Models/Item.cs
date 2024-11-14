@@ -1,9 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics;
 using System.Drawing;
-using Armoire.Interfaces;
 using Armoire.ViewModels;
 
 namespace Armoire.Models;
@@ -51,13 +49,23 @@ public class Item
 
     public Drawer Parent { get; set; }
 
+    public int DrawerHierarchy { get; set; }
+
     [MaxLength(100)]
     public string ParentId { get; set; } = "default";
 
-    public Item(string id, string name, string exePath, string parentId, int? position)
+    public Item(
+        string id,
+        string name,
+        string exePath,
+        string parentId,
+        int? position,
+        int drawerHierarchy
+    )
         : this(name, exePath, parentId, position)
     {
         Id = id;
+        DrawerHierarchy = drawerHierarchy;
     }
 
     public Item(string name, string path, string parentId, int? position = null)

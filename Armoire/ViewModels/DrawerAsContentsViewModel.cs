@@ -197,12 +197,6 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
     public Drawer CreateDrawer()
     {
         OutputHelper.DebugPrintJson(this, $"DACVM-CreateDrawer-this-{Id}");
-        return new Drawer()
-        {
-            Id = Id,
-            Name = Name,
-            ParentId = ParentId,
-            Position = Position
-        };
+        return new Drawer(Id, Name, ParentId, Position, DrawerHierarchy);
     }
 }

@@ -1,13 +1,8 @@
-﻿using System;
-using System.Drawing;
-using System.Drawing.Imaging;
+﻿using System.Drawing.Imaging;
 using System.IO;
 using Armoire.Models;
 using Armoire.Utils;
-using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using SkiaSharp;
 
 namespace Armoire.ViewModels;
 
@@ -59,6 +54,13 @@ public partial class ItemViewModel : ContentsUnitViewModel
     public Item CreateItem()
     {
         OutputHelper.DebugPrintJson(this, $"IVM-CreateItem-this-{Id}");
-        return new Item(Id, Name, ExecutablePath, ParentId ?? "MALFORMED_ITEM", Position);
+        return new Item(
+            Id,
+            Name,
+            ExecutablePath,
+            ParentId ?? "MALFORMED_ITEM",
+            Position,
+            DrawerHierarchy
+        );
     }
 }
