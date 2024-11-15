@@ -104,14 +104,23 @@ namespace Armoire.ViewModels
                 dockSource.Id,
                 0
             );
-            ActiveDockViewModel.Contents.Add(d2);
-            //ActiveDockViewModel.Contents.Add(start);
-            var notif = new NotificationAreaViewModel("CONTENTS_1", 0);
-            var start = new StartMenuItemViewModel(notif.Id, 1, notif.GeneratedDrawer);
 
+            ActiveDockViewModel.Contents.Add(d2);
+
+            /*
+             * the following doesn't work
+             * 
+             * var start = new StartMenuItemViewModel(ActiveDockViewModel.Id, 1, ActiveDockViewModel);
+             * ActiveDockViewModel.Contents.Add(start);
+             * 
+             */
+
+            var notif = new NotificationAreaViewModel("CONTENTS_1", 0);
             ActiveDockViewModel.Contents.Add(notif);
-            var tmp = new BatteryPercentageViewModel(notif.Id, 1, notif.GeneratedDrawer);
-            notif.GeneratedDrawer.Contents.Add(tmp);
+
+            var start = new StartMenuItemViewModel(notif.Id, 1, notif.GeneratedDrawer);
+            var bat = new BatteryPercentageViewModel(notif.Id, 1, notif.GeneratedDrawer);
+            notif.GeneratedDrawer.Contents.Add(bat);
             notif.GeneratedDrawer.Contents.Add(start);
 
 
