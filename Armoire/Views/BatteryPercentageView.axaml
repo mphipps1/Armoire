@@ -1,0 +1,48 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 xmlns:armoire="clr-namespace:Armoire"
+			 xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+			 xmlns:vm="using:Armoire.ViewModels"
+			 xmlns:v="using:Armoire.Views"
+			 x:DataType="vm:BatteryPercentageViewModel"
+             x:Class="Armoire.Views.BatteryPercentageView">
+	<UserControl.ContextMenu>
+		<ContextMenu>
+			<MenuItem Command="{Binding HandleDeleteClickCommand}" Header="Delete" />
+			<MenuItem Command="{Binding MoveUpCommand}" Header="{Binding MoveBackDirection}" />
+			<MenuItem Command="{Binding MoveDownCommand}" Header="{Binding MoveForwardDirection}" />
+		</ContextMenu>
+	</UserControl.ContextMenu>
+	<ToolTip.Tip>
+		<ToolTip Height="40"
+				 Padding="3"
+				 Background="LightGray"
+				 Foreground="Black">
+			<TextBlock Text="{Binding Name}" />
+		</ToolTip>
+	</ToolTip.Tip>
+	<Border Background="LightGray"
+			Width="60"
+			Height="40"
+			Padding="0"
+			CornerRadius="4">
+		<StackPanel Orientation="Horizontal"
+					Width="40"
+					Height="40"
+					HorizontalAlignment="Center">
+			<avalonia:MaterialIcon
+				Width="18"
+				Height="26"
+				Kind="{Binding BatteryIcon}"
+				Foreground="Black"/>
+			<TextBlock Text="{Binding BatteryPercentage}%"
+					   HorizontalAlignment="Center"
+					   VerticalAlignment="Center"
+					   FontSize="12"
+					   Foreground="Black"/>
+		</StackPanel>
+	</Border>
+</UserControl>

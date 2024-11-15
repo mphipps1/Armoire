@@ -8,6 +8,10 @@ using Avalonia.VisualTree;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DialogHostAvalonia;
+using System.Runtime.InteropServices;
+using Avalonia;
+using System.Security;
+using System.Drawing;
 
 namespace Armoire.ViewModels
 {
@@ -69,9 +73,10 @@ namespace Armoire.ViewModels
 
             if (DeletedUnits == null)
                 DeletedUnits = new Stack<ContentsUnitViewModel>();
-
+            ActiveDockViewModel.InnerContents.Add(new NotificationAreaViewModel("CONTENTS_0", 0));
             //getting the list of apps in the start menu here instead of in the NewItemViewModel contructor to avoid lag
             NewItemViewModel.GetExecutables();
+            
         }
 
         private void OnTimerElapsed(object sender, ElapsedEventArgs e)

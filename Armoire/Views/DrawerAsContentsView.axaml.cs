@@ -18,7 +18,7 @@ public partial class DrawerAsContentsView : UserControl
     }
 
 
-    private void Flyout_Opening(object? sender, EventArgs e)
+    public void Flyout_Opening(object? sender, EventArgs e)
     {
       
             if (DataContext is DrawerAsContentsViewModel viewModel)
