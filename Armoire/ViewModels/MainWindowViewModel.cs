@@ -28,6 +28,7 @@ namespace Armoire.ViewModels
         public static Stack<ContentsUnitViewModel> DeletedUnits;
 
         //temp
+        //dockSource is the DrawerAsContentsViewModel that holds the ActiveDockViewModel
         public static DrawerViewModel ActiveDockViewModel { get; set; }
 
         //public static DockViewModel ActiveDockViewModel
@@ -115,13 +116,14 @@ namespace Armoire.ViewModels
              * 
              */
 
-            var notif = new NotificationAreaViewModel("CONTENTS_1", 0);
+            var notif = new NotificationAreaViewModel(dockSource.Id, 0);
             ActiveDockViewModel.Contents.Add(notif);
 
             var start = new StartMenuItemViewModel(notif.Id, 1, notif.GeneratedDrawer);
-            var bat = new BatteryPercentageViewModel(notif.Id, 1, notif.GeneratedDrawer);
+            var bat = new BatteryPercentageViewModel(dockSource.Id, 1, ActiveDockViewModel);
             notif.GeneratedDrawer.Contents.Add(bat);
-            notif.GeneratedDrawer.Contents.Add(start);
+
+            ActiveDockViewModel.Contents.Add(start);
 
         }
 
