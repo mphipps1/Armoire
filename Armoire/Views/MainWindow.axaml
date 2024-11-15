@@ -9,6 +9,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModels="clr-namespace:Armoire.ViewModels"
     xmlns:vm="using:Armoire.ViewModels"
+	xmlns:v="using:Armoire.Views"
     Title="Armoire"
     d:DesignHeight="700"
     d:DesignWidth="300"
@@ -103,11 +104,18 @@
 				FontSize="18"
 				Foreground="White"
 				Text="{Binding CurrentTime}" />
-            <ItemsControl ItemsSource="{Binding ActiveDockViewModel.InnerContents}">
+            <ItemsControl ItemsSource="{Binding ActiveDockViewModel.Contents}">
                 <ItemsControl.ItemTemplate>
                     <armoire:ViewLocator />
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
+			<Button Height="40" Width="40">
+				<Button.Flyout>
+					<Flyout>
+						
+					</Flyout>
+				</Button.Flyout>
+			</Button>
 			<!-- Power settings button which displays a flyout for buttons to logoff, restart or shutdown-->
 			<Button Height="40"
 					Width="40">
@@ -199,6 +207,7 @@
 					</Flyout>
 				</Button.Flyout>
 			</Button>
+			<v:ApplicationMonitorView/>
         </StackPanel>
 		<dialogHostAvalonia:DialogHost
 			DisableOpeningAnimation="True"

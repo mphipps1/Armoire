@@ -10,8 +10,6 @@ namespace Armoire.ViewModels;
 
 public partial class ContainerViewModel : ViewModelBase
 {
-    private int _onAddCount;
-
     [ObservableProperty]
     private Orientation _wrapPanelOrientation = Orientation.Horizontal;
 
@@ -19,6 +17,7 @@ public partial class ContainerViewModel : ViewModelBase
     private static long _id = 1;
 
     public string Id { get; set; }
+    public string Name { get; set; } = "default";
 
     public ContainerViewModel() { }
 
@@ -26,7 +25,7 @@ public partial class ContainerViewModel : ViewModelBase
     {
         Id = IdBase + _id++;
         SourceDrawer = sourceDrawer;
-        //SourceDrawerId = sourceDrawer.Id;
+        SourceDrawerId = sourceDrawer.Id;
 
         // Register event handlers.
         Contents.CollectionChanged += contents_CollectionChanged;
@@ -54,33 +53,29 @@ public partial class ContainerViewModel : ViewModelBase
             item.PropertyChanged -= contents_PropertyChanged;
     }
 
-    private void contents_OnAdd(object? sender, NotifyCollectionChangedEventArgs e)
+    private static void contents_OnAdd(object? sender, NotifyCollectionChangedEventArgs e)
     {
-        using var context = new AppDbContext();
-        if (e.NewItems is not { } newItems)
+        if (e.NewItems is not { } newContentsUnits)
             return;
-        var i = 0;
-        foreach (var item in newItems)
+        foreach (var contentsUnit in newContentsUnits)
         {
-            switch (item)
+            switch (contentsUnit)
             {
-                case DrawerAsContentsViewModel deVm:
-                    OutputHelper.DebugPrintJson(deVm, $"dc_OnAdd-deVm{i++}");
-                    var newContentsUnit = deVm.CreateDrawer();
-                    context.TryAddDrawer(newContentsUnit);
+                case DrawerAsContentsViewModel dacVm:
+                    OutputHelper.DebugPrintJson(dacVm, $"CVM-contentsOnAdd-dacVm-{dacVm.Id}");
+                    DbHelper.SaveDrawer(dacVm);
                     break;
                 case ItemViewModel iVm:
-                    Debug.WriteLine("dc_OnAdd ItemViewModel case placeholder");
+                    OutputHelper.DebugPrintJson(iVm, $"CVM-contentsOnAdd-iVm-{iVm.Id}");
+                    DbHelper.SaveItem(iVm);
                     break;
                 default:
-                    Debug.WriteLine("dc_OnAdd encountered unknown contents type");
+                    Debug.WriteLine(
+                        $"Method `contents_OnAdd` encountered unknown contents type: `{contentsUnit.GetType()}`."
+                    );
                     break;
             }
         }
-        OutputHelper.DebugPrintJson(context.Drawers, $"dc_OnAdd-drawersBeforeSave{_onAddCount}");
-        context.SaveChanges();
-        OutputHelper.DebugPrintJson(context.Drawers, $"dc_OnAdd-drawersAfterSave{_onAddCount}");
-        _onAddCount++;
     }
 
     private void contents_PropertyChanged(object? sender, PropertyChangedEventArgs e)

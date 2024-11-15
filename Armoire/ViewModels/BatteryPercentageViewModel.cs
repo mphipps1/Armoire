@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using Armoire.Models;
+using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -19,10 +20,14 @@ namespace Armoire.ViewModels
         public string _batteryPercentage;
 
 
-        public BatteryPercentageViewModel()
+        public BatteryPercentageViewModel(string parentID, int drawerHeirarchy, ContainerViewModel? container)
+            : base(parentID, drawerHeirarchy, container)
         {
             UpdateNotificationArea();
             Name = "Battery life remaining: ";
+            ExecutablePath = "";
+            Parent = container.SourceDrawer;
+            Model = new Item(Name, "", parentID.ToString(), Position);
         }
 
         public async void UpdateNotificationArea()

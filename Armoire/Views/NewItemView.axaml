@@ -56,7 +56,7 @@
             Watermark="Paint" />
         <StackPanel Spacing="10">
             <StackPanel Width="150">
-                <TextBlock Margin="5">Choose App Name:</TextBlock>
+                <TextBlock Margin="-25 5 0 0">Choose App Name:</TextBlock>
                 <Button
                     Width="200"
                     Height="30"

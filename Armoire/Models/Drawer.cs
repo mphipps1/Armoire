@@ -13,9 +13,23 @@ public class Drawer
     [Key]
     public string Id { get; set; } = "default";
 
+    // Parameterless constructor needed so EF can build the schema.
     public Drawer() { }
 
+    public Drawer(string id, string name, string? parentId, int? position, int drawerHierarchy)
+    {
+        Id = id;
+        Name = name;
+        ParentId = parentId;
+        Position = position;
+        DrawerHierarchy = drawerHierarchy;
+    }
+
     public Drawer? Parent { get; set; }
+
+    public int? Position { get; set; }
+
+    public int DrawerHierarchy { get; set; }
 
     [MaxLength(100)]
     public string Name { get; set; } = "default";

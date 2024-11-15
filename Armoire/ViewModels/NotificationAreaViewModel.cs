@@ -16,11 +16,8 @@ public partial class NotificationAreaViewModel : DrawerAsContentsViewModel
 {
     public NotificationAreaViewModel(string? parentID,
                                      int drawerHeirarchy) : base(parentID, drawerHeirarchy) {
-        ParentId = parentID;
-        DrawerHierarchy = drawerHeirarchy;
-        GeneratedDrawer = new DrawerViewModel(this);
-        GeneratedDrawer.InnerContents.Add(new BatteryPercentageViewModel());
         Name = "Notification Area";
+        GeneratedDrawer = new DrawerViewModel(this);
         SetMoveDirections(this);
     }
 

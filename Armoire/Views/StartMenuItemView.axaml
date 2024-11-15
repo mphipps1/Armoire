@@ -1,0 +1,83 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 x:DataType="vm:StartMenuItemViewModel"
+			 xmlns:v="using:Armoire.Views"
+             xmlns:vm="using:Armoire.ViewModels"
+             x:Class="Armoire.Views.StartMenuItemView"
+			 xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+			 KeyUp="KeyUp">
+	<UserControl.Styles>
+		<Style Selector="Button">
+			<Setter Property="Width" Value="50" />
+			<Setter Property="Height" Value="50" />
+			<Setter Property="Padding" Value="-15" />
+			<Setter Property="Background" Value="White" />
+		</Style>
+	</UserControl.Styles>
+	<StackPanel Width="250">
+		<Button Margin="5"
+				Command="{Binding OpenStartMenuCommand}"
+				Click="PopulateStartMenuList"
+				Name="ItemButton">
+			<ToolTip.Tip>
+				<ToolTip Height="40"
+						 Padding="3"
+						 Background="LightGray"
+						 Foreground="Black">
+					<TextBlock Text="{Binding Name}" />
+				</ToolTip>
+			</ToolTip.Tip>
+			<Button.Content>
+				<avalonia:MaterialIcon
+					Height="50"
+					Width="50"
+					Kind="Search"
+					Foreground="Black"/>
+			</Button.Content>
+
+			<!--  Context Menu for Delete Drawer (attached to drawer button)  -->
+			<Button.ContextMenu>
+				<ContextMenu>
+					<MenuItem Command="{Binding HandleDeleteClickCommand}" Header="Delete" />
+					<MenuItem Command="{Binding MoveUpCommand}" Header="{Binding MoveBackDirection}" />
+					<MenuItem Command="{Binding MoveDownCommand}" Header="{Binding MoveForwardDirection}" />
+				</ContextMenu>
+			</Button.ContextMenu>
+		</Button>
+		<Popup IsOpen="{Binding StartMenuTextBoxOpen}"
+			   PlacementMode="RightEdgeAlignedBottom"
+			   PlacementTarget="{Binding ElementName=ItemButton}"
+			   Name="Popup"
+			   HorizontalOffset="10"
+			   OverlayDismissEventPassThrough="True">
+			<StackPanel Background="LightGray"
+						Margin="0">
+				<ScrollViewer Height="300"
+				  Width="230"
+				  Name="BarScroll"
+				  VerticalScrollBarVisibility="Visible"
+				  HorizontalAlignment="Right"
+				  HorizontalScrollBarVisibility="Visible">
+					<StackPanel HorizontalAlignment="Left"
+								VerticalAlignment="Stretch"
+								Width="220"
+								Name="StartMenuList"
+								Orientation="Vertical"
+								Margin="0">
+					</StackPanel>
+				</ScrollViewer>
+				<TextBox Width="220"
+					Height="40"
+					HorizontalAlignment="Left"
+					Margin="10"
+					Padding="5"
+					Background="DarkGray"
+					Watermark="Type here to search"
+					Name="TypedAppName"/>
+			</StackPanel>
+		</Popup>
+	</StackPanel>
+</UserControl>

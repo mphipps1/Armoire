@@ -19,10 +19,8 @@ namespace Armoire.ViewModels
         public ObservableCollection<dynamic> lnkDropCollection { get; set; } =
             new ObservableCollection<dynamic>();
 
-
         public ObservableCollection<dynamic> ImageDropCollection { get; set; } =
             new ObservableCollection<dynamic>();
-
 
         [ObservableProperty]
         public IBrush _borderBackground = Avalonia.Media.Brushes.Transparent;
@@ -67,10 +65,16 @@ namespace Armoire.ViewModels
 
         private int TargetDrawerHeirarchy;
 
-        public NewItemViewModel(string targetDrawerID, int targetDrawerHeirarchy)
+        private ContainerViewModel? ActiveContainerViewModel { get; }
+
+        public NewItemViewModel(
+            string targetDrawerID,
+            int targetDrawerHeirarchy,
+            ContainerViewModel? cvm = null
+        )
         {
             TargetDrawerID = targetDrawerID;
- 
+
             PanelHeight = 400;
             PanelWidth = 400;
 
@@ -79,6 +83,8 @@ namespace Armoire.ViewModels
             TargetDrawerHeirarchy = targetDrawerHeirarchy;
 
             DropDownIcon = "ArrowBottomDropCircleOutline";
+
+            ActiveContainerViewModel = cvm;
         }
 
         [RelayCommand]
@@ -95,35 +101,39 @@ namespace Armoire.ViewModels
                             Executables[NewExe],
                             Icons[NewExe].ToBitmap(),
                             TargetDrawerID,
-                            TargetDrawerHeirarchy + 1
+                            TargetDrawerHeirarchy + 1,
+                            ActiveContainerViewModel
                         )
                     );
                 }
                 else if (lnkDropCollection.Count > 0 || ImageDropCollection.Count > 0)
                 {
-
                     if (ImageDropCollection.Count > 0)
                     {
                         var droppedFile = ImageDropCollection.ElementAt(0);
                         string fileExtension = droppedFile.Substring(droppedFile.IndexOf('.') + 1);
 
-                  
+                        FileInfo fileInfo = new FileInfo(droppedFile);
 
-                            FileInfo fileInfo = new FileInfo(droppedFile);
+                        var name = fileInfo.Name.Substring(0, fileInfo.Name.IndexOf('.'));
 
-                            var name = fileInfo.Name.Substring(0, fileInfo.Name.IndexOf('.'));
+                        var icon = Icon.ExtractAssociatedIcon(droppedFile);
 
-                            var icon = Icon.ExtractAssociatedIcon(droppedFile);
+                        System.Drawing.Bitmap bitmap = icon.ToBitmap();
 
-                            System.Drawing.Bitmap bitmap = icon.ToBitmap();
+                        var b = ApplicationMonitorViewModel.isRunning;
+                        var x = ApplicationMonitorViewModel.runningApplications;
 
-                            targetDrawer.Add(
-                               new ItemViewModel(name, droppedFile, bitmap, TargetDrawerID.ToString(), TargetDrawerHeirarchy)
-                           );
-                        
-
-
-
+                        targetDrawer.Add(
+                            new ItemViewModel(
+                                name,
+                                droppedFile,
+                                bitmap,
+                                TargetDrawerID.ToString(),
+                                TargetDrawerHeirarchy,
+                                ActiveContainerViewModel
+                            )
+                        );
                     }
                     else if (lnkDropCollection.Count > 0)
                     {
@@ -135,16 +145,29 @@ namespace Armoire.ViewModels
                             .Substring(0, Path.GetFileName(droppedFile.FullName).IndexOf('.'));
                         var icon = Icon.ExtractAssociatedIcon(ExeFilePath);
 
-                       System.Drawing.Bitmap bitmap = icon.ToBitmap();
+                        System.Drawing.Bitmap bitmap = icon.ToBitmap();
 
                         targetDrawer.Add(
-                            new ItemViewModel(name, ExeFilePath, bitmap, TargetDrawerID, TargetDrawerHeirarchy)
+                            new ItemViewModel(
+                                name,
+                                ExeFilePath,
+                                bitmap,
+                                TargetDrawerID,
+                                TargetDrawerHeirarchy,
+                                ActiveContainerViewModel
+                            )
                         );
                     }
                 }
                 else
                 {
-                    var newDrawer = new DrawerAsContentsViewModel(Name, IconPath, TargetDrawerID, TargetDrawerHeirarchy + 1);
+                    var newDrawer = new DrawerAsContentsViewModel(
+                        Name,
+                        IconPath,
+                        TargetDrawerID,
+                        TargetDrawerHeirarchy + 1,
+                        ActiveContainerViewModel
+                    );
                     targetDrawer.Add(newDrawer);
                 }
             }
@@ -166,7 +189,7 @@ namespace Armoire.ViewModels
                 {
                     if (dacvm.Id == TargetDrawerID)
                     {
-                        return dacvm.GeneratedDrawer.InnerContents;
+                        return dacvm.GeneratedDrawer.Contents;
                     }
                 }
             }
@@ -174,7 +197,7 @@ namespace Armoire.ViewModels
             {
                 if (unit is DrawerAsContentsViewModel dacvm)
                 {
-                    var ret = GetTargetDrawer(dacvm.GeneratedDrawer.InnerContents);
+                    var ret = GetTargetDrawer(dacvm.GeneratedDrawer.Contents);
                     if (ret != null)
                         return ret;
                 }
@@ -184,7 +207,7 @@ namespace Armoire.ViewModels
 
         public static void GetExecutables()
         {
-            Dock = MainWindowViewModel.ActiveDockViewModel.InnerContents;
+            Dock = MainWindowViewModel.ActiveDockViewModel.Contents;
             Executables = new Dictionary<string, string>();
             ExecutableNames = new ObservableCollection<string>();
             Icons = new Dictionary<string, Icon>();
@@ -212,7 +235,6 @@ namespace Armoire.ViewModels
             ExecutableNames = new ObservableCollection<string>(ExecutableNames.OrderBy(i => i));
         }
 
-
         [RelayCommand]
         public void RemoveFile()
         {
@@ -225,7 +247,7 @@ namespace Armoire.ViewModels
                 lnkDropCollection.RemoveAt(0);
             }
 
-            if (lnkDropCollection.Count == 0 && ImageDropCollection.Count == 0 )
+            if (lnkDropCollection.Count == 0 && ImageDropCollection.Count == 0)
             {
                 FileDropText = "Drop lnk file here";
                 IsPopupRemoveButton = false;
@@ -241,8 +263,6 @@ namespace Armoire.ViewModels
                 DropDownIcon = "ArrowTopDropCircleOutline";
             else
                 DropDownIcon = "ArrowBottomDropCircleOutline";
-
-
         }
 
         [RelayCommand]
