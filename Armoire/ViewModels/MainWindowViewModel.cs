@@ -123,10 +123,6 @@ namespace Armoire.ViewModels
             notif.GeneratedDrawer.Contents.Add(bat);
             notif.GeneratedDrawer.Contents.Add(start);
 
-
-
-            //ApplicationMonitorViewModel.CheckRunningApplication();
-
         }
 
         private void OnTimerElapsed(object sender, ElapsedEventArgs e)

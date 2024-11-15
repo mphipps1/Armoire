@@ -48,8 +48,9 @@ public partial class StartMenuItemView : ItemView
                 p.StartInfo.FileName = NewItemViewModel.Executables[name];
                 p.StartInfo.UseShellExecute = true;
                 p.Start();
-
                 this.Find<Popup>("Popup").IsOpen = false;
+                var vm = (StartMenuItemViewModel)this.DataContext;
+                vm.OpenStartMenu();
             };
             button.Width = 220;
             button.Height = 50;
