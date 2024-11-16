@@ -64,7 +64,7 @@ namespace Armoire.ViewModels
             }
         }
 
-
+        //Work in Progress
         public static async Task CheckRunningApplication()
         {
 
@@ -75,7 +75,6 @@ namespace Armoire.ViewModels
                 var processes = Process.GetProcesses();
 
                 
-
                 List<Process> ProcessWithName = new List<Process>();
 
                 foreach (Process process in processes)
@@ -87,10 +86,21 @@ namespace Armoire.ViewModels
                     }
                 }
 
-
-
                 
-                
+                for (int i = 0; i < RunningApps.Count; i++)
+                {
+                    var GetProcess = ProcessWithName.FirstOrDefault(obj => obj.MainModule.FileName.Equals(RunningApps[i].StartInfo));
+
+                    
+                   if(GetProcess == null)
+                    {
+                        var itemviewmodel = ProcessList.FirstOrDefault(obj => obj.ExecutablePath == RunningApps[i].StartInfo.FileName);
+                        ProcessList.Remove(itemviewmodel);
+                        RunningApps.RemoveAt(i);
+
+                    } 
+                    
+                }
                 
 
             
