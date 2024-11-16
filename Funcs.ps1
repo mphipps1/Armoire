@@ -21,6 +21,11 @@ function dl {
     Remove-Item $logs_path
 }
 
+# Populate Database
+function pdb {
+    sqlite3 $env:localappdata\ArmoireData.db ".read commands.sql"
+}
+
 # Run All
 function ra {
     dbs

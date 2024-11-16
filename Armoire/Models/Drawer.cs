@@ -29,7 +29,7 @@ public class Drawer
 
     public int? Position { get; set; }
 
-    public int DrawerHierarchy { get; set; }
+    public int? DrawerHierarchy { get; set; }
 
     [MaxLength(100)]
     public string Name { get; set; } = "default";
