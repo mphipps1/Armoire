@@ -1,5 +1,6 @@
 ﻿using Armoire.Models;
 using Avalonia.Controls;
+using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,14 +15,16 @@ namespace Armoire.ViewModels
  
     public partial class ApplicationMonitorViewModel: ViewModelBase
     {
+        public static ObservableCollection<ItemViewModel> ProcessList { get; } = new ObservableCollection<ItemViewModel>();
 
+        public static ObservableCollection<Process> RunningApps { get; set; } = new ObservableCollection<Process>();
         public static ObservableCollection<Item> runningApplications { get; set; } = [];
 
         public static Dictionary<int, string> processMap = new Dictionary<int, string>();
 
         public static ObservableCollection<int> Pids =  new ObservableCollection<int>();
 
-        public static ObservableCollection<string> RunningApps { get; set; }
+      
 
         private static bool isMonitoring = true;
 
@@ -29,10 +32,76 @@ namespace Armoire.ViewModels
 
         public ApplicationMonitorViewModel() { 
         
-        }   
+        }
+
+
+
+        [RelayCommand]
+        public static void DisplayProcess()
+        {
+            for (int j = 0; j < RunningApps.Count; j++)
+            {
+
+                if (ProcessList.Count > 0)
+                {
+                    for (int i = 0; i < ProcessList.Count; i++)
+                    {
+                        bool isNewProcess = ProcessList.Any(obj => obj.ExecutablePath == RunningApps[j].StartInfo.FileName);
+                        if (!isNewProcess)
+                        {
+                            ProcessList.Add(new ItemViewModel(RunningApps[j].StartInfo.FileName));
+                            return;
+                        }
+                    }
+
+
+                }
+                else
+                {
+                    ProcessList.Add(new ItemViewModel(RunningApps[j].StartInfo.FileName));
+                }
+
+            }
+        }
+
+
+        public static async Task CheckRunningApplication()
+        {
+
         
+            while (isMonitoring)
+            {
+                await Task.Delay(500);
+                var processes = Process.GetProcesses();
+
+                
+
+                List<Process> ProcessWithName = new List<Process>();
+
+                foreach (Process process in processes)
+                {
+                    if (!String.IsNullOrEmpty(process.MainWindowTitle))
+                    {
+                        ProcessWithName.Add(process);
+
+                    }
+                }
 
 
+
+                
+                
+                
+
+            
+
+            }
+
+        }
+
+
+
+        /**
         public static async Task CheckRunningApplication()
         {
             RunningApps = new ObservableCollection<string>();
@@ -95,8 +164,9 @@ namespace Armoire.ViewModels
 
             isRunning = false;
         }
+        */
 
 
-       
+
     }
 }

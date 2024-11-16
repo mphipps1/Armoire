@@ -7,5 +7,27 @@
 			 xmlns:vm="using:Armoire.ViewModels"
 			 xmlns:viewModels="clr-namespace:Armoire.ViewModels"
 			 x:DataType="vm:ApplicationMonitorViewModel">
-	<ListBox ItemsSource="{Binding RunningApps}"/>
+
+
+	<UserControl.DataContext>
+		<vm:ApplicationMonitorViewModel />
+	</UserControl.DataContext>
+
+	<Button Height="32" Width="32">
+		<Button.Flyout>
+			<Flyout Placement="Right">
+				<ItemsControl ItemsSource="{Binding  ProcessList}">
+					<ItemsControl.ItemTemplate>
+						<DataTemplate>
+							<Image Source="{Binding IconBmp}" Height="32" Width="32" />
+						</DataTemplate>
+					</ItemsControl.ItemTemplate>
+				</ItemsControl>
+			</Flyout>
+		</Button.Flyout>
+		
+		
+	</Button>
+
+	
 </UserControl>

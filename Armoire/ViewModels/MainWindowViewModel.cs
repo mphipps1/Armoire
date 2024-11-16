@@ -12,20 +12,25 @@ using System.Runtime.InteropServices;
 using Avalonia;
 using System.Security;
 using System.Drawing;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Armoire.ViewModels
 {
     public partial class MainWindowViewModel : ViewModelBase
     {
+        public static Task TaskCheck;
         private int _contentsUnitCount;
         private int _drawerCount;
         private int _itemCount;
         private DevDrawerView? _devDrawerView;
         private NewItemViewModel? currentEntry;
-        private Timer _timer;
+        private System.Timers.Timer _timer;
         private string _currentTime;
         private static DockViewModel? _dockViewModel;
         public static Stack<ContentsUnitViewModel> DeletedUnits;
+
+      
 
         //temp
         //dockSource is the DrawerAsContentsViewModel that holds the ActiveDockViewModel
@@ -52,7 +57,7 @@ namespace Armoire.ViewModels
 
         public MainWindowViewModel()
         {
-            _timer = new Timer(1000);
+            _timer = new System.Timers.Timer(1000);
             _timer.Elapsed += OnTimerElapsed;
             _timer.Start();
 
@@ -124,6 +129,11 @@ namespace Armoire.ViewModels
             notif.GeneratedDrawer.Contents.Add(bat);
 
             ActiveDockViewModel.Contents.Add(start);
+
+             TaskCheck = new Task(() =>  ApplicationMonitorViewModel.CheckRunningApplication());
+            TaskCheck.Start();
+
+           
 
         }
 

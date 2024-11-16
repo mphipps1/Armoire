@@ -27,21 +27,14 @@ public class Item
 
     public void Execute()
     {
-        process.EnableRaisingEvents = true;
-        process.Exited += (sender, e) =>
-        {
-            Console.WriteLine($"Process {process.Id} exited.");
-        };
-
+      
         process.Start();
+        ApplicationMonitorViewModel.RunningApps.Add(process);
+        ApplicationMonitorViewModel.DisplayProcess();
+        var b = MainWindowViewModel.TaskCheck.Status;
 
-        var ProcessID = process.Id;
 
-        if (Process.GetProcessById(ProcessID) != null)
-        {
-            ApplicationMonitorViewModel.processMap.Add(ProcessID, process.StartInfo.FileName);
-            ApplicationMonitorViewModel.Pids.Add(ProcessID);
-        }
+
     }
 
     // Parameterless constructor needed so EF can build the schema.

@@ -1,4 +1,5 @@
-﻿using System.Drawing.Imaging;
+﻿using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using Armoire.Models;
 using Armoire.Utils;
@@ -12,6 +13,20 @@ public partial class ItemViewModel : ContentsUnitViewModel
 
     [ObservableProperty]
     public Avalonia.Media.Imaging.Bitmap _iconBmp;
+
+    public ItemViewModel(string executablePath)
+    {
+        var bmp = Icon.ExtractAssociatedIcon(executablePath).ToBitmap();
+        //which can be displayed by loading it into a memory stream to mimic downloading it
+        using (MemoryStream memory = new MemoryStream())
+        {
+            bmp.Save(memory, ImageFormat.Png);
+            memory.Position = 0;
+            IconBmp = new Avalonia.Media.Imaging.Bitmap(memory);
+
+        }
+        ExecutablePath = executablePath;
+    }
 
     public ItemViewModel(string parentID, int drawerHierarchy, ContainerViewModel? container)
     {
@@ -51,10 +66,6 @@ public partial class ItemViewModel : ContentsUnitViewModel
 
     public override void HandleContentsClick()
     {
-        if (Model is Item)
-        {
-            ApplicationMonitorViewModel.runningApplications.Add(Model);
-        }
         (Model as Item)?.Execute();
     }
 
