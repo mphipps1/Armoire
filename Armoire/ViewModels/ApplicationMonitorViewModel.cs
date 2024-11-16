@@ -89,7 +89,7 @@ namespace Armoire.ViewModels
                 
                 for (int i = 0; i < RunningApps.Count; i++)
                 {
-                    var GetProcess = ProcessWithName.FirstOrDefault(obj => obj.MainModule.FileName.Equals(RunningApps[i].StartInfo));
+                    var GetProcess = ProcessWithName.FirstOrDefault(obj => obj.MainModule.FileName.Equals(RunningApps[i].StartInfo.FileName));
 
                     
                    if(GetProcess == null)
