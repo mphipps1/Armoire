@@ -90,17 +90,25 @@
 		</ContextMenu>
 	</Window.ContextMenu>
 	<Panel>
+		<Border 
+			Background="#222222"
+			BorderBrush="Purple"
+			BorderThickness="2"
+			CornerRadius="16"
+			Padding="16"
+			HorizontalAlignment="Left">
         <StackPanel
-            HorizontalAlignment="Left"
+            HorizontalAlignment="Center"
             VerticalAlignment="Top"
-            Spacing="20">
+            Spacing="20"
+			Width="80">
 			<!--  Digital Clock  -->
 			<TextBlock
 				Grid.Column="2"
-				Margin="20,10,20,0"
-				Padding="20, 0"
+				Margin="5"
+				Padding="5"
 				HorizontalAlignment="Center"
-				VerticalAlignment="Top"
+				VerticalAlignment="Bottom"
 				FontSize="18"
 				Foreground="White"
 				Text="{Binding CurrentTime}" />
@@ -109,20 +117,15 @@
                     <armoire:ViewLocator />
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
-			<Button Height="40" Width="40">
-				<Button.Flyout>
-					<Flyout>
-						
-					</Flyout>
-				</Button.Flyout>
-			</Button>
 			<!-- Power settings button which displays a flyout for buttons to logoff, restart or shutdown-->
 			<Button Height="40"
-					Width="40">
+					Width="40"
+					Background="#222222">
 				<Button.Content>
 					<avalonia:MaterialIcon
 						Width="32"
 						Height="32"
+						Foreground="LightGray"
 						Kind="PowerSettings" />
 				</Button.Content>
 				<ToolTip.Tip>
@@ -137,12 +140,14 @@
 									Spacing="10">
 							<Button Command="{Binding Logoff}"
 									Height="40"
-									Width="40">
+									Width="40"
+									Background="#222222">
 								<Button.Content>
 									<avalonia:MaterialIcon
 										Width="32"
 										Height="32"
-										Kind="Logout"/>
+										Kind="Logout"
+										Foreground="LightGray"/>
 								</Button.Content>
 								<ToolTip.Tip>
 									<ToolTip Height="40" Width="90" Padding="3" Background="LightGray" Foreground="Black">
@@ -152,11 +157,13 @@
 							</Button>
 							<Button Command="{Binding Restart}"
 									Height="40"
-									Width="40">
+									Width="40"
+									Background="#222222">
 								<Button.Content>
 									<avalonia:MaterialIcon
 										Width="32"
 										Height="32"
+										Foreground="LightGray"
 										Kind="Restart"/>
 								</Button.Content>
 								<ToolTip.Tip>
@@ -167,11 +174,13 @@
 							</Button>
 							<Button Command="{Binding Shutdown}"
 									Height="40"
-									Width="40">
+									Width="40"
+									Background="#222222">
 								<Button.Content>
 									<avalonia:MaterialIcon
 										Width="32"
 										Height="32"
+										Foreground="LightGray"
 										Kind="Shutdown"/>
 								</Button.Content>
 								<ToolTip.Tip>
@@ -180,10 +189,16 @@
 									</ToolTip>
 								</ToolTip.Tip>
 							</Button>
-							<Button Command="{Binding OpenWindowsSettingCommand}" Height="40"
-									Width="40">
+							<Button Command="{Binding OpenWindowsSettingCommand}" 
+									Height="40"
+									Width="40"
+									Background="#222222">
 								<Button.Content>
-									<avalonia:MaterialIcon Kind="Settings" Width="32" Height="32"/>
+									<avalonia:MaterialIcon 
+										Kind="Settings" 
+										Width="32"
+										Height="32"
+										Foreground="LightGray"/>
 								</Button.Content>
 								<ToolTip.Tip>
 									<ToolTip Height="40" Width="90" Padding="3" Background="LightGray">
@@ -192,10 +207,16 @@
 								</ToolTip.Tip>
 							</Button>
 
-							<Button Click="OpenFileDialogClick"  Height="40"
-									Width="40">
+							<Button Click="OpenFileDialogClick"
+									Height="40"
+									Width="40"
+									Background="#222222">
 								<Button.Content>
-									<avalonia:MaterialIcon Kind="File" Width="32" Height="32"/>
+									<avalonia:MaterialIcon
+										Kind="File"
+										Width="32"
+										Height="32"
+										Foreground="LightGray"/>
 								</Button.Content>
 								<ToolTip.Tip>
 									<ToolTip Height="40" Width="90" Padding="3" Background="LightGray" Foreground="Black">
@@ -207,8 +228,11 @@
 					</Flyout>
 				</Button.Flyout>
 			</Button>
+			<!--
 			<v:ApplicationMonitorView/>
+			-->
         </StackPanel>
+		</Border>
 		<dialogHostAvalonia:DialogHost
 			DisableOpeningAnimation="True"
 			CloseOnClickAway="True" 

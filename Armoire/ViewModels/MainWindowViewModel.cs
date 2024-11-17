@@ -113,14 +113,6 @@ namespace Armoire.ViewModels
 
             ActiveDockViewModel.Contents.Add(d2);
 
-            /*
-             * the following doesn't work
-             * 
-             * var start = new StartMenuItemViewModel(ActiveDockViewModel.Id, 1, ActiveDockViewModel);
-             * ActiveDockViewModel.Contents.Add(start);
-             * 
-             */
-
             var notif = new NotificationAreaViewModel(dockSource.Id, 0);
             ActiveDockViewModel.Contents.Add(notif);
 
@@ -131,8 +123,13 @@ namespace Armoire.ViewModels
             ActiveDockViewModel.Contents.Add(start);
 
              TaskCheck = new Task(() =>  ApplicationMonitorViewModel.CheckRunningApplication());
-            TaskCheck.Start();
+           // TaskCheck.Start();
 
+            var apps = new ApplicationMonitorViewModel(dockSource.Id, 0);
+            ActiveDockViewModel.Contents.Add(apps);
+            apps.GetInitialRunningApps();
+            //apps.DisplayProcess();
+            
            
 
         }

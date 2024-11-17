@@ -29,8 +29,8 @@ public class Item
     {
       
         process.Start();
-        ApplicationMonitorViewModel.RunningApps.Add(process);
-        ApplicationMonitorViewModel.DisplayProcess();
+        //ApplicationMonitorViewModel.RunningApps.Add(process);
+        //ApplicationMonitorViewModel.DisplayProcess();
         var b = MainWindowViewModel.TaskCheck.Status;
 
 

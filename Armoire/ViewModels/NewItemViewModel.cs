@@ -122,7 +122,7 @@ namespace Armoire.ViewModels
                         System.Drawing.Bitmap bitmap = icon.ToBitmap();
 
                         var b = ApplicationMonitorViewModel.isRunning;
-                        var x = ApplicationMonitorViewModel.runningApplications;
+                        //var x = ApplicationMonitorViewModel.runningApplications;
 
                         targetDrawer.Add(
                             new ItemViewModel(

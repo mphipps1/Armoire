@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="clr-namespace:Armoire.ViewModels"
+	xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     d:DesignHeight="450"
     d:DesignWidth="800"
     x:DataType="vm:DrawerAsContentsViewModel"
@@ -31,6 +32,7 @@
         x:Name="DrawerButton"
         Margin="5"
         Command="{Binding CheckDraweModelCommand}"
+		Background="#222222"
         CommandParameter="{Binding}">
         <ToolTip.Tip>
             <ToolTip
@@ -47,8 +49,13 @@
                     Name="OpenDrawer"
                     Height="100"
                     Path="{Binding IconPath}" />
+					<Image Source="{Binding IconBmp}" Height="48" Width="48" />
 				-->
-				<Image Source="{Binding IconBmp}" Height="48" Width="48" />
+				<avalonia:MaterialIcon 
+					Height="32"
+					Width="32"
+					Kind="TableArrowLeft"
+					Foreground="LightGray"/>
 
 			</Viewbox>
         </Button.Content>

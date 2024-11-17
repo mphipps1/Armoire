@@ -1,33 +1,84 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Armoire.Views.ApplicationMonitorView"
-			 xmlns:vm="using:Armoire.ViewModels"
-			 xmlns:viewModels="clr-namespace:Armoire.ViewModels"
-			 x:DataType="vm:ApplicationMonitorViewModel">
+<UserControl 
+	x:Class="Armoire.Views.ApplicationMonitorView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:armoire="clr-namespace:Armoire"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="clr-namespace:Armoire.ViewModels"
+	xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    x:DataType="vm:ApplicationMonitorViewModel"
+    mc:Ignorable="d">
+    <UserControl.Styles>
+        <Style Selector="Button">
+            <Setter Property="Width" Value="50" />
+            <Setter Property="Height" Value="50" />
+            <Setter Property="Padding" Value="-15" />
+            <Setter Property="Background" Value="White" />
+        </Style>
+        <Style Selector="MenuItem">
+            <Setter Property="Height" Value="20" />
+        </Style>
 
+        <Style Selector="ContextMenu">
+            <Setter Property="Width" Value="150" />
+            <Setter Property="CornerRadius" Value="8" />
+        </Style>
+    </UserControl.Styles>
 
-	<UserControl.DataContext>
-		<vm:ApplicationMonitorViewModel />
-	</UserControl.DataContext>
+    <Button
+        x:Name="DrawerButton"
+        Margin="5"
+		Background="#222222"
+        Command="{Binding CheckDraweModelCommand}"
+        CommandParameter="{Binding}">
+        <ToolTip.Tip>
+            <ToolTip
+                Height="40"
+                Padding="3"
+                Background="LightGray">
+                <TextBlock Foreground="Black" Text="{Binding Name}" />
+            </ToolTip>
+        </ToolTip.Tip>
+        <Button.Content>
+            <Viewbox Stretch="None">
+				<!--
+                <Svg
+                    Name="OpenDrawer"
+                    Height="100"
+                    Path="{Binding IconPath}" />
+				-->
+				<avalonia:MaterialIcon
+	                Height="32"
+	                Width="32"
+	                Kind="ArrowExpand"
+					Foreground="LightGray"/>
 
-	<Button Height="32" Width="32">
-		<Button.Flyout>
-			<Flyout Placement="Right">
-				<ItemsControl ItemsSource="{Binding  ProcessList}">
-					<ItemsControl.ItemTemplate>
-						<DataTemplate>
-							<Image Source="{Binding IconBmp}" Height="32" Width="32" />
-						</DataTemplate>
-					</ItemsControl.ItemTemplate>
-				</ItemsControl>
-			</Flyout>
-		</Button.Flyout>
-		
-		
-	</Button>
+			</Viewbox>
+        </Button.Content>
+        <Button.Flyout>
+            <!--  Make this placement a binding that alternates between right, down, and up depending on where we are in the drawer structure  -->
+			<Flyout
+				OverlayDismissEventPassThrough="True"
+			    Opening="Flyout_Opening"
+                Content="{Binding GeneratedDrawer}"
+                FlyoutPresenterClasses="wider"
+                Placement="{Binding FlyoutPlacement}"
+                VerticalOffset="4" />
+        </Button.Flyout>
 
-	
+        <!--  Context Menu for Delete Drawer (attached to drawer button)  -->
+        <Button.ContextMenu>
+            <ContextMenu>
+                <MenuItem Command="{Binding HandleDeleteClickCommand}" Header="Delete" />
+                <MenuItem Command="{Binding AddItemClickCommand}" Header="Add Item" />
+                <MenuItem Command="{Binding AddDrawerClickCommand}" Header="Add Drawer" />
+                <MenuItem Command="{Binding ChangeDrawerNameCommand}" Header="Edit Drawer" />
+                <MenuItem Command="{Binding MoveUpCommand}" Header="{Binding MoveBackDirection}" />
+                <MenuItem Command="{Binding MoveDownCommand}" Header="{Binding MoveForwardDirection}" />
+            </ContextMenu>
+        </Button.ContextMenu>
+    </Button>
 </UserControl>

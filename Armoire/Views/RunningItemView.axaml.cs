@@ -4,9 +4,9 @@ using Avalonia.Markup.Xaml;
 
 namespace Armoire.Views;
 
-public partial class ApplicationMonitorView : DrawerAsContentsView
+public partial class RunningItemView : ItemView
 {
-    public ApplicationMonitorView()
+    public RunningItemView()
     {
         InitializeComponent();
     }

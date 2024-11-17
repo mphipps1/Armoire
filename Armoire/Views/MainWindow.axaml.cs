@@ -50,7 +50,8 @@ namespace Armoire.Views
             //add controls that we want to be draggable here using the source of what was pressed
             if (point.Properties.IsRightButtonPressed || 
                 ((e.Source.ToString() != "Avalonia.Controls.Panel") &&
-                (e.Source.ToString() != "Avalonia.Controls.StackPanel")))
+                (e.Source.ToString() != "Avalonia.Controls.StackPanel")&& 
+                (e.Source.ToString() != "Avalonia.Controls.Border")))
                 return;
 
             ContextMenu cm = this.Find<ContextMenu>("MainWindowContextMenu");

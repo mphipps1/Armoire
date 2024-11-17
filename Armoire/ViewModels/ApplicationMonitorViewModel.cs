@@ -6,62 +6,87 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Armoire.ViewModels
 {
  
-    public partial class ApplicationMonitorViewModel: ViewModelBase
+    public partial class ApplicationMonitorViewModel: DrawerAsContentsViewModel
     {
         public static ObservableCollection<ItemViewModel> ProcessList { get; } = new ObservableCollection<ItemViewModel>();
 
-        public static ObservableCollection<Process> RunningApps { get; set; } = new ObservableCollection<Process>();
-        public static ObservableCollection<Item> runningApplications { get; set; } = [];
-
-        public static Dictionary<int, string> processMap = new Dictionary<int, string>();
-
-        public static ObservableCollection<int> Pids =  new ObservableCollection<int>();
-
+        public static List<string> RunningAppNames { get; set; } = new List<string>();
       
 
         private static bool isMonitoring = true;
 
         public  static bool isRunning;
 
-        public ApplicationMonitorViewModel() { 
-        
+        public ApplicationMonitorViewModel(string? parentID, int drawerHierarchy) : base (parentID, drawerHierarchy) {
+            Name = "Running Applications";
+
         }
 
 
 
-        [RelayCommand]
-        public static void DisplayProcess()
+        //[RelayCommand]
+        //public void DisplayProcess()
+        //{
+        //    for (int j = 0; j < 5; j++)
+        //    {
+
+        //        if (ProcessList.Count > 0)
+        //        {
+        //            for (int i = 0; i < ProcessList.Count; i++)
+        //            {
+        //                bool isNewProcess = ProcessList.Any(obj => obj.ExecutablePath == RunningApps[j].StartInfo.FileName);
+        //                if (!isNewProcess)
+        //                {
+        //                    ProcessList.Add(new ItemViewModel(RunningApps[j].StartInfo.FileName));
+        //                    return;
+        //                }
+        //            }
+
+
+        //        }
+        //        else
+        //        {
+        //            ProcessList.Add(new ItemViewModel(RunningApps[j].StartInfo.FileName));
+        //        }
+
+        //    }
+        //}
+
+        public async void GetInitialRunningApps()
         {
-            for (int j = 0; j < RunningApps.Count; j++)
+            ArrayList badProcesses = new ArrayList();
+            badProcesses.Add("TextInputHost");
+            badProcesses.Add("devenv");
+            var processes = Process.GetProcesses();
+            var checkingApps = CheckRunningApplication();
+
+            List<Process> ProcessWithName = new List<Process>();
+
+            foreach (Process process in processes)
             {
-
-                if (ProcessList.Count > 0)
+                if (!String.IsNullOrEmpty(process.MainWindowTitle))
                 {
-                    for (int i = 0; i < ProcessList.Count; i++)
-                    {
-                        bool isNewProcess = ProcessList.Any(obj => obj.ExecutablePath == RunningApps[j].StartInfo.FileName);
-                        if (!isNewProcess)
-                        {
-                            ProcessList.Add(new ItemViewModel(RunningApps[j].StartInfo.FileName));
-                            return;
-                        }
-                    }
-
-
+                    if (badProcesses.Contains(process.ProcessName))
+                        continue;
+                    ProcessWithName.Add(process);
+                    GeneratedDrawer.Contents.Add(new RunningItemViewModel(Id, DrawerHierarchy, GeneratedDrawer, process));
                 }
-                else
-                {
-                    ProcessList.Add(new ItemViewModel(RunningApps[j].StartInfo.FileName));
-                }
-
             }
+
+            await checkingApps;
+
+            
         }
 
         //Work in Progress
@@ -75,32 +100,43 @@ namespace Armoire.ViewModels
                 var processes = Process.GetProcesses();
 
                 
-                List<Process> ProcessWithName = new List<Process>();
+                List<string> ProcessWithName = new List<string>();
 
                 foreach (Process process in processes)
                 {
                     if (!String.IsNullOrEmpty(process.MainWindowTitle))
                     {
-                        ProcessWithName.Add(process);
-
+                        ProcessWithName.Add(process.ProcessName);
                     }
                 }
 
-                
-                for (int i = 0; i < RunningApps.Count; i++)
+                foreach (string processName in ProcessWithName)
                 {
-                    var GetProcess = ProcessWithName.FirstOrDefault(obj => obj.MainModule.FileName.Equals(RunningApps[i].StartInfo.FileName));
-
-                    
-                   if(GetProcess == null)
+                    if (!RunningAppNames.Contains(processName))
                     {
-                        var itemviewmodel = ProcessList.FirstOrDefault(obj => obj.ExecutablePath == RunningApps[i].StartInfo.FileName);
-                        ProcessList.Remove(itemviewmodel);
-                        RunningApps.RemoveAt(i);
-
-                    } 
-                    
+                        RunningAppNames.Remove(processName);
+                        foreach(var ivm in ProcessList)
+                        {
+                            if (ivm.Name.Equals(processName))
+                                ivm.DeleteMe = true;
+                        }
+                    }
                 }
+                
+                //for (int i = 0; i < RunningApps.Count; i++)
+                //{
+                //    var GetProcess = Process.GetProcesses()[i];
+
+                    
+                //   if(GetProcess == null)
+                //    {
+                //        var itemviewmodel = ProcessList.FirstOrDefault(obj => obj.ExecutablePath == RunningApps[i].StartInfo.FileName);
+                //        ProcessList.Remove(itemviewmodel);
+                //        RunningApps.RemoveAt(i);
+
+                //    } 
+                    
+                //}
                 
 
             

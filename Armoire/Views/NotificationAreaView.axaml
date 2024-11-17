@@ -29,6 +29,7 @@
 	<Button
         x:Name="DrawerButton"
         Margin="5"
+		Background="#222222"
         Command="{Binding CheckDraweModelCommand}"
         CommandParameter="{Binding}">
 		<ToolTip.Tip>
@@ -51,7 +52,7 @@
 					Width="40"
 					Height="40"
 					Kind="MessageArrowRightOutline"
-					Foreground="Black"/>
+					Foreground="LightGray"/>
 
 			</Viewbox>
 		</Button.Content>

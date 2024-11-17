@@ -21,6 +21,7 @@
 		<Button Margin="5"
 				Command="{Binding OpenStartMenuCommand}"
 				Click="PopulateStartMenuList"
+				Background="#222222"
 				Name="ItemButton">
 			<ToolTip.Tip>
 				<ToolTip Height="40"
@@ -35,7 +36,7 @@
 					Height="50"
 					Width="50"
 					Kind="Search"
-					Foreground="Black"/>
+					Foreground="LightGray"/>
 			</Button.Content>
 
 			<!--  Context Menu for Delete Drawer (attached to drawer button)  -->
