@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
+using System.Runtime.InteropServices;
+using System.Security;
+using System.Threading.Tasks;
 using System.Timers;
+using System.Windows.Forms;
 using Armoire.Utils;
 using Armoire.Views;
+using Avalonia;
 using Avalonia.VisualTree;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DialogHostAvalonia;
-using System.Runtime.InteropServices;
-using Avalonia;
-using System.Security;
-using System.Drawing;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace Armoire.ViewModels
 {
@@ -29,8 +29,6 @@ namespace Armoire.ViewModels
         private string _currentTime;
         private static DockViewModel? _dockViewModel;
         public static Stack<ContentsUnitViewModel> DeletedUnits;
-
-      
 
         //temp
         //dockSource is the DrawerAsContentsViewModel that holds the ActiveDockViewModel
@@ -57,61 +55,23 @@ namespace Armoire.ViewModels
 
         public MainWindowViewModel()
         {
+            // Clock setup.
             _timer = new System.Timers.Timer(1000);
             _timer.Elapsed += OnTimerElapsed;
             _timer.Start();
-
             UpdateTime();
-            var dockSource = new DrawerAsContentsViewModel(null, 0);
-            //ActiveDockViewModel = (DockViewModel)dockSource.GeneratedDrawer;
+
+            // Dock setup.
+            if (!DbHelper.LoadDockOrCreate(out var dockSource))
+                DbHelper.SaveDrawer(dockSource);
             ActiveDockViewModel = dockSource.GeneratedDrawer;
-            DbHelper.SaveDrawer(dockSource);
 
-            // Create sample drawer 1 and add it to the dock.
-            var d1 = new DrawerAsContentsViewModel(
-                dockSource.GeneratedDrawer,
-                "sample 1",
-                dockSource.Id,
-                0
-            );
-            ActiveDockViewModel.Contents.Add(d1);
-
+            // Initialize DeletedUnits used for undo.
             if (DeletedUnits == null)
                 DeletedUnits = new Stack<ContentsUnitViewModel>();
-            //getting the list of apps in the start menu here instead of in the NewItemViewModel contructor to avoid lag
+
+            // Get the list of apps in the start menu here instead of in the NewItemViewModel constructor to avoid lag.
             NewItemViewModel.GetExecutables();
-
-            // Create random sample item and add it to the dock.
-            if (
-                NewItemViewModel.ExecutableNames is { } exeNames
-                && NewItemViewModel.Executables is { } exes
-                && NewItemViewModel.Icons is { } icons
-            )
-            {
-                var rnd = new Random();
-                var sampleItemIdx = rnd.Next(exeNames.Count);
-                var sampleItemName = exeNames[sampleItemIdx];
-                ActiveDockViewModel.Contents.Add(
-                    new ItemViewModel(
-                        sampleItemName,
-                        exes[sampleItemName],
-                        icons[sampleItemName].ToBitmap(),
-                        dockSource.Id,
-                        0,
-                        ActiveDockViewModel
-                    )
-                );
-            }
-
-            // Create sample drawer 2 and add it to the dock.
-            var d2 = new DrawerAsContentsViewModel(
-                dockSource.GeneratedDrawer,
-                "sample 2",
-                dockSource.Id,
-                0
-            );
-
-            ActiveDockViewModel.Contents.Add(d2);
 
             var notif = new NotificationAreaViewModel(dockSource.Id, 0);
             ActiveDockViewModel.Contents.Add(notif);
@@ -122,15 +82,10 @@ namespace Armoire.ViewModels
 
             ActiveDockViewModel.Contents.Add(start);
 
-
-
             var apps = new ApplicationMonitorViewModel(dockSource.Id, 0);
             ActiveDockViewModel.Contents.Add(apps);
             apps.GetInitialRunningApps();
             //apps.DisplayProcess();
-            
-           
-
         }
 
         private void OnTimerElapsed(object sender, ElapsedEventArgs e)
@@ -146,14 +101,26 @@ namespace Armoire.ViewModels
         [RelayCommand]
         public void AddItemClick()
         {
-            DialogHost.Show(new NewItemViewModel("CONTENTS_1", 0, ActiveDockViewModel));
+            DialogHost.Show(
+                new NewItemViewModel(
+                    "CONTENTS_1",
+                    ActiveDockViewModel.SourceDrawer.DrawerHierarchy,
+                    ActiveDockViewModel
+                )
+            );
         }
 
         [RelayCommand]
         public void AddDrawerClick()
         {
             if (ActiveDockViewModel.Contents.Count < 10)
-                DialogHost.Show(new NewDrawerViewModel("CONTENTS_1", 0, ActiveDockViewModel));
+                DialogHost.Show(
+                    new NewDrawerViewModel(
+                        "CONTENTS_1",
+                        ActiveDockViewModel.SourceDrawer.DrawerHierarchy,
+                        ActiveDockViewModel
+                    )
+                );
             else
                 DialogHost.Show(
                     new ErrorMessageViewModel($"The dock is full, it can\n only hold 10 items.")

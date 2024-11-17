@@ -28,7 +28,7 @@ public partial class ContentsUnitViewModel : ViewModelBase
     private bool _deleteMe;
 
     [ObservableProperty]
-    protected int _drawerHierarchy;
+    protected int? _drawerHierarchy;
 
     [ObservableProperty]
     private string _moveBackDirection;
@@ -36,8 +36,6 @@ public partial class ContentsUnitViewModel : ViewModelBase
     [ObservableProperty]
     private string _moveForwardDirection;
 
-    // TODO: This is a "memory leak" because the models are part of the database.
-    // They should only be used in the context of a "session with the database".
     public Item? Model { get; set; }
 
     public string? ParentId { get; set; }
@@ -47,6 +45,10 @@ public partial class ContentsUnitViewModel : ViewModelBase
         Id = IdBase + IdCount++;
         Name = "unit " + IdCount;
     }
+
+    //public ContentsUnitViewModel(Drawer _) { }
+
+    //public ContentsUnitViewModel(Item _) { }
 
     [RelayCommand]
     public virtual void HandleContentsClick() { }

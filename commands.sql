@@ -1,5 +1,5 @@
 INSERT INTO Drawers (Id, Position, DrawerHierarchy, Name, ParentId)
-VALUES ('CONTENTS_1', NULL, NULL, 'Dock', NULL);
+VALUES ('CONTENTS_1', NULL, -1, 'Dock', NULL);
 
 INSERT INTO Drawers (Id, Position, DrawerHierarchy, Name, ParentId)
 VALUES ('CONTENTS_2', 0, 0, 'Drawer', 'CONTENTS_1');

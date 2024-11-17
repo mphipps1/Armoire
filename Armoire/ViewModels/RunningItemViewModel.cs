@@ -14,13 +14,18 @@ namespace Armoire.ViewModels
     public partial class RunningItemViewModel : ItemViewModel
     {
 
+
         private Process RunningProcess { get; set; }
-        public RunningItemViewModel(string parentID, int drawerHierarchy, ContainerViewModel? container, Process process)
+        public string ProcessName {  get; set; }
+
+
+        public RunningItemViewModel(string parentID, int? drawerHierarchy, ContainerViewModel? container, Process process)
             : base(parentID, drawerHierarchy, container)
         {
             RunningProcess = process;
             ExecutablePath = "";
             Name = process.MainWindowTitle;
+            ProcessName = process.ProcessName;
             Icon icon;
             string s;
             try

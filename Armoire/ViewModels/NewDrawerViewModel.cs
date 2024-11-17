@@ -49,13 +49,13 @@ namespace Armoire.ViewModels
 
         private string TargetDrawerID;
 
-        private int TargetDrawerHeirarchy;
+        private int? TargetDrawerHeirarchy;
 
         private ContainerViewModel? ActiveContainerViewModel { get; }
 
         public NewDrawerViewModel(
             string targetDrawerID,
-            int targetDrawerHeirarchy,
+            int? targetDrawerHeirarchy,
             ContainerViewModel? cvm = null
         )
         {

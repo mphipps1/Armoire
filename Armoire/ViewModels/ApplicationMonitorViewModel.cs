@@ -115,8 +115,11 @@ public partial class ApplicationMonitorViewModel: DrawerAsContentsViewModel
                     RunningAppNames.Remove(appName);
                     foreach(var cuvm in dac.GeneratedDrawer.Contents.ToList())
                     {
-                        if (cuvm.Name.Equals(appName))
-                            cuvm.DeleteMe = true;
+                        if (cuvm is RunningItemViewModel rivm)
+                        {
+                            if (rivm.ProcessName.Equals(appName))
+                                rivm.DeleteMe = true;
+                        }
                     }
                 }
             }
