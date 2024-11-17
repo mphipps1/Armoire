@@ -35,9 +35,9 @@ public partial class ContainerViewModel : ViewModelBase
     // The drawer button that this container generates from.
     public DrawerAsContentsViewModel SourceDrawer { get; set; }
 
-    public string SourceDrawerId { get; set; } = "default";
+    public string? SourceDrawerId { get; set; }
 
-    public ObservableCollection<ContentsUnitViewModel> Contents { get; } = [];
+    public ObservableCollection<ContentsUnitViewModel> Contents { get; set; } = [];
 
     private void contents_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {

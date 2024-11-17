@@ -27,7 +27,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
         DrawerViewModel container,
         string name,
         string? parentID,
-        int drawerHierarchy
+        int? drawerHierarchy
     )
     {
         Name = name;
@@ -53,7 +53,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
     }
 
     // Dock source constructor (leaves some properties null on purpose).
-    public DrawerAsContentsViewModel(string? parentID, int drawerHierarchy)
+    public DrawerAsContentsViewModel(string? parentID, int? drawerHierarchy)
     {
         Name = "drawer " + _count++;
         FileStream fs = new FileStream(
@@ -79,7 +79,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
         string name,
         System.Drawing.Bitmap bmp,
         string parentID,
-        int drawerHierarchy,
+        int? drawerHierarchy,
         ContainerViewModel? cvm = null
     )
     {
@@ -106,7 +106,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
         string name,
         string? iconPath,
         string? parentID,
-        int drawerHierarchy,
+        int? drawerHierarchy,
         ContainerViewModel? cvm = null
     )
     {
@@ -121,6 +121,18 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
         _count++;
         SetMoveDirections(this);
         Container = cvm;
+    }
+
+    public DrawerAsContentsViewModel(Drawer model, ContainerViewModel? container)
+    {
+        Name = model.Name;
+        MiscHelper.SetIconBmpOnDacVm(this);
+        GeneratedDrawer = new DrawerViewModel(this);
+        Container = container;
+        ParentId = model.ParentId;
+        DrawerHierarchy = model.DrawerHierarchy;
+        SetMoveDirections(this);
+        _count++;
     }
 
     [RelayCommand]

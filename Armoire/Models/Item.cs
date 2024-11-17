@@ -27,14 +27,10 @@ public class Item
 
     public void Execute()
     {
-      
         process.Start();
         //ApplicationMonitorViewModel.RunningApps.Add(process);
         //ApplicationMonitorViewModel.DisplayProcess();
         var b = MainWindowViewModel.TaskCheck.Status;
-
-
-
     }
 
     // Parameterless constructor needed so EF can build the schema.
@@ -42,7 +38,7 @@ public class Item
 
     public Drawer Parent { get; set; }
 
-    public int DrawerHierarchy { get; set; }
+    public int? DrawerHierarchy { get; set; }
 
     [MaxLength(100)]
     public string ParentId { get; set; } = "default";
@@ -53,7 +49,7 @@ public class Item
         string exePath,
         string parentId,
         int? position,
-        int drawerHierarchy
+        int? drawerHierarchy
     )
         : this(name, exePath, parentId, position)
     {

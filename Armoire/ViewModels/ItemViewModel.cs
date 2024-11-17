@@ -23,24 +23,24 @@ public partial class ItemViewModel : ContentsUnitViewModel
             bmp.Save(memory, ImageFormat.Png);
             memory.Position = 0;
             IconBmp = new Avalonia.Media.Imaging.Bitmap(memory);
-
         }
         ExecutablePath = executablePath;
     }
 
-    public ItemViewModel(string parentID, int drawerHierarchy, ContainerViewModel? container)
+    public ItemViewModel(string parentID, int? drawerHierarchy, ContainerViewModel? container)
     {
         ParentId = parentID;
         DrawerHierarchy = drawerHierarchy;
         Container = container;
         SetMoveDirections(this);
     }
+
     public ItemViewModel(
         string name,
         string executablePath,
         System.Drawing.Bitmap bmp,
         string parentID,
-        int drawerHierarchy,
+        int? drawerHierarchy,
         ContainerViewModel? container = null
     )
     {

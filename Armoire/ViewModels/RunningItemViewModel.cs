@@ -15,7 +15,7 @@ namespace Armoire.ViewModels
     {
 
         private Process Process { get; set; }
-        public RunningItemViewModel(string parentID, int drawerHierarchy, ContainerViewModel? container, Process process)
+        public RunningItemViewModel(string parentID, int? drawerHierarchy, ContainerViewModel? container, Process process)
             : base(parentID, drawerHierarchy, container)
         {
             Process = process;
