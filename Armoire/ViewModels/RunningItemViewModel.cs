@@ -14,13 +14,13 @@ namespace Armoire.ViewModels
     public partial class RunningItemViewModel : ItemViewModel
     {
 
-        private Process Process { get; set; }
+        private Process RunningProcess { get; set; }
         public RunningItemViewModel(string parentID, int drawerHierarchy, ContainerViewModel? container, Process process)
             : base(parentID, drawerHierarchy, container)
         {
-            Process = process;
+            RunningProcess = process;
             ExecutablePath = "";
-            Name = process.ProcessName;
+            Name = process.MainWindowTitle;
             Icon icon;
             string s;
             try
@@ -68,26 +68,36 @@ namespace Armoire.ViewModels
                 null;
         }
 
-        public static IntPtr FindWindow(string titleName)
-        {
-            Process[] pros = Process.GetProcesses(".");
-            foreach (Process p in pros)
-                if (p.MainWindowTitle.ToUpper().Contains(titleName.ToUpper()))
-                    return p.MainWindowHandle;
-            return new IntPtr();
-        }
+        //[DllImport("user32.dll", SetLastError = true)]
+        //static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+
+        //// Find window by Caption only. Note you must pass IntPtr.Zero as the first parameter.
+
+        //[DllImport("user32.dll", EntryPoint = "FindWindow", SetLastError = true)]
+        //static extern IntPtr FindWindowByCaption(IntPtr ZeroOnly, string lpWindowName);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        static extern bool BringWindowToTop(IntPtr hWnd);
+
+        [DllImport("user32.dll")]
+        public static extern bool ShowWindow(IntPtr hWnd, uint nCmdShow);
 
         public override void HandleContentsClick()
         {
-            IntPtr hWnd = FindWindow(Process.ProcessName);
-            if (!hWnd.Equals(IntPtr.Zero))
-            {
-                // SW_SHOWMAXIMIZED to maximize the window
-                // SW_SHOWMINIMIZED to minimize the window
-                // SW_SHOWNORMAL to make the window be normal size
-                ShowWindowAsync(hWnd, SW_SHOWMAXIMIZED);
-                SetForegroundWindow(hWnd);
-            }
+            //IntPtr hWnd = FindWindow(null, RunningProcess);
+            Debug.WriteLine(RunningProcess.ProcessName + " " + RunningProcess.MainWindowHandle);
+
+            // SW_SHOWMAXIMIZED to maximize the window
+            // SW_SHOWMINIMIZED to minimize the window
+            // SW_SHOWNORMAL to make the window be normal size
+
+            if(RunningProcess.ProcessName.Equals("Armoire"))
+                ShowWindow(RunningProcess.MainWindowHandle, SW_SHOWNORMAL);
+            else
+                ShowWindow(RunningProcess.MainWindowHandle, SW_SHOWMAXIMIZED);
+            BringWindowToTop(RunningProcess.MainWindowHandle);
+            //SetForegroundWindow(RunningProcess.MainWindowHandle);
+            
         }
     }
 }
