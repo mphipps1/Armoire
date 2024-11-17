@@ -122,8 +122,7 @@ namespace Armoire.ViewModels
 
             ActiveDockViewModel.Contents.Add(start);
 
-             TaskCheck = new Task(() =>  ApplicationMonitorViewModel.CheckRunningApplication());
-           // TaskCheck.Start();
+
 
             var apps = new ApplicationMonitorViewModel(dockSource.Id, 0);
             ActiveDockViewModel.Contents.Add(apps);

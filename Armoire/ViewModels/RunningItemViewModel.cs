@@ -59,7 +59,7 @@ namespace Armoire.ViewModels
         [DllImport("Kernel32.dll")]
         private static extern bool QueryFullProcessImageName([In] IntPtr hProcess, [In] uint dwFlags, [Out] StringBuilder lpExeName, [In, Out] ref uint lpdwSize);
 
-        public static string GetMainModuleFileName(Process process, int buffer = 1024)
+        public static string? GetMainModuleFileName(Process process, int buffer = 1024)
         {
             var fileNameBuilder = new StringBuilder(buffer);
             uint bufferLength = (uint)fileNameBuilder.Capacity + 1;
