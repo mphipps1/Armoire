@@ -106,12 +106,16 @@ public class DbHelper
     )
     {
         var ret = new DrawerAsContentsViewModel(drawer, container);
-        drawer.Drawers.ForEach(innerDrawer =>
-            ret.GeneratedDrawer.Contents.Add(LoadRecurse(innerDrawer, ret.GeneratedDrawer, context))
-        );
-        drawer.Items.ForEach(item =>
-            ret.GeneratedDrawer.Contents.Add(new ItemViewModel(item, ret.GeneratedDrawer))
-        );
+        foreach (var innerDrawer in drawer.Drawers)
+        {
+            var innerDacVm = LoadRecurse(innerDrawer, ret.GeneratedDrawer, context);
+            ret.GeneratedDrawer.Contents.Add(innerDacVm);
+        }
+        foreach (var item in drawer.Items)
+        {
+            var itemViewModel = new ItemViewModel(item, ret.GeneratedDrawer);
+            ret.GeneratedDrawer.Contents.Add(itemViewModel);
+        }
         return ret;
     }
 }

@@ -69,6 +69,7 @@ public partial class ItemViewModel : ContentsUnitViewModel
 
     public ItemViewModel(Item itemModel, ContainerViewModel container)
     {
+        Id = itemModel.Id;
         ExecutablePath = itemModel.ExecutablePath;
         Model = new Item(itemModel);
         Name = itemModel.Name;
