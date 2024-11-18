@@ -69,8 +69,6 @@ public partial class ApplicationMonitorViewModel: DrawerAsContentsViewModel
         var processes = Process.GetProcesses();
         var checkingApps = CheckRunningApplication(this);
 
-        List<Process> ProcessWithName = new List<Process>();
-
         foreach (Process process in processes)
         {
             if (!String.IsNullOrEmpty(process.MainWindowTitle))
@@ -78,8 +76,7 @@ public partial class ApplicationMonitorViewModel: DrawerAsContentsViewModel
                 if (badProcesses.Contains(process.ProcessName))
                     continue;
                 Debug.WriteLine(process.ProcessName);
-                ProcessWithName.Add(process);
-                RunningAppNames.Add(process.ProcessName);
+                RunningAppNames.Add(process.ProcessName + process.MainWindowHandle);
                 GeneratedDrawer.Contents.Add(new RunningItemViewModel(Id, DrawerHierarchy, GeneratedDrawer, process));
             }
         }
@@ -104,47 +101,76 @@ public partial class ApplicationMonitorViewModel: DrawerAsContentsViewModel
             foreach (Process process in processes)
             {
                 if (process.MainWindowHandle.ToInt32() > 0)
-                {
-                    apps.Add(process.ProcessName, process);
+                { 
+                    apps.Add(process.ProcessName + process.MainWindowHandle, process);
                 }
                 i++;
+                // delaying this to prevent all the work being done at once
+                // without this, dragging the dock around would lag every 1 seconds or so
+                // but now we're spreading the work out
                 if(i == 15)
                 {
                     await Task.Delay(35);
                     i = 0;
                 }
             }
-
-            foreach (string appName in RunningAppNames.ToList())
-            {
-                if (!apps.Keys.Contains(appName))
-                {
-                    RunningAppNames.Remove(appName);
-                    foreach(var cuvm in dac.GeneratedDrawer.Contents.ToList())
-                    {
-                        if (cuvm is RunningItemViewModel rivm)
-                        {
-                            if (rivm.ProcessName.Equals(appName))
-                                rivm.DeleteMe = true;
-                        }
-                    }
-                }
-            }
-
             ArrayList badProcesses = new ArrayList();
             badProcesses.Add("TextInputHost");
             badProcesses.Add("svchost");
-            foreach (string appName in apps.Keys)
+            bool foundApp = false;
+            foreach (string appName in RunningAppNames.ToList())
             {
-                if (!RunningAppNames.Contains(appName))
+                foundApp = false;
+                foreach(var n in apps.Keys)
                 {
-                    if (badProcesses.Contains(appName))
-                        continue;
-                    RunningAppNames.Add(appName);
-                    dac.GeneratedDrawer.Contents.Add(new RunningItemViewModel(dac.Id, dac.DrawerHierarchy, dac.GeneratedDrawer, apps[appName]));
+                    if (appName.StartsWith(n))
+                    {
+                        foundApp = true;
+                        break;
+                    }
+                }
+                if(foundApp)
+                    continue;
+                RunningAppNames.Remove(appName);
+                foreach (var cuvm in dac.GeneratedDrawer.Contents.ToList())
+                {
+                    if (cuvm is RunningItemViewModel rivm)
+                    {
+                        if (rivm.ProcessName.Equals(appName))
+                        {
+                            rivm.DeleteMe = true;
+                            Debug.WriteLine("Deleting " + appName);
+                        }
+                    }
                 }
 
             }
+
+
+            foreach (string appName in apps.Keys)
+            {
+                foundApp = false;
+                foreach (var n in RunningAppNames)
+                {
+                    if (appName.StartsWith(n) || n.StartsWith(appName))
+                    {
+                        foundApp = true;
+                        break;
+                    }
+                }
+                if (foundApp)
+                    continue;
+                foreach (string s in badProcesses)
+                {
+                    if (appName.StartsWith(s))
+                        continue;
+                }
+                Debug.WriteLine("Adding " + appName + apps[appName].MainWindowHandle);
+                RunningAppNames.Add(appName + apps[appName].MainWindowHandle);
+                dac.GeneratedDrawer.Contents.Add(new RunningItemViewModel(dac.Id, dac.DrawerHierarchy, dac.GeneratedDrawer, apps[appName]));
+            }
+
+
         }
 
     }

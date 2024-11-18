@@ -29,6 +29,7 @@ namespace Armoire.Views
         private void InputElement_OnPointerMoved(object? sender, PointerEventArgs e)
         {
             var point = e.GetCurrentPoint(sender as Control);
+            //Debug.WriteLine(e.Source.GetType());
             if (point.Properties.IsRightButtonPressed)
                 return;
             if (!_mouseDownForWindowMoving)

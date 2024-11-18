@@ -25,7 +25,7 @@ namespace Armoire.ViewModels
             RunningProcess = process;
             ExecutablePath = "";
             Name = process.MainWindowTitle;
-            ProcessName = process.ProcessName;
+            ProcessName = process.ProcessName + process.MainWindowHandle;
             Icon icon;
             string s;
             try
@@ -54,12 +54,6 @@ namespace Armoire.ViewModels
         private const int SW_SHOWNORMAL = 1;
         private const int SW_SHOWMINIMIZED = 2;
         private const int SW_SHOWMAXIMIZED = 3;
-
-
-        [DllImport("user32.dll")]
-        private static extern bool ShowWindowAsync(IntPtr hWnd, int nCmdShow);
-        [DllImport("User32")]
-        public static extern bool SetForegroundWindow(IntPtr hWnd);
 
         [DllImport("Kernel32.dll")]
         private static extern bool QueryFullProcessImageName([In] IntPtr hProcess, [In] uint dwFlags, [Out] StringBuilder lpExeName, [In, Out] ref uint lpdwSize);
