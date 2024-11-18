@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -94,17 +95,23 @@ public partial class ApplicationMonitorViewModel: DrawerAsContentsViewModel
     
         while (isMonitoring)
         {
-            await Task.Delay(1000);
+            await Task.Delay(300);
             var processes = Process.GetProcesses();
 
             
             Dictionary<string, Process> apps = new Dictionary<string, Process>();
-
+            int i = 0;
             foreach (Process process in processes)
             {
                 if (process.MainWindowHandle.ToInt32() > 0)
                 {
                     apps.Add(process.ProcessName, process);
+                }
+                i++;
+                if(i == 15)
+                {
+                    await Task.Delay(35);
+                    i = 0;
                 }
             }
 
