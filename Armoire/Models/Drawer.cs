@@ -25,7 +25,17 @@ public class Drawer
         DrawerHierarchy = drawerHierarchy;
     }
 
-    public Drawer? Parent { get; set; }
+    public Drawer(Drawer drawer)
+    {
+        Id = drawer.Id;
+        Name = drawer.Name;
+        ParentId = drawer.ParentId;
+        Position = drawer.Position;
+        DrawerHierarchy = drawer.DrawerHierarchy;
+        Parent = drawer.Parent != null ? new Drawer(drawer.Parent) : null;
+    }
+
+    public virtual Drawer? Parent { get; set; }
 
     public int? Position { get; set; }
 
@@ -37,6 +47,6 @@ public class Drawer
     [MaxLength(100)]
     public string? ParentId { get; set; } = "default";
 
-    public List<Drawer> Drawers { get; set; } = [];
-    public List<Item> Items { get; set; } = [];
+    public virtual List<Drawer> Drawers { get; set; } = [];
+    public virtual List<Item> Items { get; set; } = [];
 }

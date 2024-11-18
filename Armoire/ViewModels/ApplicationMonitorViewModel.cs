@@ -12,25 +12,23 @@ using System.Windows.Forms;
 
 namespace Armoire.ViewModels;
 
-
-public partial class ApplicationMonitorViewModel: DrawerAsContentsViewModel
+public partial class ApplicationMonitorViewModel : DrawerAsContentsViewModel
 {
-
-    public static ObservableCollection<ItemViewModel> ProcessList { get; } = new ObservableCollection<ItemViewModel>();
+    public static ObservableCollection<ItemViewModel> ProcessList { get; } =
+        new ObservableCollection<ItemViewModel>();
 
     public static List<string> RunningAppNames { get; set; } = new List<string>();
-  
 
     private static bool isMonitoring = true;
 
-    public  static bool isRunning;
+    public static bool isRunning;
 
-    public ApplicationMonitorViewModel(string? parentID, int drawerHierarchy) : base (parentID, drawerHierarchy) {
+    public ApplicationMonitorViewModel(string? parentID, int drawerHierarchy)
+        : base(parentID, drawerHierarchy)
+    {
         Name = "Running Applications";
-
+        Id = "MONITOR";
     }
-
-
 
     //[RelayCommand]
     //public void DisplayProcess()
@@ -65,7 +63,7 @@ public partial class ApplicationMonitorViewModel: DrawerAsContentsViewModel
         ArrayList badProcesses = new ArrayList();
         badProcesses.Add("TextInputHost");
         badProcesses.Add("svchost");
-        
+
         var processes = Process.GetProcesses();
         var checkingApps = CheckRunningApplication(this);
 
@@ -76,8 +74,10 @@ public partial class ApplicationMonitorViewModel: DrawerAsContentsViewModel
                 if (badProcesses.Contains(process.ProcessName))
                     continue;
                 Debug.WriteLine(process.ProcessName);
-                RunningAppNames.Add(process.ProcessName + process.MainWindowHandle);
-                GeneratedDrawer.Contents.Add(new RunningItemViewModel(Id, DrawerHierarchy, GeneratedDrawer, process));
+                RunningAppNames.Add(process.ProcessName);
+                GeneratedDrawer.Contents.Add(
+                    new RunningItemViewModel(Id, DrawerHierarchy, GeneratedDrawer, process)
+                );
             }
         }
         await checkingApps;
@@ -88,14 +88,11 @@ public partial class ApplicationMonitorViewModel: DrawerAsContentsViewModel
     //Work in Progress
     public static async Task CheckRunningApplication(DrawerAsContentsViewModel dac)
     {
-
-    
         while (isMonitoring)
         {
             await Task.Delay(300);
             var processes = Process.GetProcesses();
 
-            
             Dictionary<string, Process> apps = new Dictionary<string, Process>();
             int i = 0;
             foreach (Process process in processes)
@@ -143,7 +140,6 @@ public partial class ApplicationMonitorViewModel: DrawerAsContentsViewModel
                         }
                     }
                 }
-
             }
 
 
@@ -172,7 +168,5 @@ public partial class ApplicationMonitorViewModel: DrawerAsContentsViewModel
 
 
         }
-
     }
-
 }

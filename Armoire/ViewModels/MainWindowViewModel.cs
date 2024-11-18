@@ -62,11 +62,11 @@ namespace Armoire.ViewModels
             UpdateTime();
 
             // Dock setup.
-            if (!DbHelper.LoadDockOrCreate(out var dockSource))
-                DbHelper.SaveDrawer(dockSource);
+            var dockSource = DbHelper.LoadDockOrCreate();
+            DbHelper.SaveDrawer(dockSource);
             ActiveDockViewModel = dockSource.GeneratedDrawer;
 
-            // Initialize DeletedUnits used for undo.
+            // Initialize DeletedUnits; used for undo.
             if (DeletedUnits == null)
                 DeletedUnits = new Stack<ContentsUnitViewModel>();
 

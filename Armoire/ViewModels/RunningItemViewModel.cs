@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing.Imaging;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -13,13 +13,15 @@ namespace Armoire.ViewModels
 {
     public partial class RunningItemViewModel : ItemViewModel
     {
-
-
         private Process RunningProcess { get; set; }
-        public string ProcessName {  get; set; }
+        public string ProcessName { get; set; }
 
-
-        public RunningItemViewModel(string parentID, int? drawerHierarchy, ContainerViewModel? container, Process process)
+        public RunningItemViewModel(
+            string parentID,
+            int? drawerHierarchy,
+            ContainerViewModel? container,
+            Process process
+        )
             : base(parentID, drawerHierarchy, container)
         {
             RunningProcess = process;
@@ -49,6 +51,8 @@ namespace Armoire.ViewModels
                     IconBmp = new Avalonia.Media.Imaging.Bitmap(memory);
                 }
             }
+
+            Id = "RUNNING";
         }
 
         private const int SW_SHOWNORMAL = 1;
@@ -56,15 +60,20 @@ namespace Armoire.ViewModels
         private const int SW_SHOWMAXIMIZED = 3;
 
         [DllImport("Kernel32.dll")]
-        private static extern bool QueryFullProcessImageName([In] IntPtr hProcess, [In] uint dwFlags, [Out] StringBuilder lpExeName, [In, Out] ref uint lpdwSize);
+        private static extern bool QueryFullProcessImageName(
+            [In] IntPtr hProcess,
+            [In] uint dwFlags,
+            [Out] StringBuilder lpExeName,
+            [In, Out] ref uint lpdwSize
+        );
 
         public static string? GetMainModuleFileName(Process process, int buffer = 1024)
         {
             var fileNameBuilder = new StringBuilder(buffer);
             uint bufferLength = (uint)fileNameBuilder.Capacity + 1;
-            return QueryFullProcessImageName(process.Handle, 0, fileNameBuilder, ref bufferLength) ?
-                fileNameBuilder.ToString() :
-                null;
+            return QueryFullProcessImageName(process.Handle, 0, fileNameBuilder, ref bufferLength)
+                ? fileNameBuilder.ToString()
+                : null;
         }
 
         //[DllImport("user32.dll", SetLastError = true)]
@@ -90,13 +99,12 @@ namespace Armoire.ViewModels
             // SW_SHOWMINIMIZED to minimize the window
             // SW_SHOWNORMAL to make the window be normal size
 
-            if(RunningProcess.ProcessName.Equals("Armoire"))
+            if (RunningProcess.ProcessName.Equals("Armoire"))
                 ShowWindow(RunningProcess.MainWindowHandle, SW_SHOWNORMAL);
             else
                 ShowWindow(RunningProcess.MainWindowHandle, SW_SHOWMAXIMIZED);
             BringWindowToTop(RunningProcess.MainWindowHandle);
             //SetForegroundWindow(RunningProcess.MainWindowHandle);
-            
         }
     }
 }

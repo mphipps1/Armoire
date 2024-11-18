@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Linq;
+using Armoire.Models;
 using Armoire.ViewModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace Armoire.Utils;
 
@@ -7,6 +10,8 @@ public class DbHelper
 {
     public static void SaveDrawer(DrawerAsContentsViewModel dacVm)
     {
+        if (dacVm.Id is "NOTIFICATIONS" or "MONITOR")
+            return;
         using var context = new AppDbContext();
         var drawerToAdd = dacVm.CreateDrawer();
         OutputHelper.DebugPrintJson(
@@ -19,6 +24,8 @@ public class DbHelper
 
     public static void SaveItem(ItemViewModel iVm)
     {
+        if (iVm.Id is "BATTERY" or "START_MENU" or "RUNNING")
+            return;
         using var context = new AppDbContext();
         var itemToAdd = iVm.CreateItem();
         OutputHelper.DebugPrintJson(itemToAdd, $"DbHelper-SaveItem-itemToAdd-{itemToAdd.Id}");
@@ -45,14 +52,66 @@ public class DbHelper
     public static bool LoadDockOrCreate(out DrawerAsContentsViewModel dock)
     {
         using var context = new AppDbContext();
-        var dockModel = context.Drawers.Find("CONTENTS_1");
+        var dockModel = context
+            .Drawers.Where(d => d.Id == "CONTENTS_1")
+            .Include(d => d.Drawers)
+            .Include(d => d.Items)
+            .FirstOrDefault();
         if (dockModel != null)
         {
             dock = new DrawerAsContentsViewModel(dockModel, null);
             OutputHelper.DebugPrintJson(dock, $"DbHelper-LoadDockOrCreate-dock-{dock.Id}");
+        }
+        else
+        {
+            dock = new DrawerAsContentsViewModel(null, -1);
+        }
+        return false;
+    }
+
+    public static bool TryLoadDrawer(
+        string id,
+        ContainerViewModel? container,
+        out DrawerAsContentsViewModel drawer
+    )
+    {
+        using var context = new AppDbContext();
+        var drawerModel = context.Drawers.Find(id);
+        if (drawerModel != null)
+        {
+            drawer = new DrawerAsContentsViewModel(drawerModel, container);
+            OutputHelper.DebugPrintJson(drawer, $"DbHelper-TryLoadDrawer-drawer-{id}");
             return true;
         }
-        dock = new DrawerAsContentsViewModel(null, -1);
+        drawer = new DrawerAsContentsViewModel(
+            container?.SourceDrawerId,
+            container?.SourceDrawer.DrawerHierarchy ?? -1
+        );
         return false;
+    }
+
+    public static DrawerAsContentsViewModel LoadDockOrCreate()
+    {
+        using var context = new AppDbContext();
+        var dockModel = context.Drawers.Find("CONTENTS_1");
+        return dockModel != null
+            ? LoadRecurse(dockModel, null, context)
+            : new DrawerAsContentsViewModel(null, -1);
+    }
+
+    public static DrawerAsContentsViewModel LoadRecurse(
+        Drawer drawer,
+        ContainerViewModel? container,
+        AppDbContext context
+    )
+    {
+        var ret = new DrawerAsContentsViewModel(drawer, container);
+        drawer.Drawers.ForEach(innerDrawer =>
+            ret.GeneratedDrawer.Contents.Add(LoadRecurse(innerDrawer, ret.GeneratedDrawer, context))
+        );
+        drawer.Items.ForEach(item =>
+            ret.GeneratedDrawer.Contents.Add(new ItemViewModel(item, ret.GeneratedDrawer))
+        );
+        return ret;
     }
 }

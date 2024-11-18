@@ -126,7 +126,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
     public DrawerAsContentsViewModel(Drawer model, ContainerViewModel? container)
     {
         Name = model.Name;
-        MiscHelper.SetIconBmpOnDacVm(this);
+        IconBmp = MiscHelper.GetAvaBmpFromAssets("tempDrawer.jpg");
         GeneratedDrawer = new DrawerViewModel(this);
         Container = container;
         ParentId = model.ParentId;

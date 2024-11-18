@@ -19,29 +19,41 @@ public class Item
     [MaxLength(100)]
     public string ExecutablePath { get; set; } = "default";
 
-    private Process process { get; set; }
-
-    private Icon? AppIcon { get; set; }
+    private Process ActiveProcess { get; }
 
     public int? Position { get; set; }
 
     public void Execute()
     {
-        process.Start();
+        ActiveProcess.Start();
         //ApplicationMonitorViewModel.RunningApps.Add(process);
         //ApplicationMonitorViewModel.DisplayProcess();
-        var b = MainWindowViewModel.TaskCheck.Status;
+        var b = MainWindowViewModel.TaskCheck?.Status;
     }
 
     // Parameterless constructor needed so EF can build the schema.
     public Item() { }
 
-    public Drawer Parent { get; set; }
+    public virtual Drawer Parent { get; set; }
 
     public int? DrawerHierarchy { get; set; }
 
     [MaxLength(100)]
     public string ParentId { get; set; } = "default";
+
+    public Item(Item item)
+    {
+        Id = item.Id;
+        Name = item.Name;
+        ExecutablePath = item.ExecutablePath;
+        Position = item.Position;
+        DrawerHierarchy = item.DrawerHierarchy;
+        ParentId = item.ParentId;
+        ActiveProcess = new Process();
+        ActiveProcess.StartInfo.FileName = item.ExecutablePath;
+        ActiveProcess.StartInfo.UseShellExecute = true;
+        Parent = new Drawer(item.Parent);
+    }
 
     public Item(
         string id,
@@ -64,9 +76,9 @@ public class Item
         //the old method gave an error when accessing other folders
         //this method also doesnt require proper quoting around folders or the executable name if it has a space in it
         //System.Diagnostics.Process.Start(path);
-        process = new Process();
-        process.StartInfo.FileName = path;
-        process.StartInfo.UseShellExecute = true;
+        ActiveProcess = new Process();
+        ActiveProcess.StartInfo.FileName = path;
+        ActiveProcess.StartInfo.UseShellExecute = true;
         ExecutablePath = path;
         ParentId = parentId;
         Position = position;

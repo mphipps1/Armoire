@@ -102,7 +102,8 @@ namespace Armoire.ViewModels
                             Icons[NewExe].ToBitmap(),
                             TargetDrawerID,
                             TargetDrawerHeirarchy + 1,
-                            ActiveContainerViewModel
+                            ActiveContainerViewModel,
+                            NewExe
                         )
                     );
                 }

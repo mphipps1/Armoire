@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using Armoire.ViewModels;
+using Bitmap = Avalonia.Media.Imaging.Bitmap;
 
 namespace Armoire.Utils;
 
@@ -30,7 +32,8 @@ public class MiscHelper
                     "An `ItemViewModel` should not have a null `SourceDrawerId`."
                 ),
             0,
-            container
+            container,
+            sampleItemName
         );
     }
 
@@ -41,31 +44,45 @@ public class MiscHelper
         var projectDirectoryDirInfo = Directory.GetParent(workingDirectory)?.Parent?.Parent?.Parent;
 
         if (projectDirectoryDirInfo is null)
-            throw new InvalidOperationException("What?!");
+            throw new InvalidOperationException("Invalid directory structure.");
 
         var assetsPath =
             projectDirectoryDirInfo
                 .GetDirectories()
                 .FirstOrDefault(dir => dir.Name == "Assets")
-                ?.FullName ?? throw new InvalidOperationException("Que?!");
+                ?.FullName ?? throw new InvalidOperationException("Assets folder not found.");
 
         return assetsPath;
     }
 
-    public static void SetIconBmpOnDacVm(DrawerAsContentsViewModel dacVm)
+    public static void PrepopulateDatabase() { }
+
+    public static Bitmap ConvertSysBmpToAvaBmp(System.Drawing.Bitmap bmp)
     {
-        var assetsPath = GetAssetsPath();
-        const string drawerIconFilename = "tempDrawer.jpg";
-        var fs = new FileStream(
-            Path.Combine(assetsPath, drawerIconFilename),
-            FileMode.Open,
-            FileAccess.Read
-        );
-        var image = System.Drawing.Image.FromStream(fs);
-        var bmp = new System.Drawing.Bitmap(image, 60, 60);
         using var memory = new MemoryStream();
         bmp.Save(memory, ImageFormat.Png);
         memory.Position = 0;
-        dacVm.IconBmp = new Avalonia.Media.Imaging.Bitmap(memory);
+        return new Bitmap(memory);
+    }
+
+    public static Bitmap? GetAvaBmpFromExePath(string exePath)
+    {
+        if (string.IsNullOrEmpty(exePath))
+            return null;
+        var icon = Icon.ExtractAssociatedIcon(exePath);
+        return icon == null ? null : ConvertSysBmpToAvaBmp(icon.ToBitmap());
+    }
+
+    public static Bitmap GetAvaBmpFromAssets(string assetFilename)
+    {
+        var assetsPath = GetAssetsPath();
+        var fs = new FileStream(
+            Path.Combine(assetsPath, assetFilename),
+            FileMode.Open,
+            FileAccess.Read
+        );
+        var image = Image.FromStream(fs);
+        var bmp = new System.Drawing.Bitmap(image, 60, 60);
+        return ConvertSysBmpToAvaBmp(bmp);
     }
 }

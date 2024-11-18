@@ -10,6 +10,7 @@ namespace Armoire.ViewModels;
 public partial class ItemViewModel : ContentsUnitViewModel
 {
     public string ExecutablePath { get; set; }
+    public string? BmpName { get; set; }
 
     [ObservableProperty]
     public Avalonia.Media.Imaging.Bitmap _iconBmp;
@@ -41,7 +42,8 @@ public partial class ItemViewModel : ContentsUnitViewModel
         System.Drawing.Bitmap bmp,
         string parentID,
         int? drawerHierarchy,
-        ContainerViewModel? container = null
+        ContainerViewModel? container,
+        string? bmpName = null
     )
     {
         ExecutablePath = executablePath;
@@ -62,6 +64,21 @@ public partial class ItemViewModel : ContentsUnitViewModel
         }
 
         Container = container;
+        BmpName = bmpName;
+    }
+
+    public ItemViewModel(Item itemModel, ContainerViewModel container)
+    {
+        ExecutablePath = itemModel.ExecutablePath;
+        Model = new Item(itemModel);
+        Name = itemModel.Name;
+        ParentId = itemModel.ParentId;
+        Container = container;
+        DrawerHierarchy = itemModel.DrawerHierarchy;
+        SetMoveDirections(this);
+        IconBmp =
+            MiscHelper.GetAvaBmpFromExePath(itemModel.ExecutablePath)
+            ?? MiscHelper.GetAvaBmpFromAssets("exe_logo.png");
     }
 
     public override void HandleContentsClick()
