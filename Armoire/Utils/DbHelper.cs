@@ -33,63 +33,6 @@ public class DbHelper
         context.SaveChanges();
     }
 
-    public static DrawerAsContentsViewModel LoadDrawerOrThrow(
-        string id,
-        ContainerViewModel container
-    )
-    {
-        using var context = new AppDbContext();
-        var drawerToLoad = context.Drawers.Find(id);
-        if (drawerToLoad is null)
-            throw new InvalidOperationException($"Drawer with Id {id} not found.");
-        OutputHelper.DebugPrintJson(
-            drawerToLoad,
-            $"DbHelper-LoadDrawerOrThrow-drawerToLoad-{drawerToLoad.Id}"
-        );
-        return new DrawerAsContentsViewModel(drawerToLoad, container);
-    }
-
-    public static bool LoadDockOrCreate(out DrawerAsContentsViewModel dock)
-    {
-        using var context = new AppDbContext();
-        var dockModel = context
-            .Drawers.Where(d => d.Id == "CONTENTS_1")
-            .Include(d => d.Drawers)
-            .Include(d => d.Items)
-            .FirstOrDefault();
-        if (dockModel != null)
-        {
-            dock = new DrawerAsContentsViewModel(dockModel, null);
-            OutputHelper.DebugPrintJson(dock, $"DbHelper-LoadDockOrCreate-dock-{dock.Id}");
-        }
-        else
-        {
-            dock = new DrawerAsContentsViewModel(null, -1);
-        }
-        return false;
-    }
-
-    public static bool TryLoadDrawer(
-        string id,
-        ContainerViewModel? container,
-        out DrawerAsContentsViewModel drawer
-    )
-    {
-        using var context = new AppDbContext();
-        var drawerModel = context.Drawers.Find(id);
-        if (drawerModel != null)
-        {
-            drawer = new DrawerAsContentsViewModel(drawerModel, container);
-            OutputHelper.DebugPrintJson(drawer, $"DbHelper-TryLoadDrawer-drawer-{id}");
-            return true;
-        }
-        drawer = new DrawerAsContentsViewModel(
-            container?.SourceDrawerId,
-            container?.SourceDrawer.DrawerHierarchy ?? -1
-        );
-        return false;
-    }
-
     public static DrawerAsContentsViewModel LoadDockOrCreate()
     {
         using var context = new AppDbContext();
@@ -117,5 +60,20 @@ public class DbHelper
             ret.GeneratedDrawer.Contents.Add(itemViewModel);
         }
         return ret;
+    }
+
+    public static void DeleteContentsUnitViewModelFromDb(ContentsUnitViewModel viewModel)
+    {
+        using var context = new AppDbContext();
+        var drawerToDelete = context.Drawers.Find(viewModel.Id);
+        if (drawerToDelete != null)
+            context.Drawers.Remove(drawerToDelete);
+        else
+        {
+            var itemToDelete = context.Items.Find(viewModel.Id);
+            if (itemToDelete != null)
+                context.Items.Remove(itemToDelete);
+        }
+        context.SaveChanges();
     }
 }

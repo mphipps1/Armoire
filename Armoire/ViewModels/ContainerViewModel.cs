@@ -84,7 +84,10 @@ public partial class ContainerViewModel : ViewModelBase
         {
             case "DeleteMe":
                 if (sender is ContentsUnitViewModel cu)
+                {
                     Contents.Remove(cu);
+                    DbHelper.DeleteContentsUnitViewModelFromDb(cu);
+                }
                 break;
             default:
                 Debug.WriteLine("Different property changed.");
