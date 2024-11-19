@@ -67,19 +67,19 @@ public partial class ApplicationMonitorViewModel : DrawerAsContentsViewModel
         var processes = Process.GetProcesses();
         var checkingApps = CheckRunningApplication(this);
 
-        foreach (Process process in processes)
-        {
-            if (!String.IsNullOrEmpty(process.MainWindowTitle))
-            {
-                if (badProcesses.Contains(process.ProcessName))
-                    continue;
-                Debug.WriteLine(process.ProcessName);
-                RunningAppNames.Add(process.ProcessName);
-                GeneratedDrawer.Contents.Add(
-                    new RunningItemViewModel(Id, DrawerHierarchy, GeneratedDrawer, process)
-                );
-            }
-        }
+        //foreach (Process process in processes)
+        //{
+        //    if (!String.IsNullOrEmpty(process.MainWindowTitle))
+        //    {
+        //        if (badProcesses.Contains(process.ProcessName))
+        //            continue;
+        //        Debug.WriteLine(process.ProcessName);
+        //        RunningAppNames.Add(process.ProcessName);
+        //        GeneratedDrawer.Contents.Add(
+        //            new RunningItemViewModel(Id, DrawerHierarchy, GeneratedDrawer, process)
+        //        );
+        //    }
+        //}
         await checkingApps;
     }
 
@@ -156,11 +156,16 @@ public partial class ApplicationMonitorViewModel : DrawerAsContentsViewModel
                 }
                 if (foundApp)
                     continue;
+
                 foreach (string s in badProcesses)
                 {
                     if (appName.StartsWith(s))
-                        continue;
+                        foundApp = true;
                 }
+                if (foundApp)
+                    continue;
+                if (String.IsNullOrEmpty(appName))
+                    continue;
                 Debug.WriteLine("Adding " + appName + apps[appName].MainWindowHandle);
                 RunningAppNames.Add(appName + apps[appName].MainWindowHandle);
                 dac.GeneratedDrawer.Contents.Add(new RunningItemViewModel(dac.Id, dac.DrawerHierarchy, dac.GeneratedDrawer, apps[appName]));

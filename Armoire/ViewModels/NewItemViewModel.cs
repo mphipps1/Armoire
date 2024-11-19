@@ -7,10 +7,17 @@ using System.Collections.ObjectModel;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using System.Windows.Forms;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using OpenFileDialog = System.Windows.Forms.OpenFileDialog;
+using System;
+using System.Collections.Specialized;
+using System.Xml.Linq;
 
 namespace Armoire.ViewModels
 {
@@ -93,7 +100,7 @@ namespace Armoire.ViewModels
             var targetDrawer = GetTargetDrawer(Dock);
             if (targetDrawer != null)
             {
-                if (NewExe != null)
+                if (NewExe != null && Executables.ContainsKey(NewExe))
                 {
                     targetDrawer.Add(
                         new ItemViewModel(
@@ -106,6 +113,22 @@ namespace Armoire.ViewModels
                             NewExe
                         )
                     );
+                    Name = NewExe;
+                }
+                else if (NewExe != null )
+                {
+                    targetDrawer.Add(
+                        new ItemViewModel(
+                                Name ?? NewExe,
+                                NewExe,
+                                Icon.ExtractAssociatedIcon(NewExe).ToBitmap(),
+                                TargetDrawerID,
+                                TargetDrawerHeirarchy + 1,
+                                ActiveContainerViewModel,
+                                NewExe
+                            )
+                        );
+                    Name = NewExe;
                 }
                 else if (lnkDropCollection.Count > 0 || ImageDropCollection.Count > 0)
                 {
@@ -135,6 +158,7 @@ namespace Armoire.ViewModels
                                 ActiveContainerViewModel
                             )
                         );
+                        Name = name;
                     }
                     else if (lnkDropCollection.Count > 0)
                     {
@@ -159,17 +183,6 @@ namespace Armoire.ViewModels
                             )
                         );
                     }
-                }
-                else
-                {
-                    var newDrawer = new DrawerAsContentsViewModel(
-                        Name,
-                        IconPath,
-                        TargetDrawerID,
-                        TargetDrawerHeirarchy + 1,
-                        ActiveContainerViewModel
-                    );
-                    targetDrawer.Add(newDrawer);
                 }
             }
 
@@ -204,6 +217,45 @@ namespace Armoire.ViewModels
                 }
             }
             return null;
+        }
+
+        [RelayCommand]
+        public void OnOpenFileDialogClick()
+        {
+            //var window = TopLevel.GetTopLevel(this) as Window;
+
+            var dialog = new OpenFileDialog();
+            dialog.Filter = "*.lnk | *.exe";
+            dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            dialog.Multiselect = true;
+            dialog.Title = "Select application(s) or drag and drop...";
+
+            var result = dialog.ShowDialog();
+
+            string[] filePaths = dialog.FileNames;
+            string[] fileNames = dialog.SafeFileNames;
+            var targetDrawer = GetTargetDrawer(Dock);
+            if (targetDrawer == null)
+                return;
+            for (int i = 0; i < filePaths.Length; i++)
+            {  
+                targetDrawer.Add(
+                     new ItemViewModel(
+                        Path.GetFileNameWithoutExtension(fileNames[i]),
+                        filePaths[i],
+                        Icon.ExtractAssociatedIcon(filePaths[i]).ToBitmap(),
+                        TargetDrawerID,
+                        TargetDrawerHeirarchy + 1,
+                        ActiveContainerViewModel
+                     )
+                );
+            }
+
+            Name = Path.GetFileNameWithoutExtension(fileNames[0]);
+
+            //if (result != null && result.Length != 0)
+            //    NewItemViewModel.NewExe = result[0];
+
         }
 
         public static void GetExecutables()
@@ -271,5 +323,7 @@ namespace Armoire.ViewModels
         {
             MainWindowViewModel.CloseDialog();
         }
+
+
     }
 }

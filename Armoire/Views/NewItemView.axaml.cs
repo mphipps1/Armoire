@@ -34,6 +34,8 @@ public partial class NewItemView : UserControl
         backAndSubmit = this.Find<StackPanel>("BackAndSubmit");
         stack = this.Find<StackPanel>("Stack");
         dragAndDropPopup = this.FindControl<Popup>("DragDropArea");
+        var drop = this.FindControl<Border>("DropBorder");
+        drop.AddHandler(DragDrop.DropEvent, OnDrop);
         DropBorder.AddHandler(DragDrop.DropEvent, OnDrop);
         typedAppName = this.Find<TextBox>("TypedAppName");
         currentTypedAppName = "";
@@ -55,6 +57,7 @@ public partial class NewItemView : UserControl
             {
                 NewItemViewModel.NewExe = (s as Button).Content as string;
                 this.Find<Popup>("Popup").IsOpen = false;
+                this.Find<TextBox>("Name").Text = NewItemViewModel.NewExe;
             };
             button.Height = 25;
             button.Padding = Thickness.Parse("10 0 0 0");
@@ -191,7 +194,7 @@ public partial class NewItemView : UserControl
     }
 
 
-   
+
 
 
 

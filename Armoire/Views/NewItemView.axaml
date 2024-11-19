@@ -52,6 +52,7 @@
         <TextBlock Margin="0,5,155,-10" HorizontalAlignment="Center">Name:</TextBlock>
         <TextBox
             Height="30"
+			Name="Name"
             Text="{Binding Name}"
             Watermark="Paint" />
         <StackPanel Spacing="10">
@@ -70,7 +71,7 @@
 								Background="{Binding BackgroundColor}">
 						<TextBox Foreground="Black"
 								 Watermark="App Name Here"
-							    Name="TypedAppName"
+							     Name="TypedAppName"
 								 Height="25"
 								 Width="150"
 								 Background="LightGray"
@@ -120,13 +121,25 @@
                             BorderThickness="1"
                             CornerRadius="8"
                             DragDrop.AllowDrop="true">
+							<StackPanel Margin="10"
+										HorizontalAlignment="Center"
+										VerticalAlignment="Center">
                             <TextBlock
                                 Name="DropText"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center">
                                 Drop .lnk Here
                             </TextBlock>
-                        </Border>
+							<Button Content="Or Open File System"
+                                Command="{Binding OnOpenFileDialogClick}"
+								BorderThickness="0"
+                                Width="160"
+								Background="Transparent"
+								Foreground="#70bfff"
+                                Margin="5"
+								Padding="0"/>
+							</StackPanel>
+						</Border>
                     </Grid>
                 </DockPanel>
                 <Popup IsOpen="{Binding IsPopupRemoveButton}"
@@ -134,12 +147,7 @@
                     <Button Command="{Binding RemoveFileCommand}"
 							Content="Remove File" />
 
-                </Popup>
-                <!--
-				<Button Content="Open File System"
-				 Click="OnOpenFileDialogClick"
-				 Width="150"
-				 Margin="5"/>                -->
+                </Popup>           
             </StackPanel>
         </StackPanel>
 
