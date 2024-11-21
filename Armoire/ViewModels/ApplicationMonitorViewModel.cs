@@ -88,6 +88,7 @@ public partial class ApplicationMonitorViewModel : DrawerAsContentsViewModel
     //Work in Progress
     public static async Task CheckRunningApplication(DrawerAsContentsViewModel dac)
     {
+        ArrayList browserWindows = new ArrayList();
         while (isMonitoring)
         {
             await Task.Delay(300);
@@ -114,6 +115,7 @@ public partial class ApplicationMonitorViewModel : DrawerAsContentsViewModel
             ArrayList badProcesses = new ArrayList();
             badProcesses.Add("TextInputHost");
             badProcesses.Add("svchost");
+            badProcesses.Add("ApplicationFrameHost");
             bool foundApp = false;
             foreach (string appName in RunningAppNames.ToList())
             {
@@ -128,12 +130,14 @@ public partial class ApplicationMonitorViewModel : DrawerAsContentsViewModel
                 }
                 if(foundApp)
                     continue;
+                if (browserWindows.Contains(appName))
+                    continue;
                 RunningAppNames.Remove(appName);
                 foreach (var cuvm in dac.GeneratedDrawer.Contents.ToList())
                 {
                     if (cuvm is RunningItemViewModel rivm)
                     {
-                        if (rivm.ProcessName.Equals(appName) || rivm.RunningProcess.MainWindowTitle == "")
+                        if (appName.StartsWith(rivm.ProcessName) || rivm.RunningProcess.MainWindowTitle == "")
                         {
                             rivm.DeleteMe = true;
                             Debug.WriteLine("Deleting " + appName);
@@ -145,6 +149,12 @@ public partial class ApplicationMonitorViewModel : DrawerAsContentsViewModel
 
             foreach (string appName in apps.Keys)
             {
+                // Handling browsers in a seperate collection. Browsers can have multiple windows, each has a different
+                // MainWindowHandle, but one process manages both of these, meaning its MainWindowHandle switches between each window
+                if (IsBrowser(appName) && !browserWindows.Contains(appName))
+                    browserWindows.Add(appName + apps[appName].MainWindowHandle);
+                //if (!apps[appName].Responding)
+                //    continue;
                 foundApp = false;
                 foreach (var n in RunningAppNames)
                 {
@@ -168,12 +178,29 @@ public partial class ApplicationMonitorViewModel : DrawerAsContentsViewModel
                     continue;
                 if (String.IsNullOrEmpty(apps[appName].MainWindowTitle))
                     continue;
+                if (appName.Equals("Drag"))
+                    continue;
+                
                 Debug.WriteLine("Adding " + appName + apps[appName].MainWindowHandle);
                 RunningAppNames.Add(appName + apps[appName].MainWindowHandle);
                 dac.GeneratedDrawer.Contents.Add(new RunningItemViewModel(dac.Id, dac.DrawerHierarchy, dac.GeneratedDrawer, apps[appName]));
             }
 
-
+            //updating the processes and names in each RunningItem
+            foreach (var cuvm in dac.GeneratedDrawer.Contents )
+            {
+                var rivm = cuvm as RunningItemViewModel;
+                if (rivm == null)
+                    continue;
+                if(apps.ContainsKey(rivm.RunningProcess.ProcessName + rivm.RunningProcess.MainWindowHandle))
+                    rivm.UpdateProcess(apps[rivm.RunningProcess.ProcessName + rivm.RunningProcess.MainWindowHandle]);
+                rivm.UpdateName();
+            }
         }
+    }
+
+    public static bool IsBrowser(string name)
+    {
+        return name.StartsWith("chrome") || name.StartsWith("msedge") || name.StartsWith("firefox");
     }
 }
