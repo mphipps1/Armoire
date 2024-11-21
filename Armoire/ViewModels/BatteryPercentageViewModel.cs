@@ -57,12 +57,17 @@ namespace Armoire.ViewModels
                     .SystemInformation
                     .PowerStatus
                     .BatteryLifeRemaining;
-                Name =
-                    "Battery life remaining: "
-                    + secondsRemaining / 3600
-                    + " hours and "
-                    + (secondsRemaining / 3600) % 60
-                    + " minutes";
+                if (secondsRemaining <= 0)
+                    Name = "Battery is pugged in";
+                else
+                {
+                    Name =
+                        "Battery life remaining: "
+                        + secondsRemaining / 3600
+                        + " hours and "
+                        + (secondsRemaining / 3600) % 60
+                        + " minutes";
+                }
                 //Debug.WriteLine(Name);
                 BatteryPercentage = (batteryPercent).ToString() + "%";
                 if (isRunningOnBattery)

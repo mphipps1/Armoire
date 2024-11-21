@@ -133,7 +133,7 @@ public partial class ApplicationMonitorViewModel : DrawerAsContentsViewModel
                 {
                     if (cuvm is RunningItemViewModel rivm)
                     {
-                        if (rivm.ProcessName.Equals(appName))
+                        if (rivm.ProcessName.Equals(appName) || rivm.RunningProcess.MainWindowTitle == "")
                         {
                             rivm.DeleteMe = true;
                             Debug.WriteLine("Deleting " + appName);
@@ -165,6 +165,8 @@ public partial class ApplicationMonitorViewModel : DrawerAsContentsViewModel
                 if (foundApp)
                     continue;
                 if (String.IsNullOrEmpty(appName))
+                    continue;
+                if (String.IsNullOrEmpty(apps[appName].MainWindowTitle))
                     continue;
                 Debug.WriteLine("Adding " + appName + apps[appName].MainWindowHandle);
                 RunningAppNames.Add(appName + apps[appName].MainWindowHandle);

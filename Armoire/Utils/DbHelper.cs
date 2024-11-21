@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using Armoire.Models;
 using Armoire.ViewModels;
@@ -24,13 +25,19 @@ public class DbHelper
 
     public static void SaveItem(ItemViewModel iVm)
     {
-        if (iVm.Id is "BATTERY" or "START_MENU" or "RUNNING")
+        if (iVm.Id is "BATTERY" or "START_MENU" or "RUNNING" or "SOUND" or "WIFI")
             return;
         using var context = new AppDbContext();
         var itemToAdd = iVm.CreateItem();
         OutputHelper.DebugPrintJson(itemToAdd, $"DbHelper-SaveItem-itemToAdd-{itemToAdd.Id}");
         context.TryAddItem(itemToAdd);
-        context.SaveChanges();
+        try
+        {
+            context.SaveChanges();
+        } catch (Exception ex)
+        {
+            throw new Exception("IVM ID: " + iVm.Id + "\n" + ex.Message);            
+        }
     }
 
     public static DrawerAsContentsViewModel LoadDockOrCreate()

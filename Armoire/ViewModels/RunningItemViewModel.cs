@@ -13,7 +13,7 @@ namespace Armoire.ViewModels
 {
     public partial class RunningItemViewModel : ItemViewModel
     {
-        private Process RunningProcess { get; set; }
+        public Process RunningProcess { get; set; }
         public string ProcessName { get; set; }
 
         public RunningItemViewModel(
