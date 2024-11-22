@@ -90,7 +90,7 @@ namespace Armoire.ViewModels
             {
                 var weather = new WeatherViewModel(dockSource.Id, 0, ActiveDockViewModel);
                 ActiveDockViewModel.Contents.Add(weather);
-                weather.UpdateWeather();
+                //weather.UpdateWeather();
             } catch(Exception ex)
             {
                 Debug.WriteLine("Could not get weather. See the following\n" + ex);

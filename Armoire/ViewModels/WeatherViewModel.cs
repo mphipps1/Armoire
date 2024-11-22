@@ -40,6 +40,7 @@ namespace Armoire.ViewModels
             Parent = container.SourceDrawer;
             Model = new Item(Name, "", parentID.ToString(), Position);
             Id = "WEATHER";
+            WeatherTasks();
         }
 
         public override void HandleContentsClick()
