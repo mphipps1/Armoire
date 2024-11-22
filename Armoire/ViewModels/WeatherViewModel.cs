@@ -47,23 +47,35 @@ namespace Armoire.ViewModels
             Process.Start(new ProcessStartInfo("https://openweathermap.org/") { UseShellExecute = true });
         }
 
-        public async void UpdateWeather()
+        public async void WeatherTasks()
         {
-            System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
-            GeoCoordinateWatcher watcher = new GeoCoordinateWatcher(GeoPositionAccuracy.Default);
-            watcher.TryStart(false, TimeSpan.FromMilliseconds(3000));
-            DateTime start = DateTime.Now;
-            bool abort = false;
-            while (watcher.Status != GeoPositionStatus.Ready && !abort)
+            if (string.IsNullOrEmpty(CurrentTemp))
             {
-                Thread.Sleep(200);
-                if (DateTime.Now.Subtract(start).TotalSeconds > 5)
-                    abort = true;
+                CurrentTemp = "";
+                WeatherDesc = "Getting location data...";
             }
-            GeoCoordinate cord = watcher.Position.Location;
-            var weather = await GetWeatherByCoordinates(cord.Latitude, cord.Longitude);
-            CurrentTemp = (((int) (weather.Main.Temp * 9 / 5) + 32)).ToString() + "°F";
-            WeatherDesc = weather.Weather[0].Description.Replace(" ", "\n");
+            await UpdateWeather();
+        }
+
+        public async Task UpdateWeather()
+        {
+            //System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
+
+            while (true)
+            {
+                try
+                {
+                    var weather = await GetWeatherByCoordinates();
+                    CurrentTemp = (((int)(weather.Main.Temp * 9 / 5) + 32)).ToString() + "°F";
+                    WeatherDesc = weather.Weather[0].Description.Replace(" ", "\n");
+                    await Task.Delay(100000);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine("Could not get weather. See the following exception\n" + ex);
+                }
+                
+            }
             //using var httpClient = new HttpClient();
             //var imageBytes = await httpClient.GetByteArrayAsync($"https://openweathermap.org/img/wn/{weather.Weather[0].Icon}.png");
             //Bitmap bitmap;
@@ -81,11 +93,18 @@ namespace Armoire.ViewModels
 
         }
 
-        private static async Task<WeatherResponse> GetWeatherByCoordinates(double latitude, double longitude)
+        private static async Task<WeatherResponse> GetWeatherByCoordinates()
         {
+            GeoCoordinateWatcher watcher = new GeoCoordinateWatcher(GeoPositionAccuracy.Default);
+            watcher.TryStart(false, TimeSpan.FromMilliseconds(3000));
+            while (watcher.Status != GeoPositionStatus.Ready)
+            {
+                Thread.Sleep(200);
+            }
+            GeoCoordinate cord = watcher.Position.Location;
             using (var client = new HttpClient())
             {
-                var weatherUrl = $"{WeatherApiUrl}?lat={latitude}&lon={longitude}&appid={WeatherApiKey}&units=metric";
+                var weatherUrl = $"{WeatherApiUrl}?lat={cord.Latitude}&lon={cord.Longitude}&appid={WeatherApiKey}&units=metric";
                 var response = await client.GetStringAsync(weatherUrl);
                 return JsonConvert.DeserializeObject<WeatherResponse>(response);
             }
