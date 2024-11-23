@@ -19,7 +19,7 @@
 		</Style>
 	</UserControl.Styles>
 	
-    <Button Margin="5" Command="{Binding HandleContentsClickCommand}"
+    <Button PointerPressed="ButtonPointerPressed" Margin="5" Command="{Binding HandleContentsClickCommand}" 
 >
 		<ToolTip.Tip>
 			<ToolTip Height="40"
