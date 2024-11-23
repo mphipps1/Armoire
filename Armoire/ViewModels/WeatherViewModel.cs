@@ -61,12 +61,17 @@ namespace Armoire.ViewModels
         public async Task UpdateWeather()
         {
             //System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
-
             while (true)
             {
                 try
                 {
-                    var weather = await GetWeatherByCoordinates();
+                    var weather = await GetWeatherByCoordinates(this);
+                    if(weather.Main == null)
+                    {
+                        WeatherDesc = "Could not load weather data.";
+                        break;
+                    }
+
                     CurrentTemp = (((int)(weather.Main.Temp * 9 / 5) + 32)).ToString() + "°F";
                     WeatherDesc = weather.Weather[0].Description.Replace(" ", "\n");
                     await Task.Delay(100000);
@@ -74,8 +79,10 @@ namespace Armoire.ViewModels
                 catch (Exception ex)
                 {
                     Debug.WriteLine("Could not get weather. See the following exception\n" + ex);
+                    WeatherDesc = "Could not load weather data.";
+                    break;
                 }
-                
+
             }
             //using var httpClient = new HttpClient();
             //var imageBytes = await httpClient.GetByteArrayAsync($"https://openweathermap.org/img/wn/{weather.Weather[0].Icon}.png");
@@ -94,14 +101,20 @@ namespace Armoire.ViewModels
 
         }
 
-        private static async Task<WeatherResponse> GetWeatherByCoordinates()
+        private static async Task<WeatherResponse> GetWeatherByCoordinates(WeatherViewModel wvm)
         {
             GeoCoordinateWatcher watcher = new GeoCoordinateWatcher(GeoPositionAccuracy.Default);
             watcher.TryStart(false, TimeSpan.FromMilliseconds(3000));
             while (watcher.Status != GeoPositionStatus.Ready)
             {
+                if(watcher.Permission == GeoPositionPermission.Denied)
+                {
+                    wvm.WeatherDesc = "Could not load weather data.";
+                    return new WeatherResponse();
+                }
                 Thread.Sleep(200);
             }
+            int i = 0;
             GeoCoordinate cord = watcher.Position.Location;
             using (var client = new HttpClient())
             {
@@ -113,7 +126,7 @@ namespace Armoire.ViewModels
         public class WeatherResponse
         {
             public string Name { get; set; }
-            public Main Main { get; set; }
+            public Main? Main { get; set; }
             public Weather[] Weather { get; set; }
         }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -19,7 +20,13 @@ public class OutputHelper
             Formatting = Formatting.Indented,
             TypeNameHandling = TypeNameHandling.All
         };
-        DebugPrintJsonOutput(JsonConvert.SerializeObject(obj, jSets), suffix);
+        try
+        {
+            DebugPrintJsonOutput(JsonConvert.SerializeObject(obj, jSets), suffix);
+        } catch (Exception ex)
+        {
+            Debug.WriteLine("Could not write JSON to debug. See the following exception: \n" + ex);
+        }
     }
 
     public static void DebugPrintJsonOutput(string output, string suffix)
