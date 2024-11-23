@@ -68,7 +68,6 @@ namespace Armoire.ViewModels
                     var weather = await GetWeatherByCoordinates(this);
                     if(weather.Main == null)
                     {
-                        WeatherDesc = "Could not load weather data.";
                         break;
                     }
 
@@ -110,6 +109,7 @@ namespace Armoire.ViewModels
                 if(watcher.Permission == GeoPositionPermission.Denied)
                 {
                     wvm.WeatherDesc = "Could not load weather data.";
+                    wvm.CurrentTemp = "Be sure to enable location in Windows Privacy Settings.";
                     return new WeatherResponse();
                 }
                 Thread.Sleep(200);
