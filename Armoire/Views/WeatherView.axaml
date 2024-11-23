@@ -1,0 +1,84 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:v="using:Armoire.Views"
+             xmlns:vm="using:Armoire.ViewModels"
+			 x:DataType="vm:WeatherViewModel"
+             x:Class="Armoire.Views.WeatherView"
+			 PointerEntered="ShowPopup"
+			 PointerExited="ClosePopup">
+
+	<UserControl.Styles>
+		<Style Selector="Button">
+			<Setter Property="Width" Value="50" />
+			<Setter Property="Height" Value="50" />
+			<Setter Property="Padding" Value="-15" />
+			<Setter Property="Margin" Value="-10" />
+			<Setter Property="Background" Value="#222222" />
+		</Style>
+	</UserControl.Styles>
+	<StackPanel>
+		<Button Margin="5"
+				Command="{Binding HandleContentsClickCommand}"
+				Name="WeatherButton">
+			<ToolTip.Tip>
+				<ToolTip Height="40"
+						 Padding="3"
+						 Background="LightGray"
+						 Foreground="Black">
+					<TextBlock Text="Weather" />
+				</ToolTip>
+			</ToolTip.Tip>
+			<Button.Content>
+				<StackPanel>
+					<!--
+				<Image Source="{Binding WeatherIconBmp}"
+					   Height="20"
+					   Width="20"/>
+				-->
+					<avalonia:MaterialIcon
+						Height="40"
+						Width="40"
+						Kind="WeatherCloudy"
+						Foreground="LightGray"/>
+				</StackPanel>
+			</Button.Content>
+
+			<!--  Context Menu for Delete Drawer (attached to drawer button)  -->
+			<Button.ContextMenu>
+				<ContextMenu>
+					<MenuItem Command="{Binding HandleDeleteClickCommand}" Header="Delete" />
+					<MenuItem Command="{Binding MoveUpCommand}" Header="{Binding MoveBackDirection}" />
+					<MenuItem Command="{Binding MoveDownCommand}" Header="{Binding MoveForwardDirection}" />
+				</ContextMenu>
+			</Button.ContextMenu>
+		</Button>
+		<Popup PlacementMode="RightEdgeAlignedBottom"
+				   PlacementTarget="{Binding ElementName=WeatherButton}"
+				   Name="Popup"
+				   HorizontalOffset="10"
+				   OverlayDismissEventPassThrough="True">
+			<Border BorderBrush="Purple"
+					BorderThickness="2"
+					Background="#222222"
+					CornerRadius="8">
+				<StackPanel Background="#222222"
+							Margin="10">
+					<TextBlock Text="{Binding WeatherDesc}"
+							   Foreground="LightGray"
+							   HorizontalAlignment="Center"
+							   FontSize="16"
+							   Padding="5"/>
+					<TextBlock Text="{Binding CurrentTemp}"
+							   Foreground="LightGray"
+							   HorizontalAlignment="Center"
+							   FontSize="16"
+							   Padding="5"/>
+				</StackPanel>
+			</Border>
+		</Popup>
+	</StackPanel>
+</UserControl>

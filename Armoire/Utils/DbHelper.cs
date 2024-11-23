@@ -25,7 +25,7 @@ public class DbHelper
 
     public static void SaveItem(ItemViewModel iVm)
     {
-        if (iVm.Id is "BATTERY" or "START_MENU" or "RUNNING" or "SOUND" or "WIFI")
+        if (iVm.Id is "BATTERY" or "START_MENU" or "RUNNING" or "SOUND" or "WIFI" or "WEATHER")
             return;
         using var context = new AppDbContext();
         var itemToAdd = iVm.CreateItem();
