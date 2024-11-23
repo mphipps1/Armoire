@@ -285,6 +285,29 @@ namespace Armoire.ViewModels
                     }
                 }
             }
+
+            directoryPath = @"C:\ProgramData\Microsoft\Windows\Start Menu\Programs";
+
+            if (Directory.Exists(directoryPath))
+            {
+                foreach (
+                    string file in Directory.EnumerateFiles(
+                        directoryPath,
+                        "*.lnk",
+                        SearchOption.AllDirectories
+                    )
+                )
+                {
+                    if (!Executables.ContainsKey(System.IO.Path.GetFileNameWithoutExtension(file)))
+                    {
+                        string shortcut = System.IO.Path.GetFileNameWithoutExtension(file);
+                        Executables.Add(shortcut, file);
+                        ExecutableNames.Add(shortcut);
+                        Icons.Add(shortcut, Icon.ExtractAssociatedIcon(file));
+                    }
+                }
+            }
+
             ExecutableNames = new ObservableCollection<string>(ExecutableNames.OrderBy(i => i));
         }
 

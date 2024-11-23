@@ -44,9 +44,7 @@
 		<!--  Context Menu for Delete Drawer (attached to drawer button)  -->
 		<Button.ContextMenu>
 			<ContextMenu>
-				<MenuItem Command="{Binding HandleDeleteClickCommand}" Header="Delete" />
-				<MenuItem Command="{Binding MoveUpCommand}" Header="{Binding MoveBackDirection}" />
-				<MenuItem Command="{Binding MoveDownCommand}" Header="{Binding MoveForwardDirection}" />
+				<MenuItem Command="{Binding EndProcessCommand}" Header="Close Process" />
 			</ContextMenu>
 		</Button.ContextMenu>
 	</Button>

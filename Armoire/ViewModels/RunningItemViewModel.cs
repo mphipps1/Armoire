@@ -6,6 +6,8 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -114,6 +116,12 @@ public partial class RunningItemViewModel : ItemViewModel
     public void UpdateProcess(Process p)
     {
         RunningProcess = p;
+    }
+
+    [RelayCommand]
+    public void EndProcess()
+    {
+        RunningProcess.Kill();
     }
 }
 

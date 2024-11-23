@@ -60,26 +60,8 @@ public partial class ApplicationMonitorViewModel : DrawerAsContentsViewModel
 
     public async void GetInitialRunningApps()
     {
-        ArrayList badProcesses = new ArrayList();
-        badProcesses.Add("TextInputHost");
-        badProcesses.Add("svchost");
-
         var processes = Process.GetProcesses();
         var checkingApps = CheckRunningApplication(this);
-
-        //foreach (Process process in processes)
-        //{
-        //    if (!String.IsNullOrEmpty(process.MainWindowTitle))
-        //    {
-        //        if (badProcesses.Contains(process.ProcessName))
-        //            continue;
-        //        Debug.WriteLine(process.ProcessName);
-        //        RunningAppNames.Add(process.ProcessName);
-        //        GeneratedDrawer.Contents.Add(
-        //            new RunningItemViewModel(Id, DrawerHierarchy, GeneratedDrawer, process)
-        //        );
-        //    }
-        //}
         await checkingApps;
     }
 
@@ -192,6 +174,12 @@ public partial class ApplicationMonitorViewModel : DrawerAsContentsViewModel
                 var rivm = cuvm as RunningItemViewModel;
                 if (rivm == null)
                     continue;
+                if (rivm.RunningProcess.HasExited)
+                {
+                    dac.GeneratedDrawer.Contents.Remove(cuvm);
+                    continue;
+                }
+
                 if(apps.ContainsKey(rivm.RunningProcess.ProcessName + rivm.RunningProcess.MainWindowHandle))
                     rivm.UpdateProcess(apps[rivm.RunningProcess.ProcessName + rivm.RunningProcess.MainWindowHandle]);
                 rivm.UpdateName();
