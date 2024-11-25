@@ -1,5 +1,7 @@
-﻿using System.Drawing.Imaging;
+﻿using System;
+using System.Drawing.Imaging;
 using System.IO;
+using System.Linq;
 using Armoire.Models;
 using Armoire.Utils;
 using Avalonia.Controls;
@@ -126,6 +128,9 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
     public DrawerAsContentsViewModel(Drawer model, ContainerViewModel? container)
     {
         Id = model.Id;
+        var modelIdCountStr = model.Id[9..];
+        if (int.TryParse(modelIdCountStr, out var modelIdCount))
+            IdCount = modelIdCount + 1;
         Name = model.Name;
         IconBmp = MiscHelper.GetAvaBmpFromAssets("tempDrawer.jpg");
         GeneratedDrawer = new DrawerViewModel(this);
@@ -134,6 +139,33 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
         DrawerHierarchy = model.DrawerHierarchy;
         SetMoveDirections(this);
         _count++;
+    }
+
+    public DrawerAsContentsViewModel(DrawerAsContentsViewModel orig)
+    {
+        Id = orig.Id;
+        Name = orig.Name;
+        GeneratedDrawer = new DrawerViewModel(this);
+        foreach (var cuVm in orig.GeneratedDrawer.Contents)
+        {
+            switch (cuVm)
+            {
+                case DrawerAsContentsViewModel dacVm:
+                    GeneratedDrawer.Contents.Add(new DrawerAsContentsViewModel(dacVm));
+                    break;
+                case ItemViewModel iVm:
+                    GeneratedDrawer.Contents.Add(new ItemViewModel(iVm));
+                    break;
+                default:
+                    throw new NotImplementedException(
+                        $"Copying a ${cuVm.GetType()} not supported yet."
+                    );
+            }
+        }
+        Container = orig.Container;
+        ParentId = orig.ParentId;
+        DrawerHierarchy = orig.DrawerHierarchy;
+        SetMoveDirections(this);
     }
 
     [RelayCommand]

@@ -70,6 +70,9 @@ public partial class ItemViewModel : ContentsUnitViewModel
     public ItemViewModel(Item itemModel, ContainerViewModel container)
     {
         Id = itemModel.Id;
+        var modelIdCountStr = itemModel.Id[9..];
+        if (int.TryParse(modelIdCountStr, out var modelIdCount))
+            IdCount = modelIdCount + 1;
         ExecutablePath = itemModel.ExecutablePath;
         Model = new Item(itemModel);
         Name = itemModel.Name;
@@ -79,6 +82,21 @@ public partial class ItemViewModel : ContentsUnitViewModel
         SetMoveDirections(this);
         IconBmp =
             MiscHelper.GetAvaBmpFromExePath(itemModel.ExecutablePath)
+            ?? MiscHelper.GetAvaBmpFromAssets("exe_logo.png");
+    }
+
+    public ItemViewModel(ItemViewModel orig)
+    {
+        Id = orig.Id;
+        ExecutablePath = orig.ExecutablePath;
+        Model = orig.Model;
+        Name = orig.Name;
+        ParentId = orig.ParentId;
+        Container = orig.Container;
+        DrawerHierarchy = orig.DrawerHierarchy;
+        SetMoveDirections(this);
+        IconBmp =
+            MiscHelper.GetAvaBmpFromExePath(ExecutablePath)
             ?? MiscHelper.GetAvaBmpFromAssets("exe_logo.png");
     }
 
