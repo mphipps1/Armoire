@@ -237,6 +237,9 @@ namespace Armoire.ViewModels
             string[] filePaths = dialog.FileNames;
             string[] fileNames = dialog.SafeFileNames;
             var targetDrawer = GetTargetDrawer(MainWindowViewModel.ActiveDockViewModel);
+            if(filePaths.Length == 0)
+                return;
+
             if (targetDrawer == null)
                 return;
             for (int i = 0; i < filePaths.Length; i++)
@@ -288,8 +291,7 @@ namespace Armoire.ViewModels
                 }
             }
 
-            directoryPath = @"C:\ProgramData\Microsoft\Windows\Start Menu\Programs";
-
+            directoryPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Microsoft\Windows\Start Menu\Programs";
             if (Directory.Exists(directoryPath))
             {
                 foreach (

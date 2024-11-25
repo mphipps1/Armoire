@@ -58,6 +58,12 @@
 
 			</Viewbox>
         </Button.Content>
+		<Button.ContextMenu>
+			<ContextMenu Background="Transparent"
+					Width="0"
+					Height="0">
+			</ContextMenu>
+		</Button.ContextMenu>
         <Button.Flyout>
             <!--  Make this placement a binding that alternates between right, down, and up depending on where we are in the drawer structure  -->
 			<Flyout
@@ -68,17 +74,5 @@
                 Placement="{Binding FlyoutPlacement}"
                 VerticalOffset="4" />
         </Button.Flyout>
-
-        <!--  Context Menu for Delete Drawer (attached to drawer button)  -->
-        <Button.ContextMenu>
-            <ContextMenu>
-                <MenuItem Command="{Binding HandleDeleteClickCommand}" Header="Delete" />
-                <MenuItem Command="{Binding AddItemClickCommand}" Header="Add Item" />
-                <MenuItem Command="{Binding AddDrawerClickCommand}" Header="Add Drawer" />
-                <MenuItem Command="{Binding ChangeDrawerNameCommand}" Header="Edit Drawer" />
-                <MenuItem Command="{Binding MoveUpCommand}" Header="{Binding MoveBackDirection}" />
-                <MenuItem Command="{Binding MoveDownCommand}" Header="{Binding MoveForwardDirection}" />
-            </ContextMenu>
-        </Button.ContextMenu>
     </Button>
 </UserControl>

@@ -12,7 +12,9 @@
     x:DataType="viewModels:DrawerViewModel"
     mc:Ignorable="d">
 
-    <Border Background="LightGray">
+    <Border Background="#222222"
+			CornerRadius="8"
+			Padding="6">
         <StackPanel>
             <ItemsControl x:Name="MyItemsControl" ItemsSource="{Binding Contents}">
                 <ItemsControl.ItemTemplate>

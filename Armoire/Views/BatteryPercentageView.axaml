@@ -10,10 +10,9 @@
 			 x:DataType="vm:BatteryPercentageViewModel"
              x:Class="Armoire.Views.BatteryPercentageView">
 	<UserControl.ContextMenu>
-		<ContextMenu>
-			<MenuItem Command="{Binding HandleDeleteClickCommand}" Header="Delete" />
-			<MenuItem Command="{Binding MoveUpCommand}" Header="{Binding MoveBackDirection}" />
-			<MenuItem Command="{Binding MoveDownCommand}" Header="{Binding MoveForwardDirection}" />
+		<ContextMenu Background="Transparent"
+				Width="0"
+				Height="0">
 		</ContextMenu>
 	</UserControl.ContextMenu>
 	<ToolTip.Tip>
@@ -32,7 +31,8 @@
 		<StackPanel Orientation="Horizontal"
 					Width="40"
 					Height="40"
-					HorizontalAlignment="Center">
+					HorizontalAlignment="Center"
+					Margin="5">
 			<avalonia:MaterialIcon
 				Width="18"
 				Height="26"

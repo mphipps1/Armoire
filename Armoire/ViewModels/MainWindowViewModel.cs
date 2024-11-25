@@ -83,18 +83,21 @@ namespace Armoire.ViewModels
             notif.GeneratedDrawer.Contents.Add(sound);
             notif.GeneratedDrawer.Contents.Add(wifi);
 
-            var start = new StartMenuItemViewModel(dockSource.Id, 0, ActiveDockViewModel);
-            ActiveDockViewModel.Contents.Add(start);
-
             try
             {
-                var weather = new WeatherViewModel(dockSource.Id, 0, ActiveDockViewModel);
-                ActiveDockViewModel.Contents.Add(weather);
+                var weather = new WeatherViewModel(notif.Id, 1, notif.GeneratedDrawer);
+                notif.GeneratedDrawer.Contents.Add(weather);
                 //weather.UpdateWeather();
-            } catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 Debug.WriteLine("Could not get weather. See the following\n" + ex);
             }
+
+            var start = new StartMenuItemViewModel(dockSource.Id, 0, ActiveDockViewModel);
+            ActiveDockViewModel.Contents.Add(start);
+
+
 
             var apps = new ApplicationMonitorViewModel(dockSource.Id, 0);
             ActiveDockViewModel.Contents.Add(apps);

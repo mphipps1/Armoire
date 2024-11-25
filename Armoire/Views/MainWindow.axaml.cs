@@ -43,7 +43,7 @@ namespace Armoire.Views
         private void InputElement_OnPointerPressed(object? sender, PointerPressedEventArgs e)
         {
             var point = e.GetCurrentPoint(sender as Control);
-            //Debug.WriteLine("Mouse click on: " + e.Source.ToString());
+            Debug.WriteLine("Mouse click on: " + e.Source.ToString());
             //Debug.WriteLine(sender.ToString());
             if (StartMenuItemView.popup != null && StartMenuItemView.popup.IsOpen)
                       StartMenuItemView.popup.IsOpen = false;

@@ -178,7 +178,7 @@ public partial class ApplicationMonitorViewModel : DrawerAsContentsViewModel
             }
 
             //updating the processes and names in each RunningItem
-            foreach (var cuvm in dac.GeneratedDrawer.Contents)
+            foreach (var cuvm in dac.GeneratedDrawer.Contents.ToList())
             {
                 var rivm = cuvm as RunningItemViewModel;
                 if (rivm == null)

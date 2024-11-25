@@ -13,8 +13,8 @@
 
 	<UserControl.Styles>
 		<Style Selector="Button">
-			<Setter Property="Width" Value="50" />
-			<Setter Property="Height" Value="50" />
+			<Setter Property="Width" Value="40" />
+			<Setter Property="Height" Value="40" />
 			<Setter Property="Padding" Value="-15" />
 			<Setter Property="Margin" Value="-10" />
 			<Setter Property="Background" Value="#222222" />
@@ -40,21 +40,12 @@
 					   Width="20"/>
 				-->
 					<avalonia:MaterialIcon
-						Height="40"
-						Width="40"
+						Height="32"
+						Width="32"
 						Kind="WeatherCloudy"
 						Foreground="LightGray"/>
 				</StackPanel>
 			</Button.Content>
-
-			<!--  Context Menu for Delete Drawer (attached to drawer button)  -->
-			<Button.ContextMenu>
-				<ContextMenu>
-					<MenuItem Command="{Binding HandleDeleteClickCommand}" Header="Delete" />
-					<MenuItem Command="{Binding MoveUpCommand}" Header="{Binding MoveBackDirection}" />
-					<MenuItem Command="{Binding MoveDownCommand}" Header="{Binding MoveForwardDirection}" />
-				</ContextMenu>
-			</Button.ContextMenu>
 		</Button>
 		<Popup PlacementMode="RightEdgeAlignedBottom"
 				   PlacementTarget="{Binding ElementName=WeatherButton}"
