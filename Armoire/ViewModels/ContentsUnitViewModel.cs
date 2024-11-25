@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using Armoire.Interfaces;
 using Armoire.Models;
 using Armoire.Utils;
@@ -10,11 +11,11 @@ namespace Armoire.ViewModels;
 
 public partial class ContentsUnitViewModel : ViewModelBase
 {
-    protected static int IdCount = 1;
     protected const string IdBase = "CONTENTS_";
 
     public ContainerViewModel? Container { get; set; }
     public ContentsUnitViewModel? Parent { get; set; }
+    public int? LoadPosition { get; set; }
 
     // Expression-bodied property.
     public int? Position => Container?.Contents.IndexOf(this);
@@ -43,8 +44,9 @@ public partial class ContentsUnitViewModel : ViewModelBase
 
     public ContentsUnitViewModel()
     {
-        Id = IdBase + IdCount++;
-        Name = "unit " + IdCount;
+        var idSuffix = Guid.NewGuid().ToString();
+        Id = IdBase + idSuffix;
+        Name = "unit_" + idSuffix;
     }
 
     //public ContentsUnitViewModel(Drawer _) { }

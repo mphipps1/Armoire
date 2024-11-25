@@ -24,7 +24,7 @@ public partial class ApplicationMonitorViewModel : DrawerAsContentsViewModel
     public static bool isRunning;
 
     public ApplicationMonitorViewModel(string? parentID, int drawerHierarchy)
-        : base(parentID, drawerHierarchy)
+        : base(parentID, drawerHierarchy, true)
     {
         Name = "Running Applications";
         Id = "MONITOR";
@@ -81,14 +81,14 @@ public partial class ApplicationMonitorViewModel : DrawerAsContentsViewModel
             foreach (Process process in processes)
             {
                 if (process.MainWindowHandle.ToInt32() > 0)
-                { 
+                {
                     apps.Add(process.ProcessName + process.MainWindowHandle, process);
                 }
                 i++;
                 // delaying this to prevent all the work being done at once
                 // without this, dragging the dock around would lag every 1 seconds or so
                 // but now we're spreading the work out
-                if(i == 15)
+                if (i == 15)
                 {
                     await Task.Delay(35);
                     i = 0;
@@ -102,7 +102,7 @@ public partial class ApplicationMonitorViewModel : DrawerAsContentsViewModel
             foreach (string appName in RunningAppNames.ToList())
             {
                 foundApp = false;
-                foreach(var n in apps.Keys)
+                foreach (var n in apps.Keys)
                 {
                     if (appName.StartsWith(n))
                     {
@@ -110,7 +110,7 @@ public partial class ApplicationMonitorViewModel : DrawerAsContentsViewModel
                         break;
                     }
                 }
-                if(foundApp)
+                if (foundApp)
                     continue;
                 if (browserWindows.Contains(appName))
                     continue;
@@ -119,7 +119,10 @@ public partial class ApplicationMonitorViewModel : DrawerAsContentsViewModel
                 {
                     if (cuvm is RunningItemViewModel rivm)
                     {
-                        if (appName.StartsWith(rivm.ProcessName) || rivm.RunningProcess.MainWindowTitle == "")
+                        if (
+                            appName.StartsWith(rivm.ProcessName)
+                            || rivm.RunningProcess.MainWindowTitle == ""
+                        )
                         {
                             rivm.DeleteMe = true;
                             Debug.WriteLine("Deleting " + appName);
@@ -127,7 +130,6 @@ public partial class ApplicationMonitorViewModel : DrawerAsContentsViewModel
                     }
                 }
             }
-
 
             foreach (string appName in apps.Keys)
             {
@@ -162,14 +164,21 @@ public partial class ApplicationMonitorViewModel : DrawerAsContentsViewModel
                     continue;
                 if (appName.Equals("Drag"))
                     continue;
-                
+
                 Debug.WriteLine("Adding " + appName + apps[appName].MainWindowHandle);
                 RunningAppNames.Add(appName + apps[appName].MainWindowHandle);
-                dac.GeneratedDrawer.Contents.Add(new RunningItemViewModel(dac.Id, dac.DrawerHierarchy, dac.GeneratedDrawer, apps[appName]));
+                dac.GeneratedDrawer.Contents.Add(
+                    new RunningItemViewModel(
+                        dac.Id,
+                        dac.DrawerHierarchy,
+                        dac.GeneratedDrawer,
+                        apps[appName]
+                    )
+                );
             }
 
             //updating the processes and names in each RunningItem
-            foreach (var cuvm in dac.GeneratedDrawer.Contents )
+            foreach (var cuvm in dac.GeneratedDrawer.Contents)
             {
                 var rivm = cuvm as RunningItemViewModel;
                 if (rivm == null)
@@ -180,8 +189,14 @@ public partial class ApplicationMonitorViewModel : DrawerAsContentsViewModel
                     continue;
                 }
 
-                if(apps.ContainsKey(rivm.RunningProcess.ProcessName + rivm.RunningProcess.MainWindowHandle))
-                    rivm.UpdateProcess(apps[rivm.RunningProcess.ProcessName + rivm.RunningProcess.MainWindowHandle]);
+                if (
+                    apps.ContainsKey(
+                        rivm.RunningProcess.ProcessName + rivm.RunningProcess.MainWindowHandle
+                    )
+                )
+                    rivm.UpdateProcess(
+                        apps[rivm.RunningProcess.ProcessName + rivm.RunningProcess.MainWindowHandle]
+                    );
                 rivm.UpdateName();
             }
         }

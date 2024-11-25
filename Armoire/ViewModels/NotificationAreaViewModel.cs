@@ -13,7 +13,7 @@ namespace Armoire.ViewModels;
 public partial class NotificationAreaViewModel : DrawerAsContentsViewModel
 {
     public NotificationAreaViewModel(string? parentID, int drawerHeirarchy)
-        : base(parentID, drawerHeirarchy)
+        : base(parentID, drawerHeirarchy, true)
     {
         Name = "Notification Area";
         GeneratedDrawer = new DrawerViewModel(this);

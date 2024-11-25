@@ -70,9 +70,9 @@ public partial class ItemViewModel : ContentsUnitViewModel
     public ItemViewModel(Item itemModel, ContainerViewModel container)
     {
         Id = itemModel.Id;
-        var modelIdCountStr = itemModel.Id[9..];
-        if (int.TryParse(modelIdCountStr, out var modelIdCount))
-            IdCount = modelIdCount + 1;
+        //var modelIdCountStr = itemModel.Id[9..];
+        //if (int.TryParse(modelIdCountStr, out var modelIdCount))
+        //    IdCount = modelIdCount + 1;
         ExecutablePath = itemModel.ExecutablePath;
         Model = new Item(itemModel);
         Name = itemModel.Name;

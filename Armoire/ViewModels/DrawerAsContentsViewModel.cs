@@ -57,6 +57,29 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
     // Dock source constructor (leaves some properties null on purpose).
     public DrawerAsContentsViewModel(string? parentID, int? drawerHierarchy)
     {
+        Name = "dock";
+        Id = "CONTENTS_1";
+        FileStream fs = new FileStream(
+            "./../../../Assets/tempDrawer.jpg",
+            FileMode.Open,
+            FileAccess.Read
+        );
+        System.Drawing.Image image = System.Drawing.Image.FromStream(fs);
+        System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(image, 60, 60);
+        using (MemoryStream memory = new MemoryStream())
+        {
+            bmp.Save(memory, ImageFormat.Png);
+            memory.Position = 0;
+            IconBmp = new Avalonia.Media.Imaging.Bitmap(memory);
+        }
+        GeneratedDrawer = new DrawerViewModel(this);
+        ParentId = parentID;
+        DrawerHierarchy = drawerHierarchy;
+        SetMoveDirections(this);
+    }
+
+    public DrawerAsContentsViewModel(string? parentID, int? drawerHierarchy, bool notDock)
+    {
         Name = "drawer " + _count++;
         FileStream fs = new FileStream(
             "./../../../Assets/tempDrawer.jpg",
@@ -125,13 +148,15 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
         Container = cvm;
     }
 
+    // Load-from-db constructor.
     public DrawerAsContentsViewModel(Drawer model, ContainerViewModel? container)
     {
         Id = model.Id;
-        var modelIdCountStr = model.Id[9..];
-        if (int.TryParse(modelIdCountStr, out var modelIdCount))
-            IdCount = modelIdCount + 1;
+        //var modelIdCountStr = model.Id[9..];
+        //if (int.TryParse(modelIdCountStr, out var modelIdCount))
+        //    IdCount = modelIdCount + 1;
         Name = model.Name;
+        LoadPosition = model.Position;
         IconBmp = MiscHelper.GetAvaBmpFromAssets("tempDrawer.jpg");
         GeneratedDrawer = new DrawerViewModel(this);
         Container = container;

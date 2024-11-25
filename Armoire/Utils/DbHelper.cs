@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using Armoire.Models;
@@ -57,16 +59,21 @@ public class DbHelper
     )
     {
         var ret = new DrawerAsContentsViewModel(drawer, container);
+        List<ContentsUnitViewModel> tempContents = [];
         foreach (var innerDrawer in drawer.Drawers)
         {
             var innerDacVm = LoadRecurse(innerDrawer, ret.GeneratedDrawer, context);
-            ret.GeneratedDrawer.Contents.Add(innerDacVm);
+            tempContents.Add(innerDacVm);
         }
         foreach (var item in drawer.Items)
         {
             var itemViewModel = new ItemViewModel(item, ret.GeneratedDrawer);
-            ret.GeneratedDrawer.Contents.Add(itemViewModel);
+            tempContents.Add(itemViewModel);
         }
+
+        ret.GeneratedDrawer.Contents = new ObservableCollection<ContentsUnitViewModel>(
+            tempContents.OrderBy(cuVm => cuVm.LoadPosition).ToList()
+        );
         return ret;
     }
 

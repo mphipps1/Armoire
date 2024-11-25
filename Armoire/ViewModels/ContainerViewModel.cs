@@ -27,7 +27,13 @@ public partial class ContainerViewModel : ViewModelBase
         SourceDrawer = sourceDrawer;
         SourceDrawerId = sourceDrawer.Id;
 
-        // Register event handlers.
+        RegisterEventHandlers();
+    }
+
+    public void RegisterEventHandlers()
+    {
+        Contents.CollectionChanged -= contents_CollectionChanged;
+        Contents.CollectionChanged -= contents_OnAdd;
         Contents.CollectionChanged += contents_CollectionChanged;
         Contents.CollectionChanged += contents_OnAdd;
     }

@@ -75,7 +75,7 @@ namespace Armoire.ViewModels
         [RelayCommand]
         public void Update()
         {
-            var targetDrawer = GetTargetDrawer(Dock);
+            var targetDrawer = GetTargetDrawer(MainWindowViewModel.ActiveDockViewModel);
             if (targetDrawer != null)
             {
                 if (ImageDropCollection.Count > 0)
@@ -89,7 +89,8 @@ namespace Armoire.ViewModels
                     //System.Drawing.Bitmap bitmap = icon.ToBitmap();
 
                     Image image = Image.FromFile(fileInfo.FullName);
-                    targetDrawer.Add(
+                    targetDrawer.RegisterEventHandlers();
+                    targetDrawer.Contents.Add(
                         new DrawerAsContentsViewModel(
                             Name,
                             new System.Drawing.Bitmap(image, 60, 60),
@@ -108,7 +109,8 @@ namespace Armoire.ViewModels
                         TargetDrawerHeirarchy + 1,
                         ActiveContainerViewModel
                     );
-                    targetDrawer.Add(newDrawer);
+                    targetDrawer.RegisterEventHandlers();
+                    targetDrawer.Contents.Add(newDrawer);
                 }
             }
 
@@ -116,27 +118,25 @@ namespace Armoire.ViewModels
             MainWindowViewModel.CloseDialog();
         }
 
-        private ObservableCollection<ContentsUnitViewModel>? GetTargetDrawer(
-            ObservableCollection<ContentsUnitViewModel> currentDrawer
-        )
+        private ContainerViewModel? GetTargetDrawer(ContainerViewModel currentDrawer)
         {
             if (TargetDrawerID == "CONTENTS_1")
-                return Dock;
-            foreach (var unit in currentDrawer)
+                return MainWindowViewModel.ActiveDockViewModel;
+            foreach (var unit in currentDrawer.Contents)
             {
                 if (unit is DrawerAsContentsViewModel dacvm)
                 {
                     if (dacvm.Id == TargetDrawerID)
                     {
-                        return dacvm.GeneratedDrawer.Contents;
+                        return dacvm.GeneratedDrawer;
                     }
                 }
             }
-            foreach (var unit in currentDrawer)
+            foreach (var unit in currentDrawer.Contents)
             {
                 if (unit is DrawerAsContentsViewModel dacvm)
                 {
-                    var ret = GetTargetDrawer(dacvm.GeneratedDrawer.Contents);
+                    var ret = GetTargetDrawer(dacvm.GeneratedDrawer);
                     if (ret != null)
                         return ret;
                 }
