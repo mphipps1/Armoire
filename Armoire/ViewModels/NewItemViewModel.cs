@@ -2,22 +2,22 @@
 
 //using Windows.Management;
 
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Windows.Forms;
+using System.Xml.Linq;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using System.Windows.Forms;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using OpenFileDialog = System.Windows.Forms.OpenFileDialog;
-using System;
-using System.Collections.Specialized;
-using System.Xml.Linq;
 
 namespace Armoire.ViewModels
 {
@@ -97,12 +97,13 @@ namespace Armoire.ViewModels
         [RelayCommand]
         public void Update()
         {
-            var targetDrawer = GetTargetDrawer(Dock);
+            var targetDrawer = GetTargetDrawer(MainWindowViewModel.ActiveDockViewModel);
             if (targetDrawer != null)
             {
                 if (NewExe != null && Executables.ContainsKey(NewExe))
                 {
-                    targetDrawer.Add(
+                    targetDrawer.RegisterEventHandlers();
+                    targetDrawer.Contents.Add(
                         new ItemViewModel(
                             Name ?? NewExe,
                             Executables[NewExe],
@@ -115,19 +116,20 @@ namespace Armoire.ViewModels
                     );
                     Name = NewExe;
                 }
-                else if (NewExe != null )
+                else if (NewExe != null)
                 {
-                    targetDrawer.Add(
+                    targetDrawer.RegisterEventHandlers();
+                    targetDrawer.Contents.Add(
                         new ItemViewModel(
-                                Name ?? NewExe,
-                                NewExe,
-                                Icon.ExtractAssociatedIcon(NewExe).ToBitmap(),
-                                TargetDrawerID,
-                                TargetDrawerHeirarchy + 1,
-                                ActiveContainerViewModel,
-                                NewExe
-                            )
-                        );
+                            Name ?? NewExe,
+                            NewExe,
+                            Icon.ExtractAssociatedIcon(NewExe).ToBitmap(),
+                            TargetDrawerID,
+                            TargetDrawerHeirarchy + 1,
+                            ActiveContainerViewModel,
+                            NewExe
+                        )
+                    );
                     Name = NewExe;
                 }
                 else if (lnkDropCollection.Count > 0 || ImageDropCollection.Count > 0)
@@ -148,7 +150,8 @@ namespace Armoire.ViewModels
                         var b = ApplicationMonitorViewModel.isRunning;
                         //var x = ApplicationMonitorViewModel.runningApplications;
 
-                        targetDrawer.Add(
+                        targetDrawer.RegisterEventHandlers();
+                        targetDrawer.Contents.Add(
                             new ItemViewModel(
                                 name,
                                 droppedFile,
@@ -172,7 +175,8 @@ namespace Armoire.ViewModels
 
                         System.Drawing.Bitmap bitmap = icon.ToBitmap();
 
-                        targetDrawer.Add(
+                        targetDrawer.RegisterEventHandlers();
+                        targetDrawer.Contents.Add(
                             new ItemViewModel(
                                 name,
                                 ExeFilePath,
@@ -191,27 +195,25 @@ namespace Armoire.ViewModels
             NewExe = null;
         }
 
-        private ObservableCollection<ContentsUnitViewModel>? GetTargetDrawer(
-            ObservableCollection<ContentsUnitViewModel> currentDrawer
-        )
+        private ContainerViewModel? GetTargetDrawer(ContainerViewModel currentDrawer)
         {
             if (TargetDrawerID == "CONTENTS_1")
-                return Dock;
-            foreach (var unit in currentDrawer)
+                return MainWindowViewModel.ActiveDockViewModel;
+            foreach (var unit in currentDrawer.Contents)
             {
                 if (unit is DrawerAsContentsViewModel dacvm)
                 {
                     if (dacvm.Id == TargetDrawerID)
                     {
-                        return dacvm.GeneratedDrawer.Contents;
+                        return dacvm.GeneratedDrawer;
                     }
                 }
             }
-            foreach (var unit in currentDrawer)
+            foreach (var unit in currentDrawer.Contents)
             {
                 if (unit is DrawerAsContentsViewModel dacvm)
                 {
-                    var ret = GetTargetDrawer(dacvm.GeneratedDrawer.Contents);
+                    var ret = GetTargetDrawer(dacvm.GeneratedDrawer);
                     if (ret != null)
                         return ret;
                 }
@@ -234,20 +236,21 @@ namespace Armoire.ViewModels
 
             string[] filePaths = dialog.FileNames;
             string[] fileNames = dialog.SafeFileNames;
-            var targetDrawer = GetTargetDrawer(Dock);
+            var targetDrawer = GetTargetDrawer(MainWindowViewModel.ActiveDockViewModel);
             if (targetDrawer == null)
                 return;
             for (int i = 0; i < filePaths.Length; i++)
-            {  
-                targetDrawer.Add(
-                     new ItemViewModel(
+            {
+                targetDrawer.RegisterEventHandlers();
+                targetDrawer.Contents.Add(
+                    new ItemViewModel(
                         Path.GetFileNameWithoutExtension(fileNames[i]),
                         filePaths[i],
                         Icon.ExtractAssociatedIcon(filePaths[i]).ToBitmap(),
                         TargetDrawerID,
                         TargetDrawerHeirarchy + 1,
                         ActiveContainerViewModel
-                     )
+                    )
                 );
             }
 
@@ -255,7 +258,6 @@ namespace Armoire.ViewModels
 
             //if (result != null && result.Length != 0)
             //    NewItemViewModel.NewExe = result[0];
-
         }
 
         public static void GetExecutables()
@@ -346,7 +348,5 @@ namespace Armoire.ViewModels
         {
             MainWindowViewModel.CloseDialog();
         }
-
-
     }
 }
