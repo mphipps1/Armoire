@@ -59,6 +59,7 @@ public partial class ContentsUnitViewModel : ViewModelBase
     [RelayCommand]
     public virtual void HandleDeleteClick()
     {
+        Container?.RegisterEventHandlers();
         DeleteMe = true;
         MainWindowViewModel.DeletedUnits.Push(this);
     }

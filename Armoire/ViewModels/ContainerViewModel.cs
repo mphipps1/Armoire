@@ -36,6 +36,11 @@ public partial class ContainerViewModel : ViewModelBase
         Contents.CollectionChanged -= contents_OnAdd;
         Contents.CollectionChanged += contents_CollectionChanged;
         Contents.CollectionChanged += contents_OnAdd;
+        foreach (ContentsUnitViewModel cuVm in Contents)
+        {
+            cuVm.PropertyChanged -= contents_PropertyChanged;
+            cuVm.PropertyChanged += contents_PropertyChanged;
+        }
     }
 
     // The drawer button that this container generates from.
