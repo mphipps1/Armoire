@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using Armoire.Interfaces;
 using Armoire.Models;
+using Armoire.Utils;
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -125,11 +126,13 @@ public partial class ContentsUnitViewModel : ViewModelBase
         if (target.ParentId == "CONTENTS_1")
         {
             MainWindowViewModel.ActiveDockViewModel.Contents.Add(target);
+            DbHelper.SaveRecursive(target);
             return;
         }
         var ret = FindParentDrawerByID(MainWindowViewModel.ActiveDockViewModel.Contents, target);
         if (ret != null)
             ret.Add(target);
+        DbHelper.SaveRecursive(target);
     }
 
     public static ObservableCollection<ContentsUnitViewModel>? FindParentDrawerByID(

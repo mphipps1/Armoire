@@ -34,9 +34,10 @@ public class DbHelper
         try
         {
             context.SaveChanges();
-        } catch (Exception ex)
+        }
+        catch (Exception ex)
         {
-            throw new Exception("IVM ID: " + iVm.Id + "\n" + ex.Message);            
+            throw new Exception("IVM ID: " + iVm.Id + "\n" + ex.Message);
         }
     }
 
@@ -82,5 +83,20 @@ public class DbHelper
                 context.Items.Remove(itemToDelete);
         }
         context.SaveChanges();
+    }
+
+    public static void SaveRecursive(ContentsUnitViewModel target)
+    {
+        switch (target)
+        {
+            case DrawerAsContentsViewModel dacVm:
+                DbHelper.SaveDrawer(dacVm);
+                foreach (var inner in dacVm.GeneratedDrawer.Contents)
+                    SaveRecursive(inner);
+                break;
+            case ItemViewModel iVm:
+                SaveItem(iVm);
+                break;
+        }
     }
 }

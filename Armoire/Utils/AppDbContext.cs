@@ -35,7 +35,8 @@ public class AppDbContext : DbContext
             .Entity<Drawer>()
             .HasOne(d => d.Parent)
             .WithMany(d => d.Drawers)
-            .HasForeignKey(d => d.ParentId);
+            .HasForeignKey(d => d.ParentId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder
             .Entity<Item>()
