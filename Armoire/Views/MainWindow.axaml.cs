@@ -44,7 +44,7 @@ namespace Armoire.Views
         {
             var point = e.GetCurrentPoint(sender as Control);
             Debug.WriteLine("Mouse click on: " + e.Source.ToString());
-            //Debug.WriteLine(sender.ToString());
+            Debug.WriteLine(sender.ToString());
             if (StartMenuItemView.popup != null && StartMenuItemView.popup.IsOpen)
                       StartMenuItemView.popup.IsOpen = false;
             if(NewItemView.popup != null && NewItemView.popup.IsOpen)
@@ -59,6 +59,16 @@ namespace Armoire.Views
             ContextMenu cm = this.Find<ContextMenu>("MainWindowContextMenu");
             if (cm.IsOpen)
                 cm.Close();
+
+
+            // There was a bug where clicking on the StartMenuPopUp border or stack panel caused it to skip off screen
+            // The following prevents this function from executing if the PointerPressedEventArgs current point is over a StartMenuItemViewModel
+            if (((Delegate)e.GetCurrentPoint).Target is null)
+                return;
+            if (((RoutedEventArgs)((Delegate)e.GetCurrentPoint).Target).Source is null)
+                return;
+            if (((StyledElement)((AvaloniaObject)((RoutedEventArgs)((Delegate)e.GetCurrentPoint).Target).Source)).DataContext is StartMenuItemViewModel)
+                return;
 
             if (WindowState == WindowState.Maximized || WindowState == WindowState.FullScreen)
                 return;

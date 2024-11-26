@@ -14,6 +14,7 @@ namespace Armoire.ViewModels
         [ObservableProperty]
         public bool _startMenuTextBoxOpen;
 
+
         [ObservableProperty]
         public string _clickedApp;
 

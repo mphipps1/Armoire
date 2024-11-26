@@ -8,7 +8,7 @@
              xmlns:vm="using:Armoire.ViewModels"
              x:Class="Armoire.Views.StartMenuItemView"
 			 xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-			 KeyUp="KeyUp">
+			 KeyUp="StartMenuKeyUp">
 	<UserControl.Styles>
 		<Style Selector="Button">
 			<Setter Property="Width" Value="50" />
@@ -20,7 +20,7 @@
 	<StackPanel Width="250">
 		<Button Margin="5"
 				Command="{Binding OpenStartMenuCommand}"
-				Click="PopulateStartMenuList"
+				Click="SetFocus"
 				Background="#222222"
 				Name="ItemButton">
 			<ToolTip.Tip>
@@ -46,15 +46,22 @@
 			</Button.ContextMenu>
 		</Button>
 		<Popup IsOpen="{Binding StartMenuTextBoxOpen}"
+			   Closed="PopupCloseEvent"
 			   PlacementMode="RightEdgeAlignedBottom"
 			   PlacementTarget="{Binding ElementName=ItemButton}"
 			   Name="Popup"
-			   HorizontalOffset="10"
+			   HorizontalOffset="40"
 			   OverlayDismissEventPassThrough="True">
-			<StackPanel Background="LightGray"
-						Margin="0">
+			<Border
+				BorderBrush="Purple"
+				BorderThickness="2"
+				CornerRadius="8"
+				Background="#222222"
+				Name="StartMenuBorder">
+			<StackPanel Background="#222222"
+						Margin="8">
 				<ScrollViewer Height="300"
-				  Width="230"
+				  Width="240"
 				  Name="BarScroll"
 				  VerticalScrollBarVisibility="Visible"
 				  HorizontalAlignment="Right"
@@ -64,18 +71,28 @@
 								Width="220"
 								Name="StartMenuList"
 								Orientation="Vertical"
-								Margin="0">
+								Margin="5">
 					</StackPanel>
 				</ScrollViewer>
-				<TextBox Width="220"
-					Height="40"
-					HorizontalAlignment="Left"
-					Margin="10"
+				<Border 
+					Margin="5"
+					Background="Gray"
+					CornerRadius="8">
+				<TextBox Width="200"
+					Height="30"
+					Cursor="Arrow"
+					CaretBrush="White"
+					HorizontalAlignment="Center"
+					Margin="5"
 					Padding="5"
-					Background="DarkGray"
+					Background="Gray"
+					Foreground="White"
 					Watermark="Type here to search"
-					Name="TypedAppName"/>
+					Name="TypedAppName">
+				</TextBox>
+				</Border>
 			</StackPanel>
+			</Border>
 		</Popup>
 	</StackPanel>
 </UserControl>
