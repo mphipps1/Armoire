@@ -82,7 +82,7 @@ namespace Armoire.ViewModels
         {
             TargetDrawerID = targetDrawerID;
 
-            PanelHeight = 400;
+            PanelHeight = 350;
             PanelWidth = 400;
 
             //setting the backgrounds to light gray

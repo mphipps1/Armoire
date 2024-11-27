@@ -11,6 +11,7 @@
     xmlns:vm="using:Armoire.ViewModels"
 	xmlns:v="using:Armoire.Views"
     Title="Armoire"
+	Name="window"
     d:DesignHeight="700"
     d:DesignWidth="300"
     x:DataType="vm:MainWindowViewModel"
@@ -237,6 +238,7 @@
 			DisableOpeningAnimation="True"
 			CloseOnClickAway="True" 
 			Background="Transparent"
-			Identifier="MainDialogHost"/>
+			Identifier="MainDialogHost"
+			dialogHostAvalonia:DialogHost.DialogOpened="CheckWindowPosition"/>
 	</Panel>
 </Window>
