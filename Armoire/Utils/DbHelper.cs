@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.Linq;
 using Armoire.Models;
 using Armoire.ViewModels;
-using Microsoft.EntityFrameworkCore;
 
 namespace Armoire.Utils;
 
@@ -105,5 +104,27 @@ public class DbHelper
                 SaveItem(iVm);
                 break;
         }
+    }
+
+    public static void RenameRecord(ContentsUnitViewModel viewModel)
+    {
+        using var context = new AppDbContext();
+        switch (viewModel)
+        {
+            case DrawerAsContentsViewModel:
+                var drawerToEdit = context.Drawers.Find(viewModel.Id);
+                if (drawerToEdit != null)
+                    drawerToEdit.Name = viewModel.Name;
+                break;
+            case ItemViewModel:
+                var itemToEdit = context.Items.Find(viewModel.Id);
+                if (itemToEdit != null)
+                    itemToEdit.Name = viewModel.Name;
+                break;
+            default:
+                Debug.WriteLine("Fell thru switch in RenameRecord");
+                break;
+        }
+        context.SaveChanges();
     }
 }

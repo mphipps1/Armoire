@@ -102,6 +102,12 @@ public partial class ContainerViewModel : ViewModelBase
                     DbHelper.DeleteContentsUnitViewModelFromDb(cu);
                 }
                 break;
+            case "Name":
+                if (sender is ContentsUnitViewModel cu2)
+                {
+                    DbHelper.RenameRecord(cu2);
+                }
+                break;
             default:
                 Debug.WriteLine("Different property changed.");
                 break;

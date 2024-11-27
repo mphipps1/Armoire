@@ -1,5 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
 namespace Armoire.ViewModels
@@ -21,32 +20,34 @@ namespace Armoire.ViewModels
         //used for the base dock to get the recursive step set up
         public void UpdateName()
         {
-            var dock = MainWindowViewModel.ActiveDockViewModel.Contents;
-            foreach (var unit in dock)
+            var dock = MainWindowViewModel.ActiveDockViewModel;
+            foreach (var unit in dock.Contents)
             {
                 if (unit is DrawerAsContentsViewModel dacvm)
                 {
                     if (dacvm.Name == TargetName)
                     {
+                        dock.RegisterEventHandlers();
                         dacvm.Name = NewName;
                     }
-                    UpdateName(dacvm.GeneratedDrawer.Contents);
+                    UpdateName(dacvm.GeneratedDrawer);
                 }
             }
         }
 
         //recursive calls to all nested drawers
-        public void UpdateName(ObservableCollection<ContentsUnitViewModel> Contents)
+        public void UpdateName(ContainerViewModel container)
         {
-            foreach (var unit in Contents)
+            foreach (var unit in container.Contents)
             {
                 if (unit is DrawerAsContentsViewModel dacvm)
                 {
                     if (dacvm.Name == TargetName)
                     {
+                        container.RegisterEventHandlers();
                         dacvm.Name = NewName;
                     }
-                    UpdateName(dacvm.GeneratedDrawer.Contents);
+                    UpdateName(dacvm.GeneratedDrawer);
                 }
             }
             MainWindowViewModel.CloseDialog();
