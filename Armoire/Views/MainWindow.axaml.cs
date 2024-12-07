@@ -50,6 +50,7 @@ namespace Armoire.Views
                       StartMenuItemView.popup.IsOpen = false;
             if(NewItemView.popup != null && NewItemView.popup.IsOpen)
                 NewItemView.popup.IsOpen = false;
+
             //add controls that we want to be draggable here using the source of what was pressed
             if (point.Properties.IsRightButtonPressed || 
                 ((e.Source.ToString() != "Avalonia.Controls.Panel") &&
@@ -57,8 +58,8 @@ namespace Armoire.Views
                 (e.Source.ToString() != "Avalonia.Controls.Border")))
                 return;
 
-            ContextMenu cm = this.Find<ContextMenu>("MainWindowContextMenu");
-            if (cm.IsOpen)
+            ContextMenu? cm = this.Find<ContextMenu>("MainWindowContextMenu");
+            if (cm is not null && cm.IsOpen)
                 cm.Close();
 
 

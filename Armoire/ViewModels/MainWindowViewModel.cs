@@ -34,6 +34,9 @@ namespace Armoire.ViewModels
         //dockSource is the DrawerAsContentsViewModel that holds the ActiveDockViewModel
         public static DrawerViewModel ActiveDockViewModel { get; set; }
 
+        //List of DrawerAsContentsViews, used to close their flyouts when a rightclick occurs
+        public static LinkedList<DrawerAsContentsView> DrawerAsContentsViews;
+
         //public static DockViewModel ActiveDockViewModel
         //{
         //    get =>
@@ -60,6 +63,8 @@ namespace Armoire.ViewModels
             _timer.Elapsed += OnTimerElapsed;
             _timer.Start();
             UpdateTime();
+
+            DrawerAsContentsViews = new LinkedList<DrawerAsContentsView>();
 
             // Dock setup.
             var dockSource = DbHelper.LoadDockOrCreate();

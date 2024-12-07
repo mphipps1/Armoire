@@ -223,12 +223,14 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
     [RelayCommand]
     public void AddItemClick()
     {
+       CloseDrawers();
         DialogHost.Show(new NewItemViewModel(Id, DrawerHierarchy, GeneratedDrawer));
     }
 
     [RelayCommand]
     public void AddDrawerClick()
     {
+        CloseDrawers();
         if (GeneratedDrawer.Contents.Count < 10)
         {
             //var newDrawer = new DrawerAsContentsViewModel();
@@ -255,6 +257,13 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
             );
     }
 
+    public void CloseDrawers()
+    {
+        foreach (var drawer in MainWindowViewModel.DrawerAsContentsViews)
+        {
+            drawer.CloseFlyout();
+        }
+    }
     [RelayCommand]
     public void ChangeDrawerName()
     {

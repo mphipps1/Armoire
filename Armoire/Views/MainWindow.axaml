@@ -25,6 +25,7 @@
 	PointerPressed="InputElement_OnPointerPressed"
 	PointerMoved="InputElement_OnPointerMoved"
 	PointerReleased="InputElement_OnPointerReleased"
+	CanResize="False"
 	KeyDown="MainWindow_KeyDown"
 	KeyUp="MainWindow_KeyUp">
 	<!--
@@ -43,6 +44,10 @@
 	    PointerPressed="InputElement_OnPointerPressed"
 	    PointerMoved="InputElement_OnPointerMoved"
 	    PointerReleased="InputElement_OnPointerReleased"
+		
+		Checking for ctrl + z
+		KeyDown="MainWindow_KeyDown"
+		KeyUp="MainWindow_KeyUp"
 	-->
 	<!--
     <Window.Background>
