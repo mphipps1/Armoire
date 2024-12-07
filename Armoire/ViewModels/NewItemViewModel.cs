@@ -42,9 +42,6 @@ namespace Armoire.ViewModels
         [ObservableProperty]
         public string _name;
 
-        [ObservableProperty]
-        public string _iconPath;
-
         public static string? NewExe;
 
         [ObservableProperty]
@@ -80,9 +77,10 @@ namespace Armoire.ViewModels
             ContainerViewModel? cvm = null
         )
         {
+            Name = "";
             TargetDrawerID = targetDrawerID;
 
-            PanelHeight = 350;
+            PanelHeight = 345;
             PanelWidth = 400;
 
             //setting the backgrounds to light gray
@@ -103,17 +101,35 @@ namespace Armoire.ViewModels
                 if (NewExe != null && Executables.ContainsKey(NewExe))
                 {
                     targetDrawer.RegisterEventHandlers();
-                    targetDrawer.Contents.Add(
-                        new ItemViewModel(
-                            Name ?? NewExe,
-                            Executables[NewExe],
-                            Icons[NewExe].ToBitmap(),
-                            TargetDrawerID,
-                            TargetDrawerHeirarchy + 1,
-                            ActiveContainerViewModel,
-                            NewExe
-                        )
-                    );
+                    if (targetDrawer.SourceDrawer.DrawerHierarchy == -1)
+                    {
+                        targetDrawer.Contents.Insert(
+                            0,
+                            new ItemViewModel(
+                                Name ?? NewExe,
+                                Executables[NewExe],
+                                Icons[NewExe].ToBitmap(),
+                                TargetDrawerID,
+                                TargetDrawerHeirarchy + 1,
+                                ActiveContainerViewModel,
+                                NewExe
+                            )
+                        );
+                    } 
+                    else
+                    {
+                        targetDrawer.Contents.Add(
+                            new ItemViewModel(
+                                Name ?? NewExe,
+                                Executables[NewExe],
+                                Icons[NewExe].ToBitmap(),
+                                TargetDrawerID,
+                                TargetDrawerHeirarchy + 1,
+                                ActiveContainerViewModel,
+                                NewExe
+                            )
+                        );
+                    }
                     Name = NewExe;
                 }
                 else if (NewExe != null)

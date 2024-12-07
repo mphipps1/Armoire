@@ -59,6 +59,8 @@ namespace Armoire.ViewModels
             ContainerViewModel? cvm = null
         )
         {
+            Name = "";
+            IconPath = "";
             TargetDrawerID = targetDrawerID;
             PanelHeight = 400;
             PanelWidth = 400;
@@ -90,15 +92,31 @@ namespace Armoire.ViewModels
 
                     Image image = Image.FromFile(fileInfo.FullName);
                     targetDrawer.RegisterEventHandlers();
-                    targetDrawer.Contents.Add(
-                        new DrawerAsContentsViewModel(
-                            Name,
-                            new System.Drawing.Bitmap(image, 60, 60),
-                            TargetDrawerID.ToString(),
-                            TargetDrawerHeirarchy,
-                            ActiveContainerViewModel
-                        )
-                    );
+                    if (targetDrawer.SourceDrawer.DrawerHierarchy == -1)
+                    {
+                        targetDrawer.Contents.Insert(
+                            0,
+                            new DrawerAsContentsViewModel(
+                                Name,
+                                new System.Drawing.Bitmap(image, 60, 60),
+                                TargetDrawerID.ToString(),
+                                TargetDrawerHeirarchy,
+                                ActiveContainerViewModel
+                            )
+                        );
+                    } 
+                    else
+                    {
+                        targetDrawer.Contents.Add(
+                            new DrawerAsContentsViewModel(
+                                Name,
+                                new System.Drawing.Bitmap(image, 60, 60),
+                                TargetDrawerID.ToString(),
+                                TargetDrawerHeirarchy,
+                                ActiveContainerViewModel
+                            )
+                        );
+                    }
                 }
                 else
                 {
@@ -110,7 +128,10 @@ namespace Armoire.ViewModels
                         ActiveContainerViewModel
                     );
                     targetDrawer.RegisterEventHandlers();
-                    targetDrawer.Contents.Add(newDrawer);
+                    if (targetDrawer.SourceDrawer.DrawerHierarchy == -1)
+                        targetDrawer.Contents.Insert(0, newDrawer);
+                    else
+                        targetDrawer.Contents.Add(newDrawer);
                 }
             }
 
