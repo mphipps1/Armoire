@@ -104,7 +104,7 @@ public partial class RunningItemViewModel : ItemViewModel
         if (RunningProcess.ProcessName.Equals("Armoire"))
             ShowWindow(RunningProcess.MainWindowHandle, SW_SHOWNORMAL);
         else
-            ShowWindow(RunningProcess.MainWindowHandle, SW_SHOWMAXIMIZED);
+            ShowWindow(RunningProcess.MainWindowHandle, 4);
         BringWindowToTop(RunningProcess.MainWindowHandle);
         //SetForegroundWindow(RunningProcess.MainWindowHandle);
     }
