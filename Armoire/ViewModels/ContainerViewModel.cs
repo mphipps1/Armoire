@@ -32,8 +32,10 @@ public partial class ContainerViewModel : ViewModelBase
     {
         Contents.CollectionChanged -= contents_CollectionChanged;
         Contents.CollectionChanged -= contents_OnAdd;
+        Contents.CollectionChanged -= contents_OnMove;
         Contents.CollectionChanged += contents_CollectionChanged;
         Contents.CollectionChanged += contents_OnAdd;
+        Contents.CollectionChanged += contents_OnMove;
         foreach (ContentsUnitViewModel cuVm in Contents)
         {
             cuVm.PropertyChanged -= contents_PropertyChanged;
@@ -87,6 +89,18 @@ public partial class ContainerViewModel : ViewModelBase
                     break;
             }
         }
+    }
+
+    private static void contents_OnMove(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        if (e.Action != NotifyCollectionChangedAction.Move)
+            return;
+        if (sender is not ObservableCollection<ContentsUnitViewModel> s)
+            return;
+        var t = s[e.OldStartingIndex];
+        var u = s[e.NewStartingIndex];
+        DbHelper.MoveRecord(t);
+        DbHelper.MoveRecord(u);
     }
 
     private void contents_PropertyChanged(object? sender, PropertyChangedEventArgs e)

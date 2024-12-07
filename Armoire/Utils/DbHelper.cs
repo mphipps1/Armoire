@@ -46,9 +46,20 @@ public class DbHelper
     {
         using var context = new AppDbContext();
         var dockModel = context.Drawers.Find("CONTENTS_1");
-        return dockModel != null
-            ? LoadRecurse(dockModel, null, context)
-            : new DrawerAsContentsViewModel(null, -1);
+        if (dockModel != null)
+        {
+            var x = LoadRecurse(dockModel, null, context);
+            return x;
+        }
+        else
+        {
+            var y = new DrawerAsContentsViewModel(null, -1);
+            return y;
+        }
+
+        //return dockModel != null
+        //    ? LoadRecurse(dockModel, null, context)
+        //    : new DrawerAsContentsViewModel(null, -1);
     }
 
     public static DrawerAsContentsViewModel LoadRecurse(
@@ -70,9 +81,8 @@ public class DbHelper
             tempContents.Add(itemViewModel);
         }
 
-        ret.GeneratedDrawer.Contents = new ObservableCollection<ContentsUnitViewModel>(
-            tempContents.OrderBy(cuVm => cuVm.LoadPosition).ToList()
-        );
+        var x = tempContents.OrderBy(cuVm => cuVm.LoadPosition).ToList();
+        ret.GeneratedDrawer.Contents = new ObservableCollection<ContentsUnitViewModel>(x);
         return ret;
     }
 
@@ -96,12 +106,17 @@ public class DbHelper
         switch (target)
         {
             case DrawerAsContentsViewModel dacVm:
-                DbHelper.SaveDrawer(dacVm);
+                SaveDrawer(dacVm);
                 foreach (var inner in dacVm.GeneratedDrawer.Contents)
                     SaveRecursive(inner);
                 break;
             case ItemViewModel iVm:
                 SaveItem(iVm);
+                break;
+            default:
+                Debug.WriteLine(
+                    "Unrecognized view model type encountered in `DbHelper.SaveRecursive`."
+                );
                 break;
         }
     }
@@ -123,6 +138,28 @@ public class DbHelper
                 break;
             default:
                 Debug.WriteLine("Fell thru switch in RenameRecord");
+                break;
+        }
+        context.SaveChanges();
+    }
+
+    public static void MoveRecord(ContentsUnitViewModel viewModel)
+    {
+        using var context = new AppDbContext();
+        switch (viewModel)
+        {
+            case DrawerAsContentsViewModel:
+                var drawerToEdit = context.Drawers.Find(viewModel.Id);
+                if (drawerToEdit != null)
+                    drawerToEdit.Position = viewModel.Position;
+                break;
+            case ItemViewModel:
+                var itemToEdit = context.Items.Find(viewModel.Id);
+                if (itemToEdit != null)
+                    itemToEdit.Position = viewModel.Position;
+                break;
+            default:
+                Debug.WriteLine("Fell thru switch in MoveRecord");
                 break;
         }
         context.SaveChanges();

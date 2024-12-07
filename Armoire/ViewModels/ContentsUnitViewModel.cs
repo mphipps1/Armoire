@@ -72,51 +72,62 @@ public partial class ContentsUnitViewModel : ViewModelBase
     [RelayCommand]
     public void MoveUp()
     {
-        var drawer = findParentDrawer(MainWindowViewModel.ActiveDockViewModel.Contents, this);
-        if (drawer == null)
+        //var drawer = findParentDrawer(MainWindowViewModel.ActiveDockViewModel, this);
+        if (Container == null)
             return;
-        int indexOfMe = drawer.IndexOf(this);
+        Container.RegisterEventHandlers();
+        var indexOfMe = Container.Contents.IndexOf(this);
 
-        //using c# tuple to swap the drawerAsContents this function was called from and the DrawerAsConetnts before it
-        if (indexOfMe > 0)
-            (drawer[indexOfMe - 1], drawer[indexOfMe]) = (drawer[indexOfMe], drawer[indexOfMe - 1]);
+        if (indexOfMe <= 0)
+            return;
+        Container.RegisterEventHandlers();
+        //(drawer.Contents[indexOfMe - 1], drawer.Contents[indexOfMe]) = (
+        //    drawer.Contents[indexOfMe],
+        //    drawer.Contents[indexOfMe - 1]
+        //);
+        Container.Contents.Move(indexOfMe, indexOfMe - 1);
     }
 
     [RelayCommand]
     public void MoveDown()
     {
-        var drawer = findParentDrawer(MainWindowViewModel.ActiveDockViewModel.Contents, this);
-        if (drawer == null)
+        //var drawer = findParentDrawer(MainWindowViewModel.ActiveDockViewModel, this);
+        if (Container == null)
             return;
-        //using c# tuple to swap the drawerAsContents this function was called from and the DrawerAsConetnts before it
 
-        int indexOfMe = drawer.IndexOf(this);
-        if (indexOfMe < drawer.Count - 1)
-            (drawer[indexOfMe + 1], drawer[indexOfMe]) = (drawer[indexOfMe], drawer[indexOfMe + 1]);
+        var indexOfMe = Container.Contents.IndexOf(this);
+        if (indexOfMe >= Container.Contents.Count - 1)
+            return;
+        Container.RegisterEventHandlers();
+        //(drawer.Contents[indexOfMe + 1], drawer.Contents[indexOfMe]) = (
+        //    drawer.Contents[indexOfMe],
+        //    drawer.Contents[indexOfMe + 1]
+        //);
+        Container.Contents.Move(indexOfMe, indexOfMe + 1);
     }
 
-    public static ObservableCollection<ContentsUnitViewModel>? findParentDrawer(
-        ObservableCollection<ContentsUnitViewModel> contentsIn,
+    public static ContainerViewModel? findParentDrawer(
+        ContainerViewModel contentsIn,
         ContentsUnitViewModel target
     )
     {
-        if (contentsIn.Contains(target))
+        if (contentsIn.Contents.Contains(target))
             return contentsIn;
-        foreach (var unit in contentsIn)
+        foreach (var unit in contentsIn.Contents)
         {
             if (
                 unit is DrawerAsContentsViewModel dac
                 && dac.GeneratedDrawer.Contents.Contains(target)
             )
             {
-                return dac.GeneratedDrawer.Contents;
+                return dac.GeneratedDrawer;
             }
         }
-        foreach (var unit in contentsIn)
+        foreach (var unit in contentsIn.Contents)
         {
             if (unit is DrawerAsContentsViewModel dac)
             {
-                return findParentDrawer(dac.GeneratedDrawer.Contents, target);
+                return findParentDrawer(dac.GeneratedDrawer, target);
             }
         }
         return null;

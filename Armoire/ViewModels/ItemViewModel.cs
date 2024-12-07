@@ -73,6 +73,7 @@ public partial class ItemViewModel : ContentsUnitViewModel
         //var modelIdCountStr = itemModel.Id[9..];
         //if (int.TryParse(modelIdCountStr, out var modelIdCount))
         //    IdCount = modelIdCount + 1;
+        LoadPosition = itemModel.Position;
         ExecutablePath = itemModel.ExecutablePath;
         Model = new Item(itemModel);
         Name = itemModel.Name;
