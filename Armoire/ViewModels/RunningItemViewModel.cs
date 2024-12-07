@@ -57,9 +57,11 @@ public partial class RunningItemViewModel : ItemViewModel
         Id = "RUNNING";
     }
 
+    //showWindow documentation: https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-showwindow
     private const int SW_SHOWNORMAL = 1;
     private const int SW_SHOWMINIMIZED = 2;
     private const int SW_SHOWMAXIMIZED = 3;
+    private const int SW_SHOW = 5;
 
     [DllImport("Kernel32.dll")]
     private static extern bool QueryFullProcessImageName(
@@ -104,7 +106,7 @@ public partial class RunningItemViewModel : ItemViewModel
         if (RunningProcess.ProcessName.Equals("Armoire"))
             ShowWindow(RunningProcess.MainWindowHandle, SW_SHOWNORMAL);
         else
-            ShowWindow(RunningProcess.MainWindowHandle, 4);
+            ShowWindow(RunningProcess.MainWindowHandle, SW_SHOW);
         BringWindowToTop(RunningProcess.MainWindowHandle);
         //SetForegroundWindow(RunningProcess.MainWindowHandle);
     }
