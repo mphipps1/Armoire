@@ -57,12 +57,6 @@ public partial class RunningItemViewModel : ItemViewModel
         Id = "RUNNING";
     }
 
-    //showWindow documentation: https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-showwindow
-    private const int SW_SHOWNORMAL = 1;
-    private const int SW_SHOWMINIMIZED = 2;
-    private const int SW_SHOWMAXIMIZED = 3;
-    private const int SW_SHOW = 5;
-
     [DllImport("Kernel32.dll")]
     private static extern bool QueryFullProcessImageName(
         [In] IntPtr hProcess,
@@ -90,6 +84,12 @@ public partial class RunningItemViewModel : ItemViewModel
 
     [DllImport("user32.dll", SetLastError = true)]
     static extern bool BringWindowToTop(IntPtr hWnd);
+
+    //showWindow documentation: https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-showwindow
+    private const int SW_SHOWNORMAL = 1;
+    private const int SW_SHOWMINIMIZED = 2;
+    private const int SW_SHOWMAXIMIZED = 3;
+    private const int SW_SHOW = 5;
 
     [DllImport("user32.dll")]
     public static extern bool ShowWindow(IntPtr hWnd, uint nCmdShow);

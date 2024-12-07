@@ -30,34 +30,6 @@ public partial class ApplicationMonitorViewModel : DrawerAsContentsViewModel
         Id = "MONITOR";
     }
 
-    //[RelayCommand]
-    //public void DisplayProcess()
-    //{
-    //    for (int j = 0; j < 5; j++)
-    //    {
-
-    //        if (ProcessList.Count > 0)
-    //        {
-    //            for (int i = 0; i < ProcessList.Count; i++)
-    //            {
-    //                bool isNewProcess = ProcessList.Any(obj => obj.ExecutablePath == RunningApps[j].StartInfo.FileName);
-    //                if (!isNewProcess)
-    //                {
-    //                    ProcessList.Add(new ItemViewModel(RunningApps[j].StartInfo.FileName));
-    //                    return;
-    //                }
-    //            }
-
-
-    //        }
-    //        else
-    //        {
-    //            ProcessList.Add(new ItemViewModel(RunningApps[j].StartInfo.FileName));
-    //        }
-
-    //    }
-    //}
-
     public async void GetInitialRunningApps()
     {
         var processes = Process.GetProcesses();

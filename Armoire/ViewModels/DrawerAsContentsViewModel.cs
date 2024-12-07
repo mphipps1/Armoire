@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.SqlTypes;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
@@ -8,6 +9,7 @@ using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DialogHostAvalonia;
+using Svg;
 
 namespace Armoire.ViewModels;
 
@@ -82,7 +84,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
     {
         Name = "drawer " + _count++;
         FileStream fs = new FileStream(
-            "./../../../Assets/tempDrawer.jpg",
+            "./../../../Assets/table.png",
             FileMode.Open,
             FileAccess.Read
         );
@@ -140,9 +142,40 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
         ParentId = parentID;
         DrawerHierarchy = drawerHierarchy;
         if (iconPath == null || iconPath == "")
-            IconPath = "/../Assets/closedGradientDrawer.svg";
+        {
+            FileStream fs = new FileStream(
+                "./../../../Assets/table.png",
+                FileMode.Open,
+                FileAccess.Read
+            );
+            System.Drawing.Image image = System.Drawing.Image.FromStream(fs);
+            System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(image, 50, 50);
+            using (MemoryStream memory = new MemoryStream())
+            {
+                bmp.Save(memory, ImageFormat.Png);
+                memory.Position = 0;
+                IconBmp = new Avalonia.Media.Imaging.Bitmap(memory);
+            }
+        }
         else
-            IconPath = iconPath;
+        {
+            if (iconPath is not null)
+            {
+                FileStream fs = new FileStream(
+                    iconPath,
+                    FileMode.Open,
+                    FileAccess.Read
+                );
+                System.Drawing.Image image = System.Drawing.Image.FromStream(fs);
+                System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(image, 50, 50);
+                using (MemoryStream memory = new MemoryStream())
+                {
+                    bmp.Save(memory, ImageFormat.Png);
+                    memory.Position = 0;
+                    IconBmp = new Avalonia.Media.Imaging.Bitmap(memory);
+                }
+            }
+        }
         _count++;
         SetMoveDirections(this);
         Container = cvm;
@@ -157,7 +190,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
         //    IdCount = modelIdCount + 1;
         Name = model.Name;
         LoadPosition = model.Position;
-        IconBmp = MiscHelper.GetAvaBmpFromAssets("tempDrawer.jpg");
+        IconBmp = MiscHelper.GetAvaBmpFromAssets("table.png");
         GeneratedDrawer = new DrawerViewModel(this);
         Container = container;
         ParentId = model.ParentId;
@@ -223,7 +256,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
     [RelayCommand]
     public void AddItemClick()
     {
-       CloseDrawers();
+        CloseDrawers();
         DialogHost.Show(new NewItemViewModel(Id, DrawerHierarchy, GeneratedDrawer));
     }
 

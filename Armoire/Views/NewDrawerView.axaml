@@ -61,10 +61,10 @@
 			Drawer Icon:
 		</TextBlock>
 		<StackPanel
-			HorizontalAlignment="Center"
-			VerticalAlignment="Center"
-			Background="Transparent"
-			Spacing="10">
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Background="Transparent"
+                Spacing="10">
 			<DockPanel>
 				<Grid>
 					<Border
@@ -78,12 +78,24 @@
 						BorderThickness="1"
 						CornerRadius="8"
 						DragDrop.AllowDrop="true">
-						<TextBlock
-							Name="DropText"
-							HorizontalAlignment="Center"
-							VerticalAlignment="Center">
-							Drop Image Here
-						</TextBlock>
+						<StackPanel Margin="10"
+									HorizontalAlignment="Center"
+									VerticalAlignment="Center">
+							<TextBlock
+                                Name="DropText"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center">
+								Drop .lnk Here
+							</TextBlock>
+							<Button Content="Or Open File System"
+                                Command="{Binding OnOpenFileDialogClick}"
+								BorderThickness="0"
+                                Width="160"
+								Background="Transparent"
+								Foreground="#70bfff"
+                                Margin="5"
+								Padding="0"/>
+						</StackPanel>
 					</Border>
 				</Grid>
 			</DockPanel>
@@ -93,11 +105,6 @@
 						Content="Remove File" />
 
 			</Popup>
-			<!--
-				<Button Content="Open File System"
-				 Click="OnOpenFileDialogClick"
-				 Width="150"
-				 Margin="5"/>                -->
 		</StackPanel>
 		<StackPanel
             Name="BackAndSubmit"

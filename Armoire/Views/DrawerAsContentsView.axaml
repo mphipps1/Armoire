@@ -43,20 +43,14 @@
             </ToolTip>
         </ToolTip.Tip>
         <Button.Content>
-            <Viewbox Stretch="None">
+            <Viewbox Stretch="None">	
 				<!--
                 <Svg
                     Name="OpenDrawer"
-                    Height="100"
+                    Height="40"
                     Path="{Binding IconPath}" />
-					<Image Source="{Binding IconBmp}" Height="48" Width="48" />
 				-->
-				<avalonia:MaterialIcon 
-					Height="32"
-					Width="32"
-					Kind="TableArrowLeft"
-					Foreground="LightGray"/>
-
+				<Image Source="{Binding IconBmp}" />
 			</Viewbox>
         </Button.Content>
         <Button.Flyout>

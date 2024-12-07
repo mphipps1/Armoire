@@ -27,10 +27,10 @@ public partial class DrawerAsContentsView : UserControl
 
     public void Flyout_Opening(object? sender, EventArgs e)
     {
-      
-            if (DataContext is DrawerAsContentsViewModel viewModel)
-            {
-                viewModel.CheckDraweModel(viewModel);
-            }
+
+        if (DataContext is DrawerAsContentsViewModel viewModel)
+        {
+            viewModel.CheckDraweModel(viewModel);
+        }
     }
 }

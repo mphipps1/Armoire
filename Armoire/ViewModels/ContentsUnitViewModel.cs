@@ -47,6 +47,8 @@ public partial class ContentsUnitViewModel : ViewModelBase
         var idSuffix = Guid.NewGuid().ToString();
         Id = IdBase + idSuffix;
         Name = "unit_" + idSuffix;
+        MoveBackDirection = "Up";
+        MoveForwardDirection = "Down";
     }
 
     //public ContentsUnitViewModel(Drawer _) { }

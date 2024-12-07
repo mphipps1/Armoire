@@ -28,9 +28,12 @@ namespace Armoire.ViewModels
             UpdateNotificationArea();
             Name = "Battery life remaining: ";
             ExecutablePath = "";
-            Parent = container.SourceDrawer;
+            if( container != null ) 
+                Parent = container.SourceDrawer;
             Model = new Item(Name, "", parentID.ToString(), Position);
             Id = "BATTERY";
+            BatteryIcon = "BATTERY100";
+            BatteryPercentage = "100";
         }
 
         public async void UpdateNotificationArea()

@@ -19,8 +19,6 @@ public partial class ContainerViewModel : ViewModelBase
     public string Id { get; set; }
     public string Name { get; set; } = "default";
 
-    public ContainerViewModel() { }
-
     public ContainerViewModel(DrawerAsContentsViewModel sourceDrawer)
     {
         Id = IdBase + _id++;

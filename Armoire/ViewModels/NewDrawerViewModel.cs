@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Windows.Forms;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -122,7 +124,7 @@ namespace Armoire.ViewModels
                 {
                     var newDrawer = new DrawerAsContentsViewModel(
                         Name,
-                        "./../../../Assets/tempDrawer.jpg",
+                        "./../../../Assets/table.png",
                         TargetDrawerID,
                         TargetDrawerHeirarchy + 1,
                         ActiveContainerViewModel
@@ -137,6 +139,38 @@ namespace Armoire.ViewModels
 
             //MainWindowViewModel._dialogIsOpen = false;
             MainWindowViewModel.CloseDialog();
+        }
+
+        [RelayCommand]
+        public void OnOpenFileDialogClick()
+        {
+            //var window = TopLevel.GetTopLevel(this) as Window;
+
+            var dialog = new OpenFileDialog();
+            dialog.Filter = "*.png | *.jpg";
+            dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            dialog.Multiselect = true;
+            dialog.Title = "Select application(s) or drag and drop...";
+
+            var result = dialog.ShowDialog();
+
+            string[] filePaths = dialog.FileNames;
+            string[] fileNames = dialog.SafeFileNames;
+            var targetDrawer = GetTargetDrawer(MainWindowViewModel.ActiveDockViewModel);
+            if (filePaths.Length == 0)
+                return;
+
+            if (targetDrawer == null)
+                return;
+            for (int i = 0; i < fileNames.Length; i++)
+            {
+                ImageDropCollection.Add(filePaths[i]);
+            }
+
+            Name = Path.GetFileNameWithoutExtension(fileNames[0]);
+
+            //if (result != null && result.Length != 0)
+            //    NewItemViewModel.NewExe = result[0];
         }
 
         private ContainerViewModel? GetTargetDrawer(ContainerViewModel currentDrawer)

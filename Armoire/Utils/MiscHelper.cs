@@ -82,7 +82,7 @@ public class MiscHelper
             FileAccess.Read
         );
         var image = Image.FromStream(fs);
-        var bmp = new System.Drawing.Bitmap(image, 60, 60);
+        var bmp = new System.Drawing.Bitmap(image, 50, 50);
         return ConvertSysBmpToAvaBmp(bmp);
     }
 }

@@ -131,20 +131,13 @@ public partial class NewItemView : UserControl
 
             if (DataContext is NewItemViewModel viewModel)
             {
-                if (viewModel.ImageDropCollection.Count < 1)
-                {
-                    viewModel.ImageDropCollection.Add(items.ElementAt(0));
-                    viewModel.BorderBackground = Brushes.Violet;
-                }
-                else
-                {
 
                     if (sender is Border dropareaborder)
                     {
                         dropareaborder.Background = Brushes.Transparent;
                         viewModel.FileDropText = "Remove the dropped file first";
                     }
-                }
+                
             }
 
 
