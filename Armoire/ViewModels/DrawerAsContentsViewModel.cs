@@ -161,11 +161,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
         {
             if (iconPath is not null)
             {
-                FileStream fs = new FileStream(
-                    iconPath,
-                    FileMode.Open,
-                    FileAccess.Read
-                );
+                FileStream fs = new FileStream(iconPath, FileMode.Open, FileAccess.Read);
                 System.Drawing.Image image = System.Drawing.Image.FromStream(fs);
                 System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(image, 50, 50);
                 using (MemoryStream memory = new MemoryStream())
@@ -297,6 +293,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
             drawer.CloseFlyout();
         }
     }
+
     [RelayCommand]
     public void ChangeDrawerName()
     {
@@ -308,7 +305,6 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
 
     public Drawer CreateDrawer()
     {
-        OutputHelper.DebugPrintJson(this, $"DACVM-CreateDrawer-this-{Id}");
         return new Drawer(Id, Name, ParentId, Position, DrawerHierarchy);
     }
 }

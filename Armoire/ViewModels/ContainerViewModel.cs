@@ -73,13 +73,11 @@ public partial class ContainerViewModel : ViewModelBase
             switch (contentsUnit)
             {
                 case DrawerAsContentsViewModel dacVm:
-                    OutputHelper.DebugPrintJson(dacVm, $"CVM-contentsOnAdd-dacVm-{dacVm.Id}");
                     DbHelper.SaveDrawer(dacVm);
                     break;
                 case RunningItemViewModel:
                     break;
                 case ItemViewModel iVm:
-                    OutputHelper.DebugPrintJson(iVm, $"CVM-contentsOnAdd-iVm-{iVm.Id}");
                     DbHelper.SaveItem(iVm);
                     break;
                 default:

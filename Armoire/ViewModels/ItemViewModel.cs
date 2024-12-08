@@ -108,7 +108,6 @@ public partial class ItemViewModel : ContentsUnitViewModel
 
     public Item CreateItem()
     {
-        OutputHelper.DebugPrintJson(this, $"IVM-CreateItem-this-{Id}");
         return new Item(
             Id,
             Name,
