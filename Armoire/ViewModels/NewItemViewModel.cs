@@ -98,35 +98,23 @@ namespace Armoire.ViewModels
                 if (NewExe != null && Executables.ContainsKey(NewExe))
                 {
                     targetDrawer.RegisterEventHandlers();
+                    targetDrawer.Contents.Add(
+                        new ItemViewModel(
+                            Name ?? NewExe,
+                            Executables[NewExe],
+                            Icons[NewExe].ToBitmap(),
+                            TargetDrawerID,
+                            TargetDrawerHeirarchy + 1,
+                            ActiveContainerViewModel,
+                            NewExe
+                        )
+                    );
+
                     if (targetDrawer.SourceDrawer.DrawerHierarchy == -1)
-                    {
-                        targetDrawer.Contents.Insert(
-                            0,
-                            new ItemViewModel(
-                                Name ?? NewExe,
-                                Executables[NewExe],
-                                Icons[NewExe].ToBitmap(),
-                                TargetDrawerID,
-                                TargetDrawerHeirarchy + 1,
-                                ActiveContainerViewModel,
-                                NewExe
-                            )
+                        targetDrawer.Contents.Move(
+                            targetDrawer.Contents.Count - 1,
+                            targetDrawer.Contents.Count - 4
                         );
-                    } 
-                    else
-                    {
-                        targetDrawer.Contents.Add(
-                            new ItemViewModel(
-                                Name ?? NewExe,
-                                Executables[NewExe],
-                                Icons[NewExe].ToBitmap(),
-                                TargetDrawerID,
-                                TargetDrawerHeirarchy + 1,
-                                ActiveContainerViewModel,
-                                NewExe
-                            )
-                        );
-                    }
                     Name = NewExe;
                 }
                 else if (NewExe != null)
@@ -145,9 +133,9 @@ namespace Armoire.ViewModels
                     );
                     Name = NewExe;
                 }
-                else if (lnkDropCollection.Count > 0 )
+                else if (lnkDropCollection.Count > 0)
                 {
-                   if (lnkDropCollection.Count > 0)
+                    if (lnkDropCollection.Count > 0)
                     {
                         var droppedFile = lnkDropCollection.ElementAt(0);
                         var ExeFilePath = droppedFile;
@@ -221,7 +209,7 @@ namespace Armoire.ViewModels
             string[] filePaths = dialog.FileNames;
             string[] fileNames = dialog.SafeFileNames;
             var targetDrawer = GetTargetDrawer(MainWindowViewModel.ActiveDockViewModel);
-            if(filePaths.Length == 0)
+            if (filePaths.Length == 0)
                 return;
 
             if (targetDrawer == null)
@@ -266,7 +254,9 @@ namespace Armoire.ViewModels
                 }
             }
 
-            directoryPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Microsoft\Windows\Start Menu\Programs";
+            directoryPath =
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)
+                + @"\Microsoft\Windows\Start Menu\Programs";
             if (Directory.Exists(directoryPath))
             {
                 foreach (

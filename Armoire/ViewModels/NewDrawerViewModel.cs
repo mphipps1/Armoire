@@ -94,31 +94,20 @@ namespace Armoire.ViewModels
 
                     Image image = Image.FromFile(fileInfo.FullName);
                     targetDrawer.RegisterEventHandlers();
+                    targetDrawer.Contents.Add(
+                        new DrawerAsContentsViewModel(
+                            Name,
+                            new System.Drawing.Bitmap(image, 60, 60),
+                            TargetDrawerID.ToString(),
+                            TargetDrawerHeirarchy,
+                            ActiveContainerViewModel
+                        )
+                    );
                     if (targetDrawer.SourceDrawer.DrawerHierarchy == -1)
-                    {
-                        targetDrawer.Contents.Insert(
-                            0,
-                            new DrawerAsContentsViewModel(
-                                Name,
-                                new System.Drawing.Bitmap(image, 60, 60),
-                                TargetDrawerID.ToString(),
-                                TargetDrawerHeirarchy,
-                                ActiveContainerViewModel
-                            )
+                        targetDrawer.Contents.Move(
+                            targetDrawer.Contents.Count - 1,
+                            targetDrawer.Contents.Count - 4
                         );
-                    } 
-                    else
-                    {
-                        targetDrawer.Contents.Add(
-                            new DrawerAsContentsViewModel(
-                                Name,
-                                new System.Drawing.Bitmap(image, 60, 60),
-                                TargetDrawerID.ToString(),
-                                TargetDrawerHeirarchy,
-                                ActiveContainerViewModel
-                            )
-                        );
-                    }
                 }
                 else
                 {
@@ -130,10 +119,12 @@ namespace Armoire.ViewModels
                         ActiveContainerViewModel
                     );
                     targetDrawer.RegisterEventHandlers();
+                    targetDrawer.Contents.Add(newDrawer);
                     if (targetDrawer.SourceDrawer.DrawerHierarchy == -1)
-                        targetDrawer.Contents.Insert(0, newDrawer);
-                    else
-                        targetDrawer.Contents.Add(newDrawer);
+                        targetDrawer.Contents.Move(
+                            targetDrawer.Contents.Count - 1,
+                            targetDrawer.Contents.Count - 4
+                        );
                 }
             }
 
