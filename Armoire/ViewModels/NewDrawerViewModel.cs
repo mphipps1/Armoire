@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Avalonia.Media;
-using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -99,7 +97,7 @@ namespace Armoire.ViewModels
                             Name,
                             new System.Drawing.Bitmap(image, 60, 60),
                             TargetDrawerID.ToString(),
-                            TargetDrawerHeirarchy,
+                            TargetDrawerHeirarchy + 1,
                             ActiveContainerViewModel
                         )
                     );

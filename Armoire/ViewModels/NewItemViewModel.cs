@@ -5,16 +5,11 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Windows.Forms;
-using System.Xml.Linq;
-using Avalonia.Controls;
-using Avalonia.Interactivity;
 using Avalonia.Media;
-using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using OpenFileDialog = System.Windows.Forms.OpenFileDialog;
@@ -111,10 +106,14 @@ namespace Armoire.ViewModels
                     );
 
                     if (targetDrawer.SourceDrawer.DrawerHierarchy == -1)
+                    {
+                        Debug.WriteLine("hi");
                         targetDrawer.Contents.Move(
                             targetDrawer.Contents.Count - 1,
                             targetDrawer.Contents.Count - 4
                         );
+                    }
+
                     Name = NewExe;
                 }
                 else if (NewExe != null)
