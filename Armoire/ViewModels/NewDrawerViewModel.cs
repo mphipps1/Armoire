@@ -98,7 +98,8 @@ namespace Armoire.ViewModels
                             new System.Drawing.Bitmap(image, 60, 60),
                             TargetDrawerID.ToString(),
                             TargetDrawerHeirarchy + 1,
-                            ActiveContainerViewModel
+                            ActiveContainerViewModel,
+                            fileInfo.FullName
                         )
                     );
                     if (targetDrawer.SourceDrawer.DrawerHierarchy == -1)

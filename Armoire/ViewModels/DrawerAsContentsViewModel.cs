@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Data.SqlTypes;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
 using Armoire.Models;
 using Armoire.Utils;
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DialogHostAvalonia;
-using Svg;
 
 namespace Armoire.ViewModels;
 
@@ -107,9 +104,11 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
         System.Drawing.Bitmap bmp,
         string parentID,
         int? drawerHierarchy,
-        ContainerViewModel? cvm = null
+        ContainerViewModel? cvm,
+        string iconPath
     )
     {
+        IconPath = iconPath;
         GeneratedDrawer = new DrawerViewModel(this);
         Name = name;
 
@@ -181,12 +180,13 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
     public DrawerAsContentsViewModel(Drawer model, ContainerViewModel? container)
     {
         Id = model.Id;
-        //var modelIdCountStr = model.Id[9..];
-        //if (int.TryParse(modelIdCountStr, out var modelIdCount))
-        //    IdCount = modelIdCount + 1;
         Name = model.Name;
         LoadPosition = model.Position;
-        IconBmp = MiscHelper.GetAvaBmpFromAssets("table.png");
+        var defaultIcon = MiscHelper.GetAvaBmpFromAssets("table.png");
+        IconBmp =
+            model.IconPath == null
+                ? defaultIcon
+                : MiscHelper.GetAvaBmpFromImgPath(model.IconPath) ?? defaultIcon;
         GeneratedDrawer = new DrawerViewModel(this);
         Container = container;
         ParentId = model.ParentId;
@@ -305,6 +305,6 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
 
     public Drawer CreateDrawer()
     {
-        return new Drawer(Id, Name, ParentId, Position, DrawerHierarchy);
+        return new Drawer(Id, Name, ParentId, Position, DrawerHierarchy, IconPath);
     }
 }

@@ -14,7 +14,7 @@ public partial class ContentsUnitViewModel : ViewModelBase
     public ContainerViewModel? Container { get; set; }
     public ContentsUnitViewModel? Parent { get; set; }
     public int? LoadPosition { get; set; }
-    private string? IconPath { get; set; }
+    protected string? IconPath { get; set; }
 
     // Expression-bodied property.
     public int? Position => Container?.Contents.IndexOf(this);

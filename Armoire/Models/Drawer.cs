@@ -19,13 +19,21 @@ public class Drawer
     // Parameterless constructor needed so EF can build the schema.
     public Drawer() { }
 
-    public Drawer(string id, string name, string? parentId, int? position, int? drawerHierarchy)
+    public Drawer(
+        string id,
+        string name,
+        string? parentId,
+        int? position,
+        int? drawerHierarchy,
+        string? iconPath
+    )
     {
         Id = id;
         Name = name;
         ParentId = parentId;
         Position = position;
         DrawerHierarchy = drawerHierarchy;
+        IconPath = iconPath;
     }
 
     public Drawer(Drawer drawer)
