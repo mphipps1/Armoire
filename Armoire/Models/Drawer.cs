@@ -13,6 +13,9 @@ public class Drawer
     [Key]
     public string Id { get; set; } = "default";
 
+    [MaxLength(100)]
+    public string? IconPath { get; set; } = "default";
+
     // Parameterless constructor needed so EF can build the schema.
     public Drawer() { }
 

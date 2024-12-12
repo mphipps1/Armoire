@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using Armoire.Interfaces;
 using Armoire.Models;
 using Armoire.Utils;
-using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -16,15 +14,13 @@ public partial class ContentsUnitViewModel : ViewModelBase
     public ContainerViewModel? Container { get; set; }
     public ContentsUnitViewModel? Parent { get; set; }
     public int? LoadPosition { get; set; }
+    private string? IconPath { get; set; }
 
     // Expression-bodied property.
     public int? Position => Container?.Contents.IndexOf(this);
 
     [ObservableProperty]
     private string _name;
-
-    [ObservableProperty]
-    private string? _iconPath;
 
     [ObservableProperty]
     private bool _deleteMe;
