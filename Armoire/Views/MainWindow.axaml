@@ -107,7 +107,7 @@
             HorizontalAlignment="Center"
             VerticalAlignment="Top"
             Spacing="20"
-			Width="80">
+			Width="70">
 			<!--  Digital Clock  -->
 			<TextBlock
 				Grid.Column="2"

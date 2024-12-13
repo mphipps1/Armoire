@@ -102,8 +102,6 @@ namespace Armoire.ViewModels
             var start = new StartMenuItemViewModel(dockSource.Id, 0, ActiveDockViewModel);
             ActiveDockViewModel.Contents.Add(start);
 
-
-
             var apps = new ApplicationMonitorViewModel(dockSource.Id, 0);
             ActiveDockViewModel.Contents.Add(apps);
             apps.GetInitialRunningApps();
@@ -117,7 +115,7 @@ namespace Armoire.ViewModels
 
         private void UpdateTime()
         {
-            CurrentTime = DateTime.Now.ToString("%h:mm tt");
+            CurrentTime = DateTime.Now.ToString("%H:mm");
         }
 
         [RelayCommand]
