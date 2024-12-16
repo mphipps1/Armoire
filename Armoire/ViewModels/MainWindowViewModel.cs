@@ -1,4 +1,9 @@
-﻿using System;
+﻿/*  MainWindow holds a the logic that should applied to the whole app or the main window
+ *  It has a couple of static members such as DeletedUnits or DockViewModel which can be used by the whole app
+ * 
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -78,6 +83,7 @@ namespace Armoire.ViewModels
             // Get the list of apps in the start menu here instead of in the NewItemViewModel constructor to avoid lag.
             NewItemViewModel.GetExecutables();
 
+            //Setting up the custom drawers/items like the NotificationArea and its contents
             var notif = new NotificationAreaViewModel(dockSource.Id, 0);
             ActiveDockViewModel.Contents.Add(notif);
 

@@ -27,6 +27,7 @@ public partial class NewDrawerView : UserControl
 
     }
 
+    // Catch anything that is dropped
     private void OnDrop(object? sender, DragEventArgs e)
     {
         //https://github.com/AvaloniaUI/Avalonia.Xaml.Behaviors/discussions/118

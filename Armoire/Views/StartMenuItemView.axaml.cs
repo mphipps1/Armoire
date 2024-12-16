@@ -1,3 +1,8 @@
+/*  This class handles the UI of the start menu
+ *  It constructs the list of executables base off the same list of executables in the NewItem drop down menu
+ * 
+ */
+
 using Armoire.ViewModels;
 using Armoire.Views;
 using Avalonia;
@@ -45,7 +50,7 @@ public partial class StartMenuItemView : ItemView
         var Icons = NewItemViewModel.Icons;
         foreach (var name in NewItemViewModel.ExecutableNames)
         {
-
+            // Making icons to place next to executable names
             Bitmap bmp = Icons[name].ToBitmap();
             Avalonia.Media.Imaging.Bitmap IconBmp;
             using (MemoryStream memory = new MemoryStream())
@@ -101,6 +106,7 @@ public partial class StartMenuItemView : ItemView
         originalList = new Controls(startMenuList.Children);
     }
 
+    // Narrowing the list of executables based off what the user has typed
     public void StartMenuKeyUp(object sender, KeyEventArgs e)
     {
         if (typedAppName is null || popup is null)
@@ -155,6 +161,7 @@ public partial class StartMenuItemView : ItemView
         }
     }
 
+    //An attempt at setting the focus to the textbox of the start menu when opened, doesnt currently work
     public void SetFocus(object sender, RoutedEventArgs args)
     {
         var textBox = this.Find<TextBox>("TypedAppName");
@@ -162,6 +169,7 @@ public partial class StartMenuItemView : ItemView
             textBox.Focus();
     }
 
+    //resetting the state of the start menu
     public void PopupCloseEvent(object? sender, System.EventArgs args)
     {
         if(DataContext == null)

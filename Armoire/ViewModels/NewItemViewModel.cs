@@ -1,6 +1,6 @@
-﻿//using Windows.Management;
-
-//using Windows.Management;
+﻿/*  This class holds the logic for when a user wants to add a new item.
+ * 
+ */
 
 using System;
 using System.Collections.Generic;
@@ -84,12 +84,14 @@ namespace Armoire.ViewModels
             ActiveContainerViewModel = cvm;
         }
 
+        // Update is called when "save" is clicked
         [RelayCommand]
         public void Update()
         {
             var targetDrawer = GetTargetDrawer(MainWindowViewModel.ActiveDockViewModel);
             if (targetDrawer != null)
             {
+                //Checking first to see if any exes from the drop down menu were selected
                 if (NewExe != null && Executables.ContainsKey(NewExe))
                 {
                     targetDrawer.RegisterEventHandlers();
@@ -104,7 +106,7 @@ namespace Armoire.ViewModels
                             NewExe
                         )
                     );
-
+                    // Moving items in the dock so that they arent below the custom drawers/items
                     if (targetDrawer.SourceDrawer.DrawerHierarchy == -1)
                     {
                         Debug.WriteLine("hi");
@@ -116,6 +118,7 @@ namespace Armoire.ViewModels
 
                     Name = NewExe;
                 }
+                // Now checking to see if something was drag and dropped
                 else if (NewExe != null)
                 {
                     targetDrawer.RegisterEventHandlers();
@@ -132,6 +135,7 @@ namespace Armoire.ViewModels
                     );
                     Name = NewExe;
                 }
+                // Checking last to see if something was selected through file dialog
                 else if (lnkDropCollection.Count > 0)
                 {
                     if (lnkDropCollection.Count > 0)
@@ -166,6 +170,7 @@ namespace Armoire.ViewModels
             NewExe = null;
         }
 
+        //G etting the drawer that we want to add the new item to
         private ContainerViewModel? GetTargetDrawer(ContainerViewModel currentDrawer)
         {
             if (TargetDrawerID == "CONTENTS_1")
@@ -192,6 +197,7 @@ namespace Armoire.ViewModels
             return null;
         }
 
+        // Opening file explorer and allowing users to select a shortcut or exe
         [RelayCommand]
         public void OnOpenFileDialogClick()
         {
@@ -225,12 +231,16 @@ namespace Armoire.ViewModels
             //    NewItemViewModel.NewExe = result[0];
         }
 
+        // GetExecutables searches the StartMenu folder for apps installed on this machine
         public static void GetExecutables()
         {
+            //Initializing here as this method is static, and is called before the constructor
             Dock = MainWindowViewModel.ActiveDockViewModel.Contents;
             Executables = new Dictionary<string, string>();
             ExecutableNames = new ObservableCollection<string>();
             Icons = new Dictionary<string, Icon>();
+
+            // Getting all shortcuts from this folder
             string directoryPath = @"C:\ProgramData\Microsoft\Windows\Start Menu\Programs";
 
             if (Directory.Exists(directoryPath))
@@ -243,6 +253,7 @@ namespace Armoire.ViewModels
                     )
                 )
                 {
+                    // Only adding if it isnt already in executables
                     if (!Executables.ContainsKey(System.IO.Path.GetFileNameWithoutExtension(file)))
                     {
                         string shortcut = System.IO.Path.GetFileNameWithoutExtension(file);
@@ -253,6 +264,7 @@ namespace Armoire.ViewModels
                 }
             }
 
+            // Also checking %appdata% starts menu folder, as they have some differences
             directoryPath =
                 Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)
                 + @"\Microsoft\Windows\Start Menu\Programs";
@@ -266,6 +278,7 @@ namespace Armoire.ViewModels
                     )
                 )
                 {
+                    // Only adding if it isnt already in executables
                     if (!Executables.ContainsKey(System.IO.Path.GetFileNameWithoutExtension(file)))
                     {
                         string shortcut = System.IO.Path.GetFileNameWithoutExtension(file);
@@ -279,6 +292,7 @@ namespace Armoire.ViewModels
             ExecutableNames = new ObservableCollection<string>(ExecutableNames.OrderBy(i => i));
         }
 
+        // Removes any selected or files that were drag and dropped
         [RelayCommand]
         public void RemoveFile()
         {
@@ -295,6 +309,7 @@ namespace Armoire.ViewModels
             }
         }
 
+        // Switching the button of the drop down menu
         [RelayCommand]
         public void ToggleExeDropDown()
         {

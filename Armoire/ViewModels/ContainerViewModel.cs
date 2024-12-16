@@ -1,4 +1,10 @@
-﻿using System.Collections.ObjectModel;
+﻿/* Container holds a collection of ContentsUnits along with information about this collection
+ * This class holds functions that are called when the collection of ContentsUnits is changed
+ * 
+ */
+
+
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -10,14 +16,18 @@ namespace Armoire.ViewModels;
 
 public partial class ContainerViewModel : ViewModelBase
 {
+    // This is the direction that this collection will be displayed
     [ObservableProperty]
     private Orientation _wrapPanelOrientation = Orientation.Horizontal;
 
     private const string IdBase = "CONTAINER_";
     private static long _id = 1;
-
     public string Id { get; set; }
     public string Name { get; set; } = "default";
+    // The drawer button that this container generates from.
+    public DrawerAsContentsViewModel SourceDrawer { get; set; }
+    public string? SourceDrawerId { get; set; }
+    public ObservableCollection<ContentsUnitViewModel> Contents { get; set; } = [];
 
     public ContainerViewModel(DrawerAsContentsViewModel sourceDrawer)
     {
@@ -42,13 +52,6 @@ public partial class ContainerViewModel : ViewModelBase
             cuVm.PropertyChanged += contents_PropertyChanged;
         }
     }
-
-    // The drawer button that this container generates from.
-    public DrawerAsContentsViewModel SourceDrawer { get; set; }
-
-    public string? SourceDrawerId { get; set; }
-
-    public ObservableCollection<ContentsUnitViewModel> Contents { get; set; } = [];
 
     private void contents_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {

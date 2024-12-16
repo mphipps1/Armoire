@@ -1,4 +1,9 @@
-﻿using System;
+﻿/*  This class holds the logic for the view displayed when a user wants to make a new drawer
+ *  A new drawer must have a name, but can also accept an image to display
+ * 
+ */
+
+using System;
 using System.Collections.ObjectModel;
 using System.Drawing;
 using System.IO;
@@ -74,6 +79,7 @@ namespace Armoire.ViewModels
             ActiveContainerViewModel = cvm;
         }
 
+        // Update is called when "save" is clicked and checks to see if it should have a custom icon or not
         [RelayCommand]
         public void Update()
         {
@@ -102,6 +108,7 @@ namespace Armoire.ViewModels
                             fileInfo.FullName
                         )
                     );
+                    // Moving items in the dock so that they arent below the custom drawers/items
                     if (targetDrawer.SourceDrawer.DrawerHierarchy == -1)
                         targetDrawer.Contents.Move(
                             targetDrawer.Contents.Count - 1,
@@ -119,6 +126,7 @@ namespace Armoire.ViewModels
                     );
                     targetDrawer.RegisterEventHandlers();
                     targetDrawer.Contents.Add(newDrawer);
+                    // Moving items in the dock so that they arent below the custom drawers/items
                     if (targetDrawer.SourceDrawer.DrawerHierarchy == -1)
                         targetDrawer.Contents.Move(
                             targetDrawer.Contents.Count - 1,
@@ -131,6 +139,7 @@ namespace Armoire.ViewModels
             MainWindowViewModel.CloseDialog();
         }
 
+        // OpenFileDialogClick is used to allow users to select an image to upload
         [RelayCommand]
         public void OnOpenFileDialogClick()
         {
@@ -163,6 +172,7 @@ namespace Armoire.ViewModels
             //    NewItemViewModel.NewExe = result[0];
         }
 
+        // GetTargetDrawer searches for the drawer to which we want to add the new drawer
         private ContainerViewModel? GetTargetDrawer(ContainerViewModel currentDrawer)
         {
             if (TargetDrawerID == "CONTENTS_1")
@@ -189,6 +199,7 @@ namespace Armoire.ViewModels
             return null;
         }
 
+        //Removes any uploaded files
         [RelayCommand]
         public void RemoveFile()
         {

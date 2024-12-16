@@ -30,7 +30,7 @@ public partial class DrawerAsContentsView : UserControl
 
         if (DataContext is DrawerAsContentsViewModel viewModel)
         {
-            viewModel.CheckDraweModel(viewModel);
+            viewModel.CheckDrawerModel(viewModel);
         }
     }
 }

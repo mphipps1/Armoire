@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*  DrawerAsContents holds the logic for the button functionalities of a drawer
+ *  These functions include moving, deleting, renaming etc.
+ * 
+ * 
+ */
+
+using System;
 using System.Drawing.Imaging;
 using System.IO;
 using Armoire.Models;
@@ -24,40 +30,14 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
     [ObservableProperty]
     private Avalonia.Media.Imaging.Bitmap _iconBmp;
 
-    public DrawerAsContentsViewModel(
-        DrawerViewModel container,
-        string name,
-        string? parentID,
-        int? drawerHierarchy
-    )
-    {
-        Name = name;
-        FileStream fs = new FileStream(
-            "./../../../Assets/tempDrawer.jpg",
-            FileMode.Open,
-            FileAccess.Read
-        );
-        System.Drawing.Image image = System.Drawing.Image.FromStream(fs);
-        System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(image, 60, 60);
-        using (MemoryStream memory = new MemoryStream())
-        {
-            bmp.Save(memory, ImageFormat.Png);
-            memory.Position = 0;
-            IconBmp = new Avalonia.Media.Imaging.Bitmap(memory);
-        }
-        GeneratedDrawer = new DrawerViewModel(this);
-        Container = container;
-        ParentId = parentID;
-        DrawerHierarchy = drawerHierarchy;
-        SetMoveDirections(this);
-        _count++;
-    }
 
     // Dock source constructor (leaves some properties null on purpose).
     public DrawerAsContentsViewModel(string? parentID, int? drawerHierarchy)
     {
         Name = "dock";
         Id = "CONTENTS_1";
+
+        // Converting the .jpg image into a bitmap
         FileStream fs = new FileStream(
             "./../../../Assets/tempDrawer.jpg",
             FileMode.Open,
@@ -80,6 +60,8 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
     public DrawerAsContentsViewModel(string? parentID, int? drawerHierarchy, bool notDock)
     {
         Name = "drawer " + _count++;
+
+        // Converting the .jpg image into a bitmap
         FileStream fs = new FileStream(
             "./../../../Assets/table.png",
             FileMode.Open,
@@ -140,6 +122,8 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
         Name = name;
         ParentId = parentID;
         DrawerHierarchy = drawerHierarchy;
+
+        // Converting the .jpg image into a bitmap
         if (iconPath == null || iconPath == "")
         {
             FileStream fs = new FileStream(
@@ -222,8 +206,9 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
         SetMoveDirections(this);
     }
 
+    // CheckDrawerModel is used to check which direction a drawer should open
     [RelayCommand]
-    public void CheckDraweModel(object typeviewModel)
+    public void CheckDrawerModel(object typeviewModel)
     {
         if (typeviewModel is DrawerAsContentsViewModel viewModel)
         {

@@ -1,3 +1,8 @@
+/*  MainWindow.axaml.cs holds the logic for dragging the MainWindow and checking to make
+ *  sure that the DialogHost doesnt extend off the screen
+ * 
+ */
+
 using System;
 using System.Diagnostics;
 using System.Linq;
@@ -27,6 +32,7 @@ namespace Armoire.Views
         private bool _mouseDownForWindowMoving = false;
         private PointerPoint _originalPoint;
 
+        //Called when the pointer is moved, then moves the window is the left mouse button is also clicked
         private void InputElement_OnPointerMoved(object? sender, PointerEventArgs e)
         {
             var point = e.GetCurrentPoint(sender as Control);
@@ -41,6 +47,7 @@ namespace Armoire.Views
                 Position.Y + (int)(currentPoint.Position.Y - _originalPoint.Position.Y));
         }
 
+        // Called when the mouse is clicked, does a series of checks before allowing thie main window to move
         private void InputElement_OnPointerPressed(object? sender, PointerPressedEventArgs e)
         {
             var point = e.GetCurrentPoint(sender as Control);
@@ -58,6 +65,8 @@ namespace Armoire.Views
                 (e.Source.ToString() != "Avalonia.Controls.Border")))
                 return;
 
+            // Make sure that we close the context menu of the main window
+            // This solves a bug where the docks context menu wouldn't close
             ContextMenu? cm = this.Find<ContextMenu>("MainWindowContextMenu");
             if (cm is not null && cm.IsOpen)
                 cm.Close();
@@ -72,6 +81,7 @@ namespace Armoire.Views
             if (((StyledElement)((AvaloniaObject)((RoutedEventArgs)((Delegate)e.GetCurrentPoint).Target).Source)).DataContext is StartMenuItemViewModel)
                 return;
 
+            //This check isn't really neccissary for our app, but was in the source where this code was found
             if (WindowState == WindowState.Maximized || WindowState == WindowState.FullScreen)
                 return;
 
@@ -98,13 +108,14 @@ namespace Armoire.Views
 
         }
 
+        // Used to check for shortcuts
         private void MainWindow_KeyDown(object? sender, KeyEventArgs e)
         {
             if (e.Key == Key.LeftCtrl || e.Key == Key.RightCtrl)
                 CtrlHeld = true;
             
         }
-
+        // Used to check for shortcuts
         private void MainWindow_KeyUp(object? sender, KeyEventArgs e)
         {
             switch (e.Key)
@@ -127,6 +138,10 @@ namespace Armoire.Views
             }
         }
 
+        // The following is all to check if the DialogHost will extend off the screen to the right
+        // If it is, move the main window to the left before opening
+        // Currently only works properly on the main monitor, and will move the window regardless
+        // if Armorie is on a secondary window
         public const Int32 MONITOR_DEFAULTTOPRIMERTY = 0x00000001;
         public const Int32 MONITOR_DEFAULTTONEAREST = 0x00000002;
 
@@ -167,6 +182,8 @@ namespace Armoire.Views
             public Int32 Flags;
         }
 
+        // Checks if the window is too close to the right side of the screen, and if it 
+        // is then move the window to the left
         public void CheckWindowPosition(object? sender, RoutedEventArgs args)
         {
             Window? ArmoireWindow = this.FindControl<Window>("window");

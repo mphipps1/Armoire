@@ -1,4 +1,8 @@
-﻿using Avalonia;
+﻿/*  This was a temporary class used for displaying tools useful for development
+ *  such as seeing the database
+ */
+
+using Avalonia;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Armoire.ViewModels;

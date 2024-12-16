@@ -1,4 +1,18 @@
-﻿using System;
+﻿/* ApplicationMonitor is the drawer responsible for holding a collection of RunningItems
+ * It inherets from DrawerAsContents
+ * 
+ * It loops over the list of all processes running on this computer, then narrows down this
+ * list based on its MainWindowHandle and MainWindowTitle to find processes that should be displayed
+ * for the user to maximize or close.
+ * 
+ * Browsers are difficult to handle. Say there are two groups of tabs open. For chrome, only one process would have a MainWindowHandle,
+ * and that is whichever group of tabs was most recently clicked on. Swapping between chrome windows causes the one that is no longer clicked
+ * on to be deleted. To solve this, browers are handled in their own collection, and arent deleted at the moment.
+ */
+
+
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -14,22 +28,22 @@ namespace Armoire.ViewModels;
 
 public partial class ApplicationMonitorViewModel : DrawerAsContentsViewModel
 {
-    public static ObservableCollection<ItemViewModel> ProcessList { get; } =
-        new ObservableCollection<ItemViewModel>();
-
+    //The names of the currently running apps, used to store the list of apps that are currently added in this drawer
+    //Used so that we dont need to manually check each RunningItems Processes MainWindowTitle every time
     public static List<string> RunningAppNames { get; set; } = new List<string>();
 
+    //Boolean used to infinately loop
     private static bool isMonitoring = true;
-
-    public static bool isRunning;
 
     public ApplicationMonitorViewModel(string? parentID, int drawerHierarchy)
         : base(parentID, drawerHierarchy, true)
     {
         Name = "Running Applications";
+        //This Id is special and serves as a flag so this drawer isnt added to the database
         Id = "MONITOR";
     }
 
+    // This function uses async and await to start the infinate loop of checking processes
     public async void GetInitialRunningApps()
     {
         var processes = Process.GetProcesses();
@@ -37,9 +51,7 @@ public partial class ApplicationMonitorViewModel : DrawerAsContentsViewModel
         await checkingApps;
     }
 
-    //https://stackoverflow.com/questions/44602890/c-sharp-how-to-get-tabs-from-chrome-in-multiple-windows
-
-    //Work in Progress
+    // CheckRunningApplication infinately loops to check for changes in the currentl running processes
     public static async Task CheckRunningApplication(DrawerAsContentsViewModel dac)
     {
         ArrayList browserWindows = new ArrayList();
@@ -48,6 +60,7 @@ public partial class ApplicationMonitorViewModel : DrawerAsContentsViewModel
             await Task.Delay(300);
             var processes = Process.GetProcesses();
 
+            // Creating a dictionary to hold apps who have a MainWindowHandle (apps that can be maximized)
             Dictionary<string, Process> apps = new Dictionary<string, Process>();
             int i = 0;
             foreach (Process process in processes)
@@ -57,7 +70,7 @@ public partial class ApplicationMonitorViewModel : DrawerAsContentsViewModel
                     apps.Add(process.ProcessName + process.MainWindowHandle, process);
                 }
                 i++;
-                // delaying this to prevent all the work being done at once
+                // delaying here to prevent all the delaying being done at once
                 // without this, dragging the dock around would lag every 1 seconds or so
                 // but now we're spreading the work out
                 if (i == 15)
@@ -66,13 +79,20 @@ public partial class ApplicationMonitorViewModel : DrawerAsContentsViewModel
                     i = 0;
                 }
             }
+
+            // A badProcess is defined as a process that has a MainWindowTitle that we dont want to display
+            // Any processes that shouldn't be added to the list of running apps should be added here
             ArrayList badProcesses = new ArrayList();
             badProcesses.Add("TextInputHost");
             badProcesses.Add("svchost");
             badProcesses.Add("ApplicationFrameHost");
             bool foundApp = false;
+
+            // This loop checks to see if any apps in our drawer have been closed
             foreach (string appName in RunningAppNames.ToList())
             {
+                // Using a loop and flag to search with StartsWith as some MainWindowHandles were truncated occassionally
+                // This mainly occured with FileExplorer, so it might not still be neccissary 
                 foundApp = false;
                 foreach (var n in apps.Keys)
                 {
@@ -84,8 +104,12 @@ public partial class ApplicationMonitorViewModel : DrawerAsContentsViewModel
                 }
                 if (foundApp)
                     continue;
+
+                //Check to see if its a brower window
                 if (browserWindows.Contains(appName))
                     continue;
+
+                //If we make it this far, delete the app
                 RunningAppNames.Remove(appName);
                 foreach (var cuvm in dac.GeneratedDrawer.Contents.ToList())
                 {
@@ -103,14 +127,16 @@ public partial class ApplicationMonitorViewModel : DrawerAsContentsViewModel
                 }
             }
 
+            //Adding any new apps
             foreach (string appName in apps.Keys)
             {
                 // Handling browsers in a seperate collection. Browsers can have multiple windows, each has a different
                 // MainWindowHandle, but one process manages both of these, meaning its MainWindowHandle switches between each window
                 if (IsBrowser(appName) && !browserWindows.Contains(appName))
                     browserWindows.Add(appName + apps[appName].MainWindowHandle);
-                //if (!apps[appName].Responding)
-                //    continue;
+
+                // Checking with a flag and loop as some names were truncated occassionally
+                // The logic here could be improved
                 foundApp = false;
                 foreach (var n in RunningAppNames)
                 {
@@ -149,7 +175,7 @@ public partial class ApplicationMonitorViewModel : DrawerAsContentsViewModel
                 );
             }
 
-            //updating the processes and names in each RunningItem
+            // Updating the processes and names in each RunningItem
             foreach (var cuvm in dac.GeneratedDrawer.Contents.ToList())
             {
                 var rivm = cuvm as RunningItemViewModel;
@@ -174,6 +200,7 @@ public partial class ApplicationMonitorViewModel : DrawerAsContentsViewModel
         }
     }
 
+    // Check to see if the current name is a browser
     public static bool IsBrowser(string name)
     {
         return name.StartsWith("chrome") || name.StartsWith("msedge") || name.StartsWith("firefox");

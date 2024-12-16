@@ -1,4 +1,8 @@
-﻿using System;
+﻿/*  The NotificationArea holds the battery info, sound and wifi settings along with the weather
+ * 
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,6 +22,8 @@ public partial class NotificationAreaViewModel : DrawerAsContentsViewModel
         Name = "Notification Area";
         GeneratedDrawer = new DrawerViewModel(this);
         SetMoveDirections(this);
+
+        //Special ID to prevent this DrawerAsContents from being added to the database
         Id = "NOTIFICATIONS";
     }
 }

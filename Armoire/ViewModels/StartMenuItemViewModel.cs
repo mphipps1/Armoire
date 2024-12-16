@@ -1,4 +1,8 @@
-﻿using System;
+﻿/*  This class manages the Armoire startmenu. Much of the logic for creating the UI is handled in StartMenuView.axaml.cs
+ * 
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -29,6 +33,8 @@ namespace Armoire.ViewModels
             ExecutablePath = "";
             //Container = container;
             Model = new Item(Name, "", parentID.ToString(), Position);
+
+            //Special ID so this item isnt added to the database
             Id = "START_MENU";
         }
 
