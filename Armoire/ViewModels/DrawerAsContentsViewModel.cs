@@ -1,7 +1,7 @@
 ﻿/*  DrawerAsContents holds the logic for the button functionalities of a drawer
  *  These functions include moving, deleting, renaming etc.
- * 
- * 
+ *
+ *
  */
 
 using System;
@@ -29,7 +29,6 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
 
     [ObservableProperty]
     private Avalonia.Media.Imaging.Bitmap _iconBmp;
-
 
     // Dock source constructor (leaves some properties null on purpose).
     public DrawerAsContentsViewModel(string? parentID, int? drawerHierarchy)
@@ -60,21 +59,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
     public DrawerAsContentsViewModel(string? parentID, int? drawerHierarchy, bool notDock)
     {
         Name = "drawer " + _count++;
-
-        // Converting the .jpg image into a bitmap
-        FileStream fs = new FileStream(
-            "./../../../Assets/table.png",
-            FileMode.Open,
-            FileAccess.Read
-        );
-        System.Drawing.Image image = System.Drawing.Image.FromStream(fs);
-        System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(image, 60, 60);
-        using (MemoryStream memory = new MemoryStream())
-        {
-            bmp.Save(memory, ImageFormat.Png);
-            memory.Position = 0;
-            IconBmp = new Avalonia.Media.Imaging.Bitmap(memory);
-        }
+        IconBmp = MiscHelper.GetAvaBmpFromAssets("table.png");
         GeneratedDrawer = new DrawerViewModel(this);
         ParentId = parentID;
         DrawerHierarchy = drawerHierarchy;
