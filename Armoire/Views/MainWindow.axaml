@@ -1,3 +1,7 @@
+<!--
+Four `Window` attributes that remove the window's title bar and transparent protruding background:
+https://stackoverflow.com/a/76226627/16458003
+-->
 <Window
     x:Class="Armoire.Views.MainWindow"
     xmlns="https://github.com/avaloniaui"
@@ -21,7 +25,8 @@
 	SizeToContent="WidthAndHeight"
 	ExtendClientAreaToDecorationsHint="True"
     ExtendClientAreaChromeHints="NoChrome"
-    ExtendClientAreaTitleBarHeightHint="0"
+    ExtendClientAreaTitleBarHeightHint="-1"
+	SystemDecorations="None"
 	PointerPressed="InputElement_OnPointerPressed"
 	PointerMoved="InputElement_OnPointerMoved"
 	PointerReleased="InputElement_OnPointerReleased"
@@ -99,9 +104,9 @@
 		<Border 
 			Background="#222222"
 			BorderBrush="Purple"
-			BorderThickness="2"
-			CornerRadius="16"
-			Padding="16"
+			BorderThickness="3"
+			CornerRadius="10"
+			Padding="10 9 10 15"
 			HorizontalAlignment="Left">
         <StackPanel
             HorizontalAlignment="Center"
