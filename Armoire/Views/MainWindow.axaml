@@ -1,6 +1,6 @@
 <!--
-Four `Window` attributes that remove the window's title bar and transparent protruding background:
-https://stackoverflow.com/a/76226627/16458003
+    Four `Window` attributes that remove the window's title bar and transparent protruding background:
+    https://stackoverflow.com/a/76226627/16458003
 -->
 <Window
     x:Class="Armoire.Views.MainWindow"
@@ -11,53 +11,53 @@ https://stackoverflow.com/a/76226627/16458003
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:dialogHostAvalonia="clr-namespace:DialogHostAvalonia;assembly=DialogHost.Avalonia"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:v="using:Armoire.Views"
     xmlns:viewModels="clr-namespace:Armoire.ViewModels"
     xmlns:vm="using:Armoire.ViewModels"
-	xmlns:v="using:Armoire.Views"
+    Name="window"
     Title="Armoire"
-	Name="window"
     d:DesignHeight="700"
     d:DesignWidth="300"
     x:DataType="vm:MainWindowViewModel"
-    Icon="/Assets/avalonia-logo.ico"
-    mc:Ignorable="d"
-	Topmost="True"
-	SizeToContent="WidthAndHeight"
-	ExtendClientAreaToDecorationsHint="True"
+    CanResize="False"
     ExtendClientAreaChromeHints="NoChrome"
     ExtendClientAreaTitleBarHeightHint="-1"
-	SystemDecorations="None"
-	PointerPressed="InputElement_OnPointerPressed"
-	PointerMoved="InputElement_OnPointerMoved"
-	PointerReleased="InputElement_OnPointerReleased"
-	CanResize="False"
-	KeyDown="MainWindow_KeyDown"
-	KeyUp="MainWindow_KeyUp">
-	<!--
-	    Sets our window to always be on top
-		Topmost="True"
-		
-		Window size scales to ocntent
-	    SizeToContent="WidthAndHeight"
-		
-		Hiding the task bar
-	    ExtendClientAreaToDecorationsHint="True"
+    ExtendClientAreaToDecorationsHint="True"
+    Icon="/Assets/avalonia-logo.ico"
+    KeyDown="MainWindow_KeyDown"
+    KeyUp="MainWindow_KeyUp"
+    PointerMoved="InputElement_OnPointerMoved"
+    PointerPressed="InputElement_OnPointerPressed"
+    PointerReleased="InputElement_OnPointerReleased"
+    SizeToContent="WidthAndHeight"
+    SystemDecorations="None"
+    Topmost="True"
+    mc:Ignorable="d">
+    <!--
+        Sets our window to always be on top
+        Topmost="True"
+        
+        Window size scales to ocntent
+        SizeToContent="WidthAndHeight"
+        
+        Hiding the task bar
+        ExtendClientAreaToDecorationsHint="True"
         ExtendClientAreaChromeHints="NoChrome"
         ExtendClientAreaTitleBarHeightHint="0"
-		
-		Dragging the window around
-	    PointerPressed="InputElement_OnPointerPressed"
-	    PointerMoved="InputElement_OnPointerMoved"
-	    PointerReleased="InputElement_OnPointerReleased"
-		
-		Checking for ctrl + z
-		KeyDown="MainWindow_KeyDown"
-		KeyUp="MainWindow_KeyUp"
-	-->
-	<!--
+        
+        Dragging the window around
+        PointerPressed="InputElement_OnPointerPressed"
+        PointerMoved="InputElement_OnPointerMoved"
+        PointerReleased="InputElement_OnPointerReleased"
+        
+        Checking for ctrl + z
+        KeyDown="MainWindow_KeyDown"
+        KeyUp="MainWindow_KeyUp"
+    -->
+    <!--
     <Window.Background>
         <ImageBrush Source="/Assets/p4.jpg" Stretch="Fill" />
-         p.jpg and p4.jpg are from https://www.artstation.com/aenamiart they say we must cite their work 
+         p.jpg and p4.jpg are from https://www.artstation.com/aenamiart they say we must cite their work
     </Window.Background>
 	-->
     <Design.DataContext>
@@ -75,180 +75,213 @@ https://stackoverflow.com/a/76226627/16458003
             <Setter Property="BorderBrush" Value="Purple" />
             <Setter Property="BorderThickness" Value="1" />
         </Style>
-		<Style Selector="Window">
-			<Setter Property="Width" Value="200" />
-			<Setter Property="Height" Value="500" />
-			<Setter Property="Background" Value="Transparent" />
-		</Style>
-		<Style Selector="MenuItem">
-			<Setter Property="Height" Value="20" />
-		</Style>
+        <Style Selector="Window">
+            <Setter Property="Width" Value="200" />
+            <Setter Property="Height" Value="500" />
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+        <Style Selector="MenuItem">
+            <Setter Property="Height" Value="20" />
+        </Style>
 
-		<Style Selector="ContextMenu">
-			<Setter Property="Width" Value="150" />
-			<Setter Property="CornerRadius" Value="8" />
-		</Style>
-		<Style Selector="dialogHostAvalonia|DialogHost /template/ Rectangle#PART_ContentCover:not(.notransitions)">
-			<Setter Property="Transitions">
-				<Transitions />
-			</Setter>
-		</Style>
+        <Style Selector="ContextMenu">
+            <Setter Property="Width" Value="150" />
+            <Setter Property="CornerRadius" Value="8" />
+        </Style>
+        <Style Selector="dialogHostAvalonia|DialogHost /template/ Rectangle#PART_ContentCover:not(.notransitions)">
+            <Setter Property="Transitions">
+                <Transitions />
+            </Setter>
+        </Style>
     </Window.Styles>
-	<Window.ContextMenu>
-		<ContextMenu Name="MainWindowContextMenu">
-			<MenuItem Command="{Binding AddDrawerClickCommand}" Header="Add Drawer" />
-			<MenuItem Command="{Binding AddItemClickCommand}" Header="Add Item" />
-		</ContextMenu>
-	</Window.ContextMenu>
-	<Panel>
-		<Border 
-			Background="#222222"
-			BorderBrush="Purple"
-			BorderThickness="3"
-			CornerRadius="10"
-			Padding="10 9 10 15"
-			HorizontalAlignment="Left">
-        <StackPanel
-            HorizontalAlignment="Center"
-            VerticalAlignment="Top"
-            Spacing="20"
-			Width="70">
-			<!--  Digital Clock  -->
-			<TextBlock
-				Grid.Column="2"
-				Margin="5"
-				Padding="5"
-				HorizontalAlignment="Center"
-				VerticalAlignment="Bottom"
-				FontSize="18"
-				Foreground="White"
-				Text="{Binding CurrentTime}" />
-            <ItemsControl ItemsSource="{Binding ActiveDockViewModel.Contents}">
-                <ItemsControl.ItemTemplate>
-                    <armoire:ViewLocator />
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-			<!-- Power settings button which displays a flyout for buttons to logoff, restart or shutdown-->
-			<Button Height="40"
-					Width="40"
-					Background="#222222">
-				<Button.Content>
-					<avalonia:MaterialIcon
-						Width="32"
-						Height="32"
-						Foreground="LightGray"
-						Kind="PowerSettings" />
-				</Button.Content>
-				<ToolTip.Tip>
-					<ToolTip Height="40" Width="100" Padding="3" Background="LightGray" Foreground="Black">
-						<TextBlock Text="Power Settings" />
-					</ToolTip>
-				</ToolTip.Tip>
-				<Button.Flyout>
-					<Flyout Placement="Right"
-							VerticalOffset="4">
-						<StackPanel Orientation="Horizontal"
-									Spacing="10">
-							<Button Command="{Binding Logoff}"
-									Height="40"
-									Width="40"
-									Background="#222222">
-								<Button.Content>
-									<avalonia:MaterialIcon
-										Width="32"
-										Height="32"
-										Kind="Logout"
-										Foreground="LightGray"/>
-								</Button.Content>
-								<ToolTip.Tip>
-									<ToolTip Height="40" Width="90" Padding="3" Background="LightGray" Foreground="Black">
-										<TextBlock Text="Log Off" />
-									</ToolTip>
-								</ToolTip.Tip>
-							</Button>
-							<Button Command="{Binding Restart}"
-									Height="40"
-									Width="40"
-									Background="#222222">
-								<Button.Content>
-									<avalonia:MaterialIcon
-										Width="32"
-										Height="32"
-										Foreground="LightGray"
-										Kind="Restart"/>
-								</Button.Content>
-								<ToolTip.Tip>
-									<ToolTip Height="40" Width="90" Padding="3" Background="LightGray" Foreground="Black">
-										<TextBlock Text="Restart" />
-									</ToolTip>
-								</ToolTip.Tip>
-							</Button>
-							<Button Command="{Binding Shutdown}"
-									Height="40"
-									Width="40"
-									Background="#222222">
-								<Button.Content>
-									<avalonia:MaterialIcon
-										Width="32"
-										Height="32"
-										Foreground="LightGray"
-										Kind="Shutdown"/>
-								</Button.Content>
-								<ToolTip.Tip>
-									<ToolTip Height="40" Width="90" Padding="3" Background="LightGray" Foreground="Black">
-										<TextBlock Text="Shut Down"/>
-									</ToolTip>
-								</ToolTip.Tip>
-							</Button>
-							<Button Command="{Binding OpenWindowsSettingCommand}" 
-									Height="40"
-									Width="40"
-									Background="#222222">
-								<Button.Content>
-									<avalonia:MaterialIcon 
-										Kind="Settings" 
-										Width="32"
-										Height="32"
-										Foreground="LightGray"/>
-								</Button.Content>
-								<ToolTip.Tip>
-									<ToolTip Height="40" Width="90" Padding="3" Background="LightGray">
-										<TextBlock Text="Settings" />
-									</ToolTip>
-								</ToolTip.Tip>
-							</Button>
+    <Window.ContextMenu>
+        <ContextMenu Name="MainWindowContextMenu">
+            <MenuItem Command="{Binding AddDrawerClickCommand}" Header="Add Drawer" />
+            <MenuItem Command="{Binding AddItemClickCommand}" Header="Add Item" />
+        </ContextMenu>
+    </Window.ContextMenu>
+    <Panel>
+        <Border
+            Padding="10,9,10,15"
+            HorizontalAlignment="Left"
+            Background="#222222"
+            BorderBrush="Purple"
+            BorderThickness="3"
+            CornerRadius="10">
+            <StackPanel
+                Width="70"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top"
+                Spacing="20">
+                <!--  Digital Clock  -->
+                <TextBlock
+                    Grid.Column="2"
+                    Margin="5"
+                    Padding="5"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Bottom"
+                    FontSize="18"
+                    Foreground="White"
+                    Text="{Binding CurrentTime}" />
+                <ItemsControl ItemsSource="{Binding ActiveDockViewModel.Contents}">
+                    <ItemsControl.ItemTemplate>
+                        <armoire:ViewLocator />
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <!--  Power settings button which displays a flyout for buttons to logoff, restart or shutdown  -->
+                <Button
+                    Width="40"
+                    Height="40"
+                    Background="#222222">
+                    <Button.Content>
+                        <avalonia:MaterialIcon
+                            Width="32"
+                            Height="32"
+                            Foreground="LightGray"
+                            Kind="PowerSettings" />
+                    </Button.Content>
+                    <ToolTip.Tip>
+                        <ToolTip
+                            Width="100"
+                            Height="40"
+                            Padding="3"
+                            Background="LightGray"
+                            Foreground="Black">
+                            <TextBlock Text="Power Settings" />
+                        </ToolTip>
+                    </ToolTip.Tip>
+                    <Button.Flyout>
+                        <Flyout Placement="Right" VerticalOffset="4">
+                            <StackPanel Orientation="Horizontal" Spacing="10">
+                                <Button
+                                    Width="40"
+                                    Height="40"
+                                    Background="#222222"
+                                    Command="{Binding Logoff}">
+                                    <Button.Content>
+                                        <avalonia:MaterialIcon
+                                            Width="32"
+                                            Height="32"
+                                            Foreground="LightGray"
+                                            Kind="Logout" />
+                                    </Button.Content>
+                                    <ToolTip.Tip>
+                                        <ToolTip
+                                            Width="90"
+                                            Height="40"
+                                            Padding="3"
+                                            Background="LightGray"
+                                            Foreground="Black">
+                                            <TextBlock Text="Log Off" />
+                                        </ToolTip>
+                                    </ToolTip.Tip>
+                                </Button>
+                                <Button
+                                    Width="40"
+                                    Height="40"
+                                    Background="#222222"
+                                    Command="{Binding Restart}">
+                                    <Button.Content>
+                                        <avalonia:MaterialIcon
+                                            Width="32"
+                                            Height="32"
+                                            Foreground="LightGray"
+                                            Kind="Restart" />
+                                    </Button.Content>
+                                    <ToolTip.Tip>
+                                        <ToolTip
+                                            Width="90"
+                                            Height="40"
+                                            Padding="3"
+                                            Background="LightGray"
+                                            Foreground="Black">
+                                            <TextBlock Text="Restart" />
+                                        </ToolTip>
+                                    </ToolTip.Tip>
+                                </Button>
+                                <Button
+                                    Width="40"
+                                    Height="40"
+                                    Background="#222222"
+                                    Command="{Binding Shutdown}">
+                                    <Button.Content>
+                                        <avalonia:MaterialIcon
+                                            Width="32"
+                                            Height="32"
+                                            Foreground="LightGray"
+                                            Kind="Shutdown" />
+                                    </Button.Content>
+                                    <ToolTip.Tip>
+                                        <ToolTip
+                                            Width="90"
+                                            Height="40"
+                                            Padding="3"
+                                            Background="LightGray"
+                                            Foreground="Black">
+                                            <TextBlock Text="Shut Down" />
+                                        </ToolTip>
+                                    </ToolTip.Tip>
+                                </Button>
+                                <Button
+                                    Width="40"
+                                    Height="40"
+                                    Background="#222222"
+                                    Command="{Binding OpenWindowsSettingCommand}">
+                                    <Button.Content>
+                                        <avalonia:MaterialIcon
+                                            Width="32"
+                                            Height="32"
+                                            Foreground="LightGray"
+                                            Kind="Settings" />
+                                    </Button.Content>
+                                    <ToolTip.Tip>
+                                        <ToolTip
+                                            Width="90"
+                                            Height="40"
+                                            Padding="3"
+                                            Background="LightGray">
+                                            <TextBlock Text="Settings" />
+                                        </ToolTip>
+                                    </ToolTip.Tip>
+                                </Button>
 
-							<Button Click="OpenFileDialogClick"
-									Height="40"
-									Width="40"
-									Background="#222222">
-								<Button.Content>
-									<avalonia:MaterialIcon
-										Kind="File"
-										Width="32"
-										Height="32"
-										Foreground="LightGray"/>
-								</Button.Content>
-								<ToolTip.Tip>
-									<ToolTip Height="40" Width="90" Padding="3" Background="LightGray" Foreground="Black">
-										<TextBlock Text="File Explorer"/>
-									</ToolTip>
-								</ToolTip.Tip>
-							</Button>
-						</StackPanel>
-					</Flyout>
-				</Button.Flyout>
-			</Button>
-			<!--
+                                <Button
+                                    Width="40"
+                                    Height="40"
+                                    Background="#222222"
+                                    Click="OpenFileDialogClick">
+                                    <Button.Content>
+                                        <avalonia:MaterialIcon
+                                            Width="32"
+                                            Height="32"
+                                            Foreground="LightGray"
+                                            Kind="File" />
+                                    </Button.Content>
+                                    <ToolTip.Tip>
+                                        <ToolTip
+                                            Width="90"
+                                            Height="40"
+                                            Padding="3"
+                                            Background="LightGray"
+                                            Foreground="Black">
+                                            <TextBlock Text="File Explorer" />
+                                        </ToolTip>
+                                    </ToolTip.Tip>
+                                </Button>
+                            </StackPanel>
+                        </Flyout>
+                    </Button.Flyout>
+                </Button>
+                <!--
 			<v:ApplicationMonitorView/>
 			-->
-        </StackPanel>
-		</Border>
-		<dialogHostAvalonia:DialogHost
-			DisableOpeningAnimation="True"
-			CloseOnClickAway="True" 
-			Background="Transparent"
-			Identifier="MainDialogHost"
-			dialogHostAvalonia:DialogHost.DialogOpened="CheckWindowPosition"/>
-	</Panel>
+            </StackPanel>
+        </Border>
+        <dialogHostAvalonia:DialogHost
+            dialogHostAvalonia:DialogHost.DialogOpened="CheckWindowPosition"
+            Background="Transparent"
+            CloseOnClickAway="True"
+            DisableOpeningAnimation="True"
+            Identifier="MainDialogHost" />
+    </Panel>
 </Window>
