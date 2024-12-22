@@ -1,6 +1,6 @@
 ﻿/*  This class holds the logic for the view displayed when a user wants to make a new drawer
  *  A new drawer must have a name, but can also accept an image to display
- * 
+ *
  */
 
 using System;
@@ -68,7 +68,7 @@ namespace Armoire.ViewModels
             IconPath = "";
             TargetDrawerID = targetDrawerID;
             PanelHeight = 400;
-            PanelWidth = 400;
+            PanelWidth = 200;
 
             //setting the backgrounds to light gray
             BackgroundColor = "#c5c7c6";

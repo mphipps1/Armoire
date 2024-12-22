@@ -39,27 +39,15 @@
         Name="Stack"
         Width="{Binding PanelWidth}"
         Height="{Binding PanelHeight}"
-        Margin="20"
-        HorizontalAlignment="Right"
+        HorizontalAlignment="Center"
         VerticalAlignment="Center"
-        Background="Transparent">
-        <!--
-            The Margin is set like this to properly align
-            'Name' on the left side of the TextBox below it
-        -->
-        <TextBlock Margin="0,5,155,-10" HorizontalAlignment="Center">Name:</TextBlock>
-        <TextBox
-            Height="30"
-            Text="{Binding Name}"
-            Watermark="Paint" />
-        <!--
-            The Margin is set like this to properly align
-            'Icon Path' on the left side of the TextBox below it
-        -->
-        <TextBlock Margin="15,5,135,0" HorizontalAlignment="Center">
-            Drawer Icon:
-        </TextBlock>
+        Margin="15 20 15 0"
+        Spacing="0">
+        <TextBlock Text="Name" />
+        <TextBox Height="30" Text="{Binding Name}" />
+        <TextBlock Margin="0 10 0 0" Text="Drawer Icon" />
         <StackPanel
+            Margin="0 10 0 0"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             Background="Transparent"
