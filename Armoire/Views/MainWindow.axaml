@@ -100,7 +100,7 @@
             <MenuItem Command="{Binding AddItemClickCommand}" Header="Add Item" />
         </ContextMenu>
     </Window.ContextMenu>
-    <Panel>
+    <StackPanel Orientation="Horizontal">
         <Border
             Padding="10,9,10,15"
             HorizontalAlignment="Left"
@@ -279,9 +279,9 @@
         </Border>
         <dialogHostAvalonia:DialogHost
             dialogHostAvalonia:DialogHost.DialogOpened="CheckWindowPosition"
-            Background="Transparent"
+            Background="#222222"
             CloseOnClickAway="True"
             DisableOpeningAnimation="True"
             Identifier="MainDialogHost" />
-    </Panel>
+    </StackPanel>
 </Window>
