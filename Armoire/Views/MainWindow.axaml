@@ -115,9 +115,8 @@
                 Spacing="20">
                 <!--  Digital Clock  -->
                 <TextBlock
-                    Grid.Column="2"
-                    Margin="5"
-                    Padding="5"
+                    Margin="5 5 5 0"
+                    Padding="5 5 5 0"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Bottom"
                     FontSize="18"
