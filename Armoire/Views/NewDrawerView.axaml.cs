@@ -1,3 +1,10 @@
+using System;
+using System.Collections;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Text;
 using Armoire.ViewModels;
 using Avalonia;
 using Avalonia.Controls;
@@ -8,13 +15,6 @@ using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.Metadata;
-using System;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Collections;
-using System.Runtime.InteropServices;
-using System.Text;
 
 namespace Armoire.Views;
 
@@ -24,7 +24,7 @@ public partial class NewDrawerView : UserControl
     {
         InitializeComponent();
         DropBorder.AddHandler(DragDrop.DropEvent, OnDrop);
-
+        Height = Program.ProgramMainWindow.Bounds.Height - 21;
     }
 
     // Catch anything that is dropped
@@ -47,7 +47,8 @@ public partial class NewDrawerView : UserControl
                     drawerviewmodel.IsPopupRemoveButton = true;
                     var dotIndex = Path.GetFileName(fileInfo.Name).IndexOf('.');
                     border.Background = Brushes.DarkViolet;
-                    drawerviewmodel.FileDropText = $"{Path.GetFileName(fileInfo.Name).Substring(0, dotIndex)} dropped";
+                    drawerviewmodel.FileDropText =
+                        $"{Path.GetFileName(fileInfo.Name).Substring(0, dotIndex)} dropped";
                 }
             }
 
@@ -60,7 +61,6 @@ public partial class NewDrawerView : UserControl
                 }
                 else
                 {
-
                     if (sender is Border dropareaborder)
                     {
                         dropareaborder.Background = Brushes.Transparent;
@@ -68,8 +68,6 @@ public partial class NewDrawerView : UserControl
                     }
                 }
             }
-
-
         }
     }
 }

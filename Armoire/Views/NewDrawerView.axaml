@@ -38,9 +38,7 @@
     <StackPanel
         Name="Stack"
         Width="{Binding PanelWidth}"
-        Height="{Binding PanelHeight}"
         HorizontalAlignment="Center"
-        VerticalAlignment="Center"
         Margin="15 20 15 0"
         Spacing="0">
         <TextBlock Text="Name" />
