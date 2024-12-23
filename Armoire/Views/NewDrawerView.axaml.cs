@@ -24,7 +24,6 @@ public partial class NewDrawerView : UserControl
     {
         InitializeComponent();
         DropBorder.AddHandler(DragDrop.DropEvent, OnDrop);
-        Height = Program.ProgramMainWindow.Bounds.Height - 21;
     }
 
     // Catch anything that is dropped

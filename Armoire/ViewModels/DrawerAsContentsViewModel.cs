@@ -246,7 +246,14 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
             //        )
             //    );
             //}
-            DialogHost.Show(new NewDrawerViewModel(Id, DrawerHierarchy, GeneratedDrawer));
+            DialogHost.Show(
+                new NewDrawerViewModel(
+                    Id,
+                    DrawerHierarchy,
+                    GeneratedDrawer,
+                    App.ActiveMainWindowViewModel?.ViewHeight ?? 400
+                )
+            );
         }
         else
             DialogHost.Show(

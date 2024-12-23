@@ -32,7 +32,7 @@ namespace Armoire.ViewModels
         public string _iconPath;
 
         [ObservableProperty]
-        public int _panelHeight;
+        public double _panelHeight;
 
         [ObservableProperty]
         public int _panelWidth;
@@ -57,17 +57,19 @@ namespace Armoire.ViewModels
         private int? TargetDrawerHeirarchy;
 
         private ContainerViewModel? ActiveContainerViewModel { get; }
+        private const int MagicNumber = 37;
 
         public NewDrawerViewModel(
             string targetDrawerID,
             int? targetDrawerHeirarchy,
-            ContainerViewModel? cvm = null
+            ContainerViewModel? cvm,
+            double height
         )
         {
             Name = "";
             IconPath = "";
             TargetDrawerID = targetDrawerID;
-            PanelHeight = 400;
+            PanelHeight = height - MagicNumber;
             PanelWidth = 200;
 
             //setting the backgrounds to light gray

@@ -14,6 +14,8 @@ namespace Armoire
             AvaloniaXamlLoader.Load(this);
         }
 
+        public static MainWindowViewModel? ActiveMainWindowViewModel { get; set; }
+
         public override void OnFrameworkInitializationCompleted()
         {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
@@ -21,7 +23,8 @@ namespace Armoire
                 // Line below is needed to remove Avalonia data validation.
                 // Without this line you will get duplicate validations from both Avalonia and CT
                 BindingPlugins.DataValidators.RemoveAt(0);
-                desktop.MainWindow = new MainWindow { DataContext = new MainWindowViewModel(), };
+                ActiveMainWindowViewModel = new MainWindowViewModel();
+                desktop.MainWindow = new MainWindow { DataContext = ActiveMainWindowViewModel };
             }
 
             base.OnFrameworkInitializationCompleted();

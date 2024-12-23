@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:v="using:Armoire.Views"
     xmlns:vm="using:Armoire.ViewModels"
-    d:DesignHeight="600"
+    d:DesignHeight="400"
     d:DesignWidth="300"
     x:DataType="vm:NewDrawerViewModel">
 
@@ -38,6 +38,7 @@
     <StackPanel
         Name="Stack"
         Width="{Binding PanelWidth}"
+        Height="{Binding PanelHeight}"
         HorizontalAlignment="Center"
         Margin="15 20 15 0"
         Spacing="0">

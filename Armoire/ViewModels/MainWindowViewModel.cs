@@ -28,6 +28,7 @@ namespace Armoire.ViewModels
         private string _currentTime;
         private static DockViewModel? _dockViewModel;
         public static Stack<ContentsUnitViewModel> DeletedUnits;
+        public double ViewHeight { get; set; }
 
         //temp
         //dockSource is the DrawerAsContentsViewModel that holds the ActiveDockViewModel
@@ -138,7 +139,8 @@ namespace Armoire.ViewModels
                     new NewDrawerViewModel(
                         "CONTENTS_1",
                         ActiveDockViewModel.SourceDrawer.DrawerHierarchy,
-                        ActiveDockViewModel
+                        ActiveDockViewModel,
+                        ViewHeight
                     )
                 );
             else

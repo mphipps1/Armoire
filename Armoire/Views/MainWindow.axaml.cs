@@ -21,13 +21,13 @@ namespace Armoire.Views
         public MainWindow()
         {
             InitializeComponent();
-            Program.ProgramMainWindow = this;
             SizeChanged += OnSizeChanged;
         }
 
         private void OnSizeChanged(object? sender, SizeChangedEventArgs e)
         {
-            Debug.WriteLine("hey");
+            if (DataContext is MainWindowViewModel mwVm)
+                mwVm.ViewHeight = e.NewSize.Height;
         }
 
         //https://github.com/AvaloniaUI/Avalonia/discussions/8441
