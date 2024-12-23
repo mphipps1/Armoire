@@ -5,16 +5,12 @@
 
 using System;
 using System.Diagnostics;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Threading;
-using Armoire.Models;
 using Armoire.ViewModels;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
 
 namespace Armoire.Views
 {
@@ -26,6 +22,12 @@ namespace Armoire.Views
         {
             InitializeComponent();
             Program.ProgramMainWindow = this;
+            SizeChanged += OnSizeChanged;
+        }
+
+        private void OnSizeChanged(object? sender, SizeChangedEventArgs e)
+        {
+            Debug.WriteLine("hey");
         }
 
         //https://github.com/AvaloniaUI/Avalonia/discussions/8441

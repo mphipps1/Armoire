@@ -1,21 +1,15 @@
 ﻿/*  MainWindow holds a the logic that should applied to the whole app or the main window
  *  It has a couple of static members such as DeletedUnits or DockViewModel which can be used by the whole app
- * 
+ *
  */
 
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
-using System.Runtime.InteropServices;
-using System.Security;
 using System.Threading.Tasks;
 using System.Timers;
-using System.Windows.Forms;
 using Armoire.Utils;
 using Armoire.Views;
-using Avalonia;
-using Avalonia.VisualTree;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DialogHostAvalonia;
