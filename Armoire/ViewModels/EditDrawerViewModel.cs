@@ -1,4 +1,9 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿/*  This class is where the logic for editing a drawer goes
+ *  As of writing this comment, the only function is renaming the drawer
+ * 
+ */
+
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
 namespace Armoire.ViewModels

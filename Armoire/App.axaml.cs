@@ -3,7 +3,6 @@ using Armoire.ViewModels;
 using Armoire.Views;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,6 +16,8 @@ namespace Armoire
             AvaloniaXamlLoader.Load(this);
         }
 
+        public static MainWindowViewModel? ActiveMainWindowViewModel { get; set; }
+
         public override void OnFrameworkInitializationCompleted()
         {
             var sc = new ServiceCollection();
@@ -26,10 +27,8 @@ namespace Armoire
                 // Line below is needed to remove Avalonia data validation.
                 // Without this line you will get duplicate validations from both Avalonia and CT
                 BindingPlugins.DataValidators.RemoveAt(0);
-                desktop.MainWindow = new MainWindow
-                {
-                    DataContext = new MainWindowViewModel(),
-                };
+                ActiveMainWindowViewModel = new MainWindowViewModel();
+                desktop.MainWindow = new MainWindow { DataContext = ActiveMainWindowViewModel };
             }
 
             base.OnFrameworkInitializationCompleted();

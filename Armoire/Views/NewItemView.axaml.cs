@@ -74,6 +74,7 @@ public partial class NewItemView : UserControl
         originalList = new Controls(exeList.Children);
     }
 
+    // Narrowing down the list of executables based on what the user typed
     public void KeyUp(object sender, KeyEventArgs e)
     {
         if (typedAppName.Text == currentTypedAppName || typedAppName.Text == null)
@@ -106,6 +107,7 @@ public partial class NewItemView : UserControl
         }
     }
 
+    //Handles drag and drop of a new item
     private void OnDrop(object? sender, DragEventArgs e)
     {
         //https://github.com/AvaloniaUI/Avalonia.Xaml.Behaviors/discussions/118

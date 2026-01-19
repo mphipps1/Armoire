@@ -1,4 +1,9 @@
-﻿using System;
+﻿/*  A RunningItem represents an application that is currently running on this device
+ *  This class contains info about the process that it represents along with the ability to close it.
+ *  
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -28,72 +33,45 @@ public partial class RunningItemViewModel : ItemViewModel
     {
         RunningProcess = process;
         ExecutablePath = "";
+
+        // The name is what is displayed as a tool tip to the user,
+        // the process name is used to identify unique processes such as two sepereate command prompts
         Name = process.MainWindowTitle;
         ProcessName = process.ProcessName + process.MainWindowHandle;
         Icon icon;
-        string s;
-        try
-        {
-            s = GetMainModuleFileName(process, 1024);
-        }
-        catch (System.ComponentModel.Win32Exception ex)
-        {
-            return;
-        }
-        if (!String.IsNullOrEmpty(s))
-        {
-            icon = Icon.ExtractAssociatedIcon(process.MainModule.FileName);
-            Avalonia.Controls.Image image = new Avalonia.Controls.Image();
 
-            var bmp = icon.ToBitmap();
-            using (MemoryStream memory = new MemoryStream())
-            {
-                bmp.Save(memory, ImageFormat.Png);
-                memory.Position = 0;
-                IconBmp = new Avalonia.Media.Imaging.Bitmap(memory);
-            }
+        // Getting the icon of this app
+        icon = Icon.ExtractAssociatedIcon(process.MainModule.FileName);
+        Avalonia.Controls.Image image = new Avalonia.Controls.Image();
+
+        var bmp = icon.ToBitmap();
+        using (MemoryStream memory = new MemoryStream())
+        {
+            bmp.Save(memory, ImageFormat.Png);
+            memory.Position = 0;
+            IconBmp = new Avalonia.Media.Imaging.Bitmap(memory);
         }
 
+        //Special ID to prevent being added to the database
         Id = "RUNNING";
     }
 
-    [DllImport("Kernel32.dll")]
-    private static extern bool QueryFullProcessImageName(
-        [In] IntPtr hProcess,
-        [In] uint dwFlags,
-        [Out] StringBuilder lpExeName,
-        [In, Out] ref uint lpdwSize
-    );
-
-    public static string? GetMainModuleFileName(Process process, int buffer = 1024)
-    {
-        var fileNameBuilder = new StringBuilder(buffer);
-        uint bufferLength = (uint)fileNameBuilder.Capacity + 1;
-        return QueryFullProcessImageName(process.Handle, 0, fileNameBuilder, ref bufferLength)
-            ? fileNameBuilder.ToString()
-            : null;
-    }
-
-    //[DllImport("user32.dll", SetLastError = true)]
-    //static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
-
-    //// Find window by Caption only. Note you must pass IntPtr.Zero as the first parameter.
-
-    //[DllImport("user32.dll", EntryPoint = "FindWindow", SetLastError = true)]
-    //static extern IntPtr FindWindowByCaption(IntPtr ZeroOnly, string lpWindowName);
-
+    // pinvoke function that brings the process that has the MainWindowHandle hWnd to the top of the screen
     [DllImport("user32.dll", SetLastError = true)]
     static extern bool BringWindowToTop(IntPtr hWnd);
 
+    //Constant values used ub showing windows
     //showWindow documentation: https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-showwindow
     private const int SW_SHOWNORMAL = 1;
     private const int SW_SHOWMINIMIZED = 2;
     private const int SW_SHOWMAXIMIZED = 3;
     private const int SW_SHOW = 5;
 
+    // pinvoke function to show the window if it was minized
     [DllImport("user32.dll")]
     public static extern bool ShowWindow(IntPtr hWnd, uint nCmdShow);
 
+    //Show the window and bring to to the top if this RunningItem is clicked
     public override void HandleContentsClick()
     {
         //IntPtr hWnd = FindWindow(null, RunningProcess);

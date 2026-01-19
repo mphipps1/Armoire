@@ -1,17 +1,17 @@
-﻿using System;
+﻿/*  MainWindow holds a the logic that should applied to the whole app or the main window
+ *  It has a couple of static members such as DeletedUnits or DockViewModel which can be used by the whole app
+ *
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
-using System.Runtime.InteropServices;
-using System.Security;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Forms;
 using Armoire.Interfaces;
 using Armoire.Utils;
 using Armoire.Views;
-using Avalonia;
-using Avalonia.VisualTree;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DialogHostAvalonia;
@@ -30,6 +30,7 @@ namespace Armoire.ViewModels
         private string _currentTime;
         private static DockViewModel? _dockViewModel;
         public static Stack<ContentsUnitViewModel> DeletedUnits;
+        public double ViewHeight { get; set; }
 
         //temp
         //dockSource is the DrawerAsContentsViewModel that holds the ActiveDockViewModel
@@ -79,6 +80,7 @@ namespace Armoire.ViewModels
             // Get the list of apps in the start menu here instead of in the NewItemViewModel constructor to avoid lag.
             NewItemViewModel.GetExecutables();
 
+            //Setting up the custom drawers/items like the NotificationArea and its contents
             var notif = new NotificationAreaViewModel(dockSource.Id, 0);
             ActiveDockViewModel.Contents.Add(notif);
 
@@ -103,8 +105,6 @@ namespace Armoire.ViewModels
             var start = new StartMenuItemViewModel(dockSource.Id, 0, ActiveDockViewModel);
             ActiveDockViewModel.Contents.Add(start);
 
-
-
             var apps = new ApplicationMonitorViewModel(dockSource.Id, 0);
             ActiveDockViewModel.Contents.Add(apps);
             apps.GetInitialRunningApps();
@@ -118,7 +118,7 @@ namespace Armoire.ViewModels
 
         private void UpdateTime()
         {
-            CurrentTime = DateTime.Now.ToString("%h:mm tt");
+            CurrentTime = DateTime.Now.ToString("%H:mm");
         }
 
         [RelayCommand]
@@ -141,7 +141,8 @@ namespace Armoire.ViewModels
                     new NewDrawerViewModel(
                         "CONTENTS_1",
                         ActiveDockViewModel.SourceDrawer.DrawerHierarchy,
-                        ActiveDockViewModel
+                        ActiveDockViewModel,
+                        ViewHeight
                     )
                 );
             else

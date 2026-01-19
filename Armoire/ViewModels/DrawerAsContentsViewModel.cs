@@ -1,8 +1,12 @@
-﻿using System;
-using System.Data.SqlTypes;
+﻿/*  DrawerAsContents holds the logic for the button functionalities of a drawer
+ *  These functions include moving, deleting, renaming etc.
+ *
+ *
+ */
+
+using System;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
 using Armoire.Models;
 using Armoire.Utils;
 using Avalonia.Controls;
@@ -10,7 +14,6 @@ using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DialogHostAvalonia;
-using Svg;
 
 namespace Armoire.ViewModels;
 
@@ -28,14 +31,14 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
     [ObservableProperty]
     private Avalonia.Media.Imaging.Bitmap _iconBmp;
 
-    public DrawerAsContentsViewModel(
-        DrawerViewModel container,
-        string name,
-        string? parentID,
-        int? drawerHierarchy
-    )
+    // Dock source constructor (leaves some properties null on purpose).
+    public DrawerAsContentsViewModel(string? parentID, int? drawerHierarchy)
     {
-        Name = name;
+        Name = "dock";
+        Id = "CONTENTS_1";
+        IconBmp = MiscHelper.GetAvaBmpFromAssets("tempDrawer.jpg");
+
+        // Converting the .jpg image into a bitmap
         FileStream fs = new FileStream(
             "./../../../Assets/tempDrawer.jpg",
             FileMode.Open,
@@ -49,20 +52,6 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
             memory.Position = 0;
             IconBmp = new Avalonia.Media.Imaging.Bitmap(memory);
         }
-        GeneratedDrawer = new DrawerViewModel(this);
-        Container = container;
-        ParentId = parentID;
-        DrawerHierarchy = drawerHierarchy;
-        SetMoveDirections(this);
-        _count++;
-    }
-
-    // Dock source constructor (leaves some properties null on purpose).
-    public DrawerAsContentsViewModel(string? parentID, int? drawerHierarchy)
-    {
-        Name = "dock";
-        Id = "CONTENTS_1";
-        IconBmp = MiscHelper.GetAvaBmpFromAssets("tempDrawer.jpg");
         GeneratedDrawer = new DrawerViewModel(this);
         ParentId = parentID;
         DrawerHierarchy = drawerHierarchy;
@@ -84,9 +73,11 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
         System.Drawing.Bitmap bmp,
         string parentID,
         int? drawerHierarchy,
-        ContainerViewModel? cvm = null
+        ContainerViewModel? cvm,
+        string iconPath
     )
     {
+        IconPath = iconPath;
         GeneratedDrawer = new DrawerViewModel(this);
         Name = name;
 
@@ -119,6 +110,39 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
         ParentId = parentID;
         DrawerHierarchy = drawerHierarchy;
         IconBmp = string.IsNullOrEmpty(iconPath) ? MiscHelper.GetAvaBmpFromAssets("table.png") : new Bitmap(iconPath);
+
+        // Converting the .jpg image into a bitmap
+        if (iconPath == null || iconPath == "")
+        {
+            FileStream fs = new FileStream(
+                "./../../../Assets/table.png",
+                FileMode.Open,
+                FileAccess.Read
+            );
+            System.Drawing.Image image = System.Drawing.Image.FromStream(fs);
+            System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(image, 50, 50);
+            using (MemoryStream memory = new MemoryStream())
+            {
+                bmp.Save(memory, ImageFormat.Png);
+                memory.Position = 0;
+                IconBmp = new Avalonia.Media.Imaging.Bitmap(memory);
+            }
+        }
+        else
+        {
+            if (iconPath is not null)
+            {
+                FileStream fs = new FileStream(iconPath, FileMode.Open, FileAccess.Read);
+                System.Drawing.Image image = System.Drawing.Image.FromStream(fs);
+                System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(image, 50, 50);
+                using (MemoryStream memory = new MemoryStream())
+                {
+                    bmp.Save(memory, ImageFormat.Png);
+                    memory.Position = 0;
+                    IconBmp = new Avalonia.Media.Imaging.Bitmap(memory);
+                }
+            }
+        }
         _count++;
         SetMoveDirections(this);
         Container = cvm;
@@ -128,12 +152,13 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
     public DrawerAsContentsViewModel(Drawer model, ContainerViewModel? container)
     {
         Id = model.Id;
-        //var modelIdCountStr = model.Id[9..];
-        //if (int.TryParse(modelIdCountStr, out var modelIdCount))
-        //    IdCount = modelIdCount + 1;
         Name = model.Name;
         LoadPosition = model.Position;
-        IconBmp = MiscHelper.GetAvaBmpFromAssets("table.png");
+        var defaultIcon = MiscHelper.GetAvaBmpFromAssets("table.png");
+        IconBmp =
+            model.IconPath == null
+                ? defaultIcon
+                : MiscHelper.GetAvaBmpFromImgPath(model.IconPath) ?? defaultIcon;
         GeneratedDrawer = new DrawerViewModel(this);
         Container = container;
         ParentId = model.ParentId;
@@ -169,8 +194,9 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
         SetMoveDirections(this);
     }
 
+    // CheckDrawerModel is used to check which direction a drawer should open
     [RelayCommand]
-    public void CheckDraweModel(object typeviewModel)
+    public void CheckDrawerModel(object typeviewModel)
     {
         if (typeviewModel is DrawerAsContentsViewModel viewModel)
         {
@@ -223,7 +249,14 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
             //        )
             //    );
             //}
-            DialogHost.Show(new NewDrawerViewModel(Id, DrawerHierarchy, GeneratedDrawer));
+            DialogHost.Show(
+                new NewDrawerViewModel(
+                    Id,
+                    DrawerHierarchy,
+                    GeneratedDrawer,
+                    App.ActiveMainWindowViewModel?.ViewHeight ?? 400
+                )
+            );
         }
         else
             DialogHost.Show(
@@ -252,6 +285,6 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
 
     public Drawer CreateDrawer()
     {
-        return new Drawer(Id, Name, ParentId, Position, DrawerHierarchy);
+        return new Drawer(Id, Name, ParentId, Position, DrawerHierarchy, IconPath);
     }
 }

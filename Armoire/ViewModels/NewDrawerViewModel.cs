@@ -1,5 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿/*  This class holds the logic for the view displayed when a user wants to make a new drawer
+ *  A new drawer must have a name, but can also accept an image to display
+ *
+ */
+
+using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -33,7 +37,7 @@ namespace Armoire.ViewModels
         public string _iconPath;
 
         [ObservableProperty]
-        public int _panelHeight;
+        public double _panelHeight;
 
         [ObservableProperty]
         public int _panelWidth;
@@ -58,18 +62,20 @@ namespace Armoire.ViewModels
         private int? TargetDrawerHeirarchy;
 
         private ContainerViewModel? ActiveContainerViewModel { get; }
+        private const int MagicNumber = 37;
 
         public NewDrawerViewModel(
             string targetDrawerID,
             int? targetDrawerHeirarchy,
-            ContainerViewModel? cvm = null
+            ContainerViewModel? cvm,
+            double height
         )
         {
             Name = "";
             IconPath = "";
             TargetDrawerID = targetDrawerID;
-            PanelHeight = 400;
-            PanelWidth = 400;
+            PanelHeight = height - MagicNumber;
+            PanelWidth = 200;
 
             //setting the backgrounds to light gray
             BackgroundColor = "#c5c7c6";
@@ -80,6 +86,7 @@ namespace Armoire.ViewModels
             ActiveContainerViewModel = cvm;
         }
 
+        // Update is called when "save" is clicked and checks to see if it should have a custom icon or not
         [RelayCommand]
         public void Update()
         {
@@ -103,10 +110,12 @@ namespace Armoire.ViewModels
                             Name,
                             new System.Drawing.Bitmap(image, 60, 60),
                             TargetDrawerID.ToString(),
-                            TargetDrawerHeirarchy,
-                            ActiveContainerViewModel
+                            TargetDrawerHeirarchy + 1,
+                            ActiveContainerViewModel,
+                            fileInfo.FullName
                         )
                     );
+                    // Moving items in the dock so that they arent below the custom drawers/items
                     if (targetDrawer.SourceDrawer.DrawerHierarchy == -1)
                         targetDrawer.Contents.Move(
                             targetDrawer.Contents.Count - 1,
@@ -124,6 +133,7 @@ namespace Armoire.ViewModels
                     );
                     targetDrawer.RegisterEventHandlers();
                     targetDrawer.Contents.Add(newDrawer);
+                    // Moving items in the dock so that they arent below the custom drawers/items
                     if (targetDrawer.SourceDrawer.DrawerHierarchy == -1)
                         targetDrawer.Contents.Move(
                             targetDrawer.Contents.Count - 1,
@@ -136,6 +146,7 @@ namespace Armoire.ViewModels
             MainWindowViewModel.CloseDialog();
         }
 
+        // OpenFileDialogClick is used to allow users to select an image to upload
         [RelayCommand]
         public void OnOpenFileDialogClick()
         {
@@ -182,6 +193,7 @@ namespace Armoire.ViewModels
             //    NewItemViewModel.NewExe = result[0];
         }
 
+        // GetTargetDrawer searches for the drawer to which we want to add the new drawer
         private ContainerViewModel? GetTargetDrawer(ContainerViewModel currentDrawer)
         {
             if (TargetDrawerID == "CONTENTS_1")
@@ -208,6 +220,7 @@ namespace Armoire.ViewModels
             return null;
         }
 
+        //Removes any uploaded files
         [RelayCommand]
         public void RemoveFile()
         {

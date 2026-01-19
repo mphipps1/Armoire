@@ -1,4 +1,8 @@
-﻿using System;
+﻿/*  Wifi is an item that launches the windows wifi settings on click
+ *  This class should be updated in the future to show a custom UI
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -21,11 +25,14 @@ namespace Armoire.ViewModels
             ExecutablePath = "";
             Parent = container.SourceDrawer;
             Model = new Item(Name, "", parentID.ToString(), Position);
+
+            //Special ID to prevent this item from being added to the database
             Id = "WIFI";
         }
 
         public override void HandleContentsClick()
         {
+            // Launching windows settings to the wifi page
             Process.Start(new ProcessStartInfo("ms-settings:wifi") { UseShellExecute = true });
         }
     }

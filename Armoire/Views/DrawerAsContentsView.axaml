@@ -31,7 +31,7 @@
     <Button
         x:Name="DrawerButton"
         Margin="5"
-        Command="{Binding CheckDraweModelCommand}"
+        Command="{Binding CheckDrawerModelCommand}"
 		Background="#222222"
         CommandParameter="{Binding}">
         <ToolTip.Tip>

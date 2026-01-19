@@ -73,6 +73,13 @@ public class MiscHelper
         return icon == null ? null : ConvertSysBmpToAvaBmp(icon.ToBitmap());
     }
 
+    public static Bitmap? GetAvaBmpFromImgPath(string imgPath)
+    {
+        if (string.IsNullOrEmpty(imgPath) || !File.Exists(imgPath))
+            return null;
+        return ConvertSysBmpToAvaBmp(new System.Drawing.Bitmap(Image.FromFile(imgPath), 60, 60));
+    }
+
     public static Bitmap GetAvaBmpFromAssets(string assetFilename)
     {
         var assetsPath = GetAssetsPath();

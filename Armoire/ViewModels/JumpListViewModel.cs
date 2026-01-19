@@ -1,4 +1,9 @@
-﻿using Avalonia.Controls;
+﻿/*  This class is currently incomplete, but contains our attempt at creating jumplists for
+ *  Items in Armoire.
+ * 
+ */
+
+using Avalonia.Controls;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,12 +23,6 @@ namespace Armoire.ViewModels
         public static List<ItemViewModel> Items = new List<ItemViewModel>();
 
         public static List<string> lnkpaths = new List<string>();   
-
-
-
-
-
-
 
 
         public static void GetJumpList()

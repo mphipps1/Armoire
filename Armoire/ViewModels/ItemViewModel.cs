@@ -1,4 +1,9 @@
-﻿using System.Drawing;
+﻿/*  An Item is defined as any unit in a drawer that can be clicked on and launches an app.
+ *  An Item is usually an app, but it can also be a settings option or search for the weather
+ * 
+ */
+
+using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using Armoire.Models;

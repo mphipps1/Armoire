@@ -1,4 +1,9 @@
-﻿using Avalonia.Layout;
+﻿/* This class inherets from Container, its mostly empty for now but splitting these 
+ * Container and Drawer might make future development easier.
+ * 
+ */
+
+using Avalonia.Layout;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Armoire.ViewModels;

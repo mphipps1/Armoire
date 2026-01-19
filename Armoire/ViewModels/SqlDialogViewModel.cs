@@ -1,4 +1,9 @@
-﻿using System;
+﻿/*  This class was used initially to interact with the SQLite database, but 
+ *  is no longer used since we moved over to EntityFramework
+ * 
+ */
+
+using System;
 using System.Threading.Tasks;
 using Armoire.Interfaces;
 using Armoire.Models;

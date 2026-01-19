@@ -1,9 +1,12 @@
-﻿using System;
+﻿/* ContentsUnit is any unit that can be stored in a drawer. For now, the units that can be a drawer
+ * are a DrawerAsContents and an Item
+ * 
+ */
+
+using System;
 using System.Collections.ObjectModel;
-using Armoire.Interfaces;
 using Armoire.Models;
 using Armoire.Utils;
-using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -16,15 +19,13 @@ public partial class ContentsUnitViewModel : ViewModelBase
     public ContainerViewModel? Container { get; set; }
     public ContentsUnitViewModel? Parent { get; set; }
     public int? LoadPosition { get; set; }
+    protected string? IconPath { get; set; }
 
     // Expression-bodied property.
     public int? Position => Container?.Contents.IndexOf(this);
 
     [ObservableProperty]
     private string _name;
-
-    [ObservableProperty]
-    private string? _iconPath;
 
     [ObservableProperty]
     private bool _deleteMe;
@@ -106,6 +107,7 @@ public partial class ContentsUnitViewModel : ViewModelBase
         Container.Contents.Move(indexOfMe, indexOfMe + 1);
     }
 
+    //findParentDrawer searches for the target reccursively
     public static ContainerViewModel? findParentDrawer(
         ContainerViewModel contentsIn,
         ContentsUnitViewModel target
@@ -123,21 +125,29 @@ public partial class ContentsUnitViewModel : ViewModelBase
                 return dac.GeneratedDrawer;
             }
         }
+
+        //if we haven't found it by now, search the next level of the tree (Depth first)
         foreach (var unit in contentsIn.Contents)
         {
             if (unit is DrawerAsContentsViewModel dac)
             {
-                return findParentDrawer(dac.GeneratedDrawer, target);
+                var ret = findParentDrawer(dac.GeneratedDrawer, target);
+                if (ret != null)
+                    return ret;
             }
         }
         return null;
     }
 
+    //This function is called when a user clicks ctrl+z
     public static void Undo()
     {
+        //The MainWindows stack of DeletedUnits holds any units deleted in the current session of Armoire
         if (MainWindowViewModel.DeletedUnits.Count == 0)
             return;
         ContentsUnitViewModel target = MainWindowViewModel.DeletedUnits.Pop();
+        // Resetting target.DeleteMe here is crucial as it has an event handler that is called when it is changed
+        // Doing this at the end would result in the unit being deleted again
         target.DeleteMe = false;
         if (target.ParentId == "CONTENTS_1")
         {
@@ -151,6 +161,7 @@ public partial class ContentsUnitViewModel : ViewModelBase
         DbHelper.SaveRecursive(target);
     }
 
+    //Reccursive search for a drawer by its ID
     public static ObservableCollection<ContentsUnitViewModel>? FindParentDrawerByID(
         ObservableCollection<ContentsUnitViewModel> contentsIn,
         ContentsUnitViewModel target
@@ -173,6 +184,9 @@ public partial class ContentsUnitViewModel : ViewModelBase
         return null;
     }
 
+    // Setting the ContextMenu options for this unit
+    // If the drawer this unit is in is vertical, we should display up or down as options
+    // If the drawer this unit is in is horizontal, we should display left or right
     [RelayCommand]
     public void SetMoveDirections(object parameter)
     {

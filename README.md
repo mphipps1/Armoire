@@ -8,7 +8,13 @@ A dock for Windows that helps users organize their apps into "drawers" to fit th
 
 ICSI 499 Capstone at SUNY at Albany
 
-## Database instructions
+## System Requirements
+
+Windows 10 or 11
+
+## Setup (Do this before you run the app)
+
+### Database instructions
 
 Open up PowerShell and navigate to the repo root.
 
@@ -26,5 +32,7 @@ dbs
 ```
 
 ## Run instructions
+
+Run Visual Studio as an administrator.
 
 Load the solution in Visual Studio and run it with the green play button.
