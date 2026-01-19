@@ -1,3 +1,4 @@
+using Armoire.Interfaces;
 using Armoire.ViewModels;
 using Armoire.Views;
 using Avalonia;
@@ -5,6 +6,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Armoire
 {
@@ -17,6 +19,8 @@ namespace Armoire
 
         public override void OnFrameworkInitializationCompleted()
         {
+            var sc = new ServiceCollection();
+            sc.AddSingleton<ICrossPlatform, MacCrossPlatform>();
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
                 // Line below is needed to remove Avalonia data validation.

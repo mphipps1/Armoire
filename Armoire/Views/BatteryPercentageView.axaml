@@ -38,7 +38,7 @@
 				Height="26"
 				Kind="{Binding BatteryIcon}"
 				Foreground="Black"/>
-			<TextBlock Text="{Binding BatteryPercentage}%"
+			<TextBlock Text="{Binding BatteryPercentage}"
 					   HorizontalAlignment="Center"
 					   VerticalAlignment="Center"
 					   FontSize="12"

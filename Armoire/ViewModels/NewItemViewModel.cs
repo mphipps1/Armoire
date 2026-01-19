@@ -11,13 +11,15 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
+using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using OpenFileDialog = System.Windows.Forms.OpenFileDialog;
 
 namespace Armoire.ViewModels
 {
@@ -193,37 +195,44 @@ namespace Armoire.ViewModels
             return null;
         }
 
-        [RelayCommand]
-        public void OnOpenFileDialogClick()
+        public async void GetFiles()
         {
-            //var window = TopLevel.GetTopLevel(this) as Window;
-
-            var dialog = new OpenFileDialog();
-            dialog.Filter = "*.lnk | *.exe";
-            dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            dialog.Multiselect = true;
-            dialog.Title = "Select application(s) or drag and drop...";
-
-            var result = dialog.ShowDialog();
-
-            string[] filePaths = dialog.FileNames;
-            string[] fileNames = dialog.SafeFileNames;
-            var targetDrawer = GetTargetDrawer(MainWindowViewModel.ActiveDockViewModel);
-            if (filePaths.Length == 0)
+            var sp = Application.Current.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime;
+            var desktop = await sp.MainWindow.StorageProvider.TryGetWellKnownFolderAsync(WellKnownFolder.Desktop);
+            var result = await sp.MainWindow.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions()
+            {
+                
+                Title = "Select application(s) or drag and drop...",
+                    FileTypeFilter = [FilePickerFileTypes.All],
+ //               SuggestedStartLocation = desktop,
+  //              AllowMultiple = true
+            });
+            if (result.Count == 0)
                 return;
+            var filePaths = result.Select(x=>x.Path.ToString()).ToArray();
+            var fileNames = result.Select(x=>x.Name).ToArray();
+
+            var targetDrawer = GetTargetDrawer(MainWindowViewModel.ActiveDockViewModel);
 
             if (targetDrawer == null)
                 return;
-            for (int i = 0; i < filePaths.Length; i++)
+            foreach (var t in filePaths)
             {
                 targetDrawer.RegisterEventHandlers();
-                lnkDropCollection.Add(filePaths[i]);
+                lnkDropCollection.Add(t);
             }
 
             Name = Path.GetFileNameWithoutExtension(fileNames[0]);
 
             //if (result != null && result.Length != 0)
             //    NewItemViewModel.NewExe = result[0];
+        }
+
+        
+        [RelayCommand]
+        public void OnOpenFileDialogClick()
+        {
+             GetFiles();
         }
 
         public static void GetExecutables()

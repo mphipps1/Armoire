@@ -40,6 +40,7 @@ public class DbHelper
     public static DrawerAsContentsViewModel LoadDockOrCreate()
     {
         using var context = new AppDbContext();
+        context.Database.EnsureCreated();
         var dockModel = context.Drawers.Find("CONTENTS_1");
         if (dockModel != null)
         {

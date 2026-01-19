@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Armoire.Interfaces;
 using Armoire.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 
@@ -47,19 +48,9 @@ namespace Armoire.ViewModels
         {
             while (true)
             {
-                bool isRunningOnBattery = (
-                    System.Windows.Forms.SystemInformation.PowerStatus.PowerLineStatus
-                    == PowerLineStatus.Offline
-                );
-                int batteryPercent = (int)(
-                    System.Windows.Forms.SystemInformation.PowerStatus.BatteryLifePercent * 100
-                );
-                int secondsRemaining = System
-                    .Windows
-                    .Forms
-                    .SystemInformation
-                    .PowerStatus
-                    .BatteryLifeRemaining;
+                var isRunningOnBattery = ICrossPlatform.Instance.IsOnBattery();
+                var batteryPercent = ICrossPlatform.Instance.BatteryLevel();
+                int secondsRemaining =ICrossPlatform.Instance.BatteryLifeRemainingInSeconds(); 
                 if (secondsRemaining <= 0)
                     Name = "Battery is pugged in";
                 else

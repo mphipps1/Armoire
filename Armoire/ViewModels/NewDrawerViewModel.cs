@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
+using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Image = System.Drawing.Image;
 
 namespace Armoire.ViewModels
 {
@@ -135,8 +139,23 @@ namespace Armoire.ViewModels
         [RelayCommand]
         public void OnOpenFileDialogClick()
         {
-            //var window = TopLevel.GetTopLevel(this) as Window;
-
+            var sp = Application.Current.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime;
+            var task = sp.MainWindow.StorageProvider.TryGetWellKnownFolderAsync(WellKnownFolder.Desktop);
+            task.Wait();
+            var desktop = task.Result;
+            var fp = sp.MainWindow.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions()
+            {
+                Title = "Select application(s) or drag and drop...",
+                FileTypeFilter = [FilePickerFileTypes.ImageJpg, FilePickerFileTypes.ImagePng],
+                SuggestedStartLocation = desktop,
+                AllowMultiple = true
+            });
+            fp.Wait();
+            var result = fp.Result; 
+            var filePaths = result.Select(x=>x.Path.ToString()).ToArray();
+            var fileNames = result.Select(x=>x.Name).ToArray();
+             
+            /*
             var dialog = new OpenFileDialog();
             dialog.Filter = "*.png | *.jpg";
             dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
@@ -144,9 +163,8 @@ namespace Armoire.ViewModels
             dialog.Title = "Select application(s) or drag and drop...";
 
             var result = dialog.ShowDialog();
+            */
 
-            string[] filePaths = dialog.FileNames;
-            string[] fileNames = dialog.SafeFileNames;
             var targetDrawer = GetTargetDrawer(MainWindowViewModel.ActiveDockViewModel);
             if (filePaths.Length == 0)
                 return;

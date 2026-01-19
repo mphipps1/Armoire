@@ -7,6 +7,7 @@ using System.Security;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Forms;
+using Armoire.Interfaces;
 using Armoire.Utils;
 using Armoire.Views;
 using Avalonia;
@@ -152,19 +153,19 @@ namespace Armoire.ViewModels
         [RelayCommand]
         public void Logoff()
         {
-            WindowsFunctionalities.LogOff();
+            ICrossPlatform.Instance.LogOff();
         }
 
         [RelayCommand]
         public void Restart()
         {
-            WindowsFunctionalities.Restart();
+            ICrossPlatform.Instance.Restart();
         }
 
         [RelayCommand]
         public void Shutdown()
         {
-            WindowsFunctionalities.Shutdown();
+            ICrossPlatform.Instance.Shutdown();
         }
 
         public static void CloseDialog()

@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Device.Location;
 using Avalonia.Controls;
 using Newtonsoft.Json;
 using System.Net.Http;
@@ -15,6 +14,7 @@ using System.IO;
 using System.Net;
 using System.Drawing;
 using System.Drawing.Imaging;
+using Armoire.Interfaces;
 
 
 namespace Armoire.ViewModels
@@ -102,20 +102,7 @@ namespace Armoire.ViewModels
 
         private static async Task<WeatherResponse> GetWeatherByCoordinates(WeatherViewModel wvm)
         {
-            GeoCoordinateWatcher watcher = new GeoCoordinateWatcher(GeoPositionAccuracy.Default);
-            watcher.TryStart(false, TimeSpan.FromMilliseconds(3000));
-            while (watcher.Status != GeoPositionStatus.Ready)
-            {
-                if(watcher.Permission == GeoPositionPermission.Denied)
-                {
-                    wvm.WeatherDesc = "Could not load weather data.";
-                    wvm.CurrentTemp = "Be sure to enable location in Windows Privacy Settings.";
-                    return new WeatherResponse();
-                }
-                Thread.Sleep(200);
-            }
-            int i = 0;
-            GeoCoordinate cord = watcher.Position.Location;
+            var cord = ICrossPlatform.Instance.GetLocation(); 
             using (var client = new HttpClient())
             {
                 var weatherUrl = $"{WeatherApiUrl}?lat={cord.Latitude}&lon={cord.Longitude}&appid={WeatherApiKey}&units=metric";

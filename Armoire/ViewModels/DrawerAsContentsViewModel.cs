@@ -6,6 +6,7 @@ using System.Linq;
 using Armoire.Models;
 using Armoire.Utils;
 using Avalonia.Controls;
+using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using DialogHostAvalonia;
@@ -61,19 +62,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
     {
         Name = "dock";
         Id = "CONTENTS_1";
-        FileStream fs = new FileStream(
-            "./../../../Assets/tempDrawer.jpg",
-            FileMode.Open,
-            FileAccess.Read
-        );
-        System.Drawing.Image image = System.Drawing.Image.FromStream(fs);
-        System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(image, 60, 60);
-        using (MemoryStream memory = new MemoryStream())
-        {
-            bmp.Save(memory, ImageFormat.Png);
-            memory.Position = 0;
-            IconBmp = new Avalonia.Media.Imaging.Bitmap(memory);
-        }
+        IconBmp = MiscHelper.GetAvaBmpFromAssets("tempDrawer.jpg");
         GeneratedDrawer = new DrawerViewModel(this);
         ParentId = parentID;
         DrawerHierarchy = drawerHierarchy;
@@ -83,19 +72,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
     public DrawerAsContentsViewModel(string? parentID, int? drawerHierarchy, bool notDock)
     {
         Name = "drawer " + _count++;
-        FileStream fs = new FileStream(
-            "./../../../Assets/table.png",
-            FileMode.Open,
-            FileAccess.Read
-        );
-        System.Drawing.Image image = System.Drawing.Image.FromStream(fs);
-        System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(image, 60, 60);
-        using (MemoryStream memory = new MemoryStream())
-        {
-            bmp.Save(memory, ImageFormat.Png);
-            memory.Position = 0;
-            IconBmp = new Avalonia.Media.Imaging.Bitmap(memory);
-        }
+        IconBmp = MiscHelper.GetAvaBmpFromAssets("table.png");
         GeneratedDrawer = new DrawerViewModel(this);
         ParentId = parentID;
         DrawerHierarchy = drawerHierarchy;
@@ -141,37 +118,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
         Name = name;
         ParentId = parentID;
         DrawerHierarchy = drawerHierarchy;
-        if (iconPath == null || iconPath == "")
-        {
-            FileStream fs = new FileStream(
-                "./../../../Assets/table.png",
-                FileMode.Open,
-                FileAccess.Read
-            );
-            System.Drawing.Image image = System.Drawing.Image.FromStream(fs);
-            System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(image, 50, 50);
-            using (MemoryStream memory = new MemoryStream())
-            {
-                bmp.Save(memory, ImageFormat.Png);
-                memory.Position = 0;
-                IconBmp = new Avalonia.Media.Imaging.Bitmap(memory);
-            }
-        }
-        else
-        {
-            if (iconPath is not null)
-            {
-                FileStream fs = new FileStream(iconPath, FileMode.Open, FileAccess.Read);
-                System.Drawing.Image image = System.Drawing.Image.FromStream(fs);
-                System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(image, 50, 50);
-                using (MemoryStream memory = new MemoryStream())
-                {
-                    bmp.Save(memory, ImageFormat.Png);
-                    memory.Position = 0;
-                    IconBmp = new Avalonia.Media.Imaging.Bitmap(memory);
-                }
-            }
-        }
+        IconBmp = string.IsNullOrEmpty(iconPath) ? MiscHelper.GetAvaBmpFromAssets("table.png") : new Bitmap(iconPath);
         _count++;
         SetMoveDirections(this);
         Container = cvm;

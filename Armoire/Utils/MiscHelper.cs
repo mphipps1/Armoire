@@ -76,6 +76,8 @@ public class MiscHelper
     public static Bitmap GetAvaBmpFromAssets(string assetFilename)
     {
         var assetsPath = GetAssetsPath();
+        return new Bitmap(assetsPath + Path.DirectorySeparatorChar + assetFilename);
+        /*
         var fs = new FileStream(
             Path.Combine(assetsPath, assetFilename),
             FileMode.Open,
@@ -84,5 +86,6 @@ public class MiscHelper
         var image = Image.FromStream(fs);
         var bmp = new System.Drawing.Bitmap(image, 50, 50);
         return ConvertSysBmpToAvaBmp(bmp);
+        */
     }
 }
