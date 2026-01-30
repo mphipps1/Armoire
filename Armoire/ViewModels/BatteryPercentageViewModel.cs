@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using Armoire.Interfaces;
 using Armoire.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.Maui.Devices;
 
 namespace Armoire.ViewModels
 {
@@ -62,37 +63,18 @@ namespace Armoire.ViewModels
             {
                 // Check if the battery is plugged in
                 bool isMachineRunningOnBattery = (
-                    System.Windows.Forms.SystemInformation.PowerStatus.PowerLineStatus
-                    == PowerLineStatus.Offline
+                        Battery.PowerSource == BatteryPowerSource.Battery 
                 );
                 // Get the battery power as a percentage
                 int batteryPercent = (int)(
-                    System.Windows.Forms.SystemInformation.PowerStatus.BatteryLifePercent * 100
+                    Battery.ChargeLevel * 100
                 );
-
-                // Get the remaining battery life
-                int secondsRemaining = System
-                    .Windows
-                    .Forms
-                    .SystemInformation
-                    .PowerStatus
-                    .BatteryLifeRemaining;
-
+                
                 // Updating the name to reflect how much lifetime the battery has left
                 var isRunningOnBattery = ICrossPlatform.Instance.IsOnBattery();
-                var batteryPercent = ICrossPlatform.Instance.BatteryLevel();
-                int secondsRemaining =ICrossPlatform.Instance.BatteryLifeRemainingInSeconds(); 
-                if (secondsRemaining <= 0)
-                    Name = "Battery is pugged in";
-                else
-                {
-                    Name =
-                        "Battery life remaining: "
-                        + secondsRemaining / 3600
-                        + " hours and "
-                        + (secondsRemaining / 3600) % 60
-                        + " minutes";
-                }
+                //var batteryPercent = ICrossPlatform.Instance.BatteryLevel();
+                //int secondsRemaining = ICrossPlatform.Instance.BatteryLifeRemainingInSeconds(); 
+                //TODO figure out how to get battery life remaining in seconds.
                 //Debug.WriteLine(Name);
 
                 // Changing the battery percentage and icon to refelct the current battery state
