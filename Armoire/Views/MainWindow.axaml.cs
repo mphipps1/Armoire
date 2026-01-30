@@ -11,6 +11,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.Platform;
 
 namespace Armoire.Views
 {
@@ -196,14 +197,12 @@ namespace Armoire.Views
                 return;
 
             var primaryWindowWidth = ArmoireWindow.Screens.Primary.WorkingArea.Size.Width;
-            
-            if(primaryWindowWidth - 400 < ArmoireWindow.Position.X)
-            var primaryWindowWidth = System
-                .Windows
-                .Forms
-                .SystemInformation
-                .PrimaryMonitorSize
-                .Width;
+
+            if (primaryWindowWidth - 400 < ArmoireWindow.Position.X)
+            {
+                var primaryScreen = Screens.Primary; 
+                primaryWindowWidth = (int)primaryScreen.Bounds.Width;
+            }
 
             if (primaryWindowWidth - 400 < ArmoireWindow.Position.X)
             {
