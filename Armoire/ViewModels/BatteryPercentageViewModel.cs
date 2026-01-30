@@ -61,7 +61,7 @@ namespace Armoire.ViewModels
             while (true)
             {
                 // Check if the battery is plugged in
-                bool isRunningOnBattery = (
+                bool isMachineRunningOnBattery = (
                     System.Windows.Forms.SystemInformation.PowerStatus.PowerLineStatus
                     == PowerLineStatus.Offline
                 );
