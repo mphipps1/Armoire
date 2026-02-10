@@ -5,20 +5,13 @@
 
 using Armoire.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Avalonia.Controls;
 using Newtonsoft.Json;
 using System.Net.Http;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System.Threading;
 using System.Diagnostics;
-using System.IO;
-using System.Net;
-using System.Drawing;
-using System.Drawing.Imaging;
+using Microsoft.Maui.Devices.Sensors;
 using Armoire.Interfaces;
 
 
@@ -98,29 +91,28 @@ namespace Armoire.ViewModels
 
         private static async Task<WeatherResponse> GetWeatherByCoordinates(WeatherViewModel wvm)
         {
-            var cord = ICrossPlatform.Instance.GetLocation(); 
-            GeoCoordinateWatcher watcher = new GeoCoordinateWatcher(GeoPositionAccuracy.Default);
-            watcher.TryStart(false, TimeSpan.FromMilliseconds(3000));
             //Making sure that we can get the weatherdata or else this results in an infinate loop
-            while (watcher.Status != GeoPositionStatus.Ready)
+            try
             {
-                if(watcher.Permission == GeoPositionPermission.Denied)
+                //Getting the location using MAUI instead of Windows
+                Location location = await Geolocation.GetLastKnownLocationAsync();
+                
+                // Sending API request and getting the JSON object it returns
+                using (var client = new HttpClient())
                 {
-                    // Display an error message in place of the weahter
-                    wvm.WeatherDesc = "Could not load weather data.";
-                    wvm.CurrentTemp = "Be sure to enable location in Windows Privacy Settings.";
-                    return new WeatherResponse();
+                    var weatherUrl =
+                        $"{WeatherApiUrl}?lat={location.Latitude}&lon={location.Longitude}&appid={WeatherApiKey}&units=metric";
+                    var response = await client.GetStringAsync(weatherUrl);
+                    return JsonConvert.DeserializeObject<WeatherResponse>(response);
                 }
-                Thread.Sleep(200);
+
             }
-            int i = 0;
-            GeoCoordinate cord = watcher.Position.Location;
-            // Sending API request and getting the JSON object it returns
-            using (var client = new HttpClient())
+            catch (Exception ex)
             {
-                var weatherUrl = $"{WeatherApiUrl}?lat={cord.Latitude}&lon={cord.Longitude}&appid={WeatherApiKey}&units=metric";
-                var response = await client.GetStringAsync(weatherUrl);
-                return JsonConvert.DeserializeObject<WeatherResponse>(response);
+                // Display an error message in place of the weather
+                wvm.WeatherDesc = "Could not load weather data.";
+                wvm.CurrentTemp = "Be sure to enable location in Windows Privacy Settings.";
+                return new WeatherResponse();
             }
         }
 

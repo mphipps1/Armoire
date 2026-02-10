@@ -44,8 +44,9 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
             FileMode.Open,
             FileAccess.Read
         );
+        //TODO replace System.Drawing with Avalonia alternative.
         System.Drawing.Image image = System.Drawing.Image.FromStream(fs);
-        System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(image, 60, 60);
+        var bmp = new Avalonia.Media.Imaging.Bitmap();
         using (MemoryStream memory = new MemoryStream())
         {
             bmp.Save(memory, ImageFormat.Png);
