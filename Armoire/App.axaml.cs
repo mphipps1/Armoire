@@ -21,7 +21,7 @@ namespace Armoire
         public override void OnFrameworkInitializationCompleted()
         {
             var sc = new ServiceCollection();
-            sc.AddSingleton<ICrossPlatform, MacCrossPlatform>();
+            sc.AddSingleton<ICrossPlatform>();
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
                 // Line below is needed to remove Avalonia data validation.

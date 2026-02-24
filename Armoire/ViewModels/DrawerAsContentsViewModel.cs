@@ -39,19 +39,9 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
         IconBmp = MiscHelper.GetAvaBmpFromAssets("tempDrawer.jpg");
 
         // Converting the .jpg image into a bitmap
-        FileStream fs = new FileStream(
-            "./../../../Assets/tempDrawer.jpg",
-            FileMode.Open,
-            FileAccess.Read
-        );
-        //TODO replace System.Drawing with Avalonia alternative.
-        System.Drawing.Image image = System.Drawing.Image.FromStream(fs);
-        var bmp = new Avalonia.Media.Imaging.Bitmap();
-        using (MemoryStream memory = new MemoryStream())
+        using (var fs = File.OpenRead("./../../../Assets/tempDrawer.jpg"))
         {
-            bmp.Save(memory, ImageFormat.Png);
-            memory.Position = 0;
-            IconBmp = new Avalonia.Media.Imaging.Bitmap(memory);
+            IconBmp = new Avalonia.Media.Imaging.Bitmap(fs);
         }
         GeneratedDrawer = new DrawerViewModel(this);
         ParentId = parentID;
@@ -112,37 +102,9 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
         DrawerHierarchy = drawerHierarchy;
         IconBmp = string.IsNullOrEmpty(iconPath) ? MiscHelper.GetAvaBmpFromAssets("table.png") : new Bitmap(iconPath);
 
-        // Converting the .jpg image into a bitmap
-        if (iconPath == null || iconPath == "")
+        using (var fs = File.OpenRead("./../../../Assets/table.png"))
         {
-            FileStream fs = new FileStream(
-                "./../../../Assets/table.png",
-                FileMode.Open,
-                FileAccess.Read
-            );
-            System.Drawing.Image image = System.Drawing.Image.FromStream(fs);
-            System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(image, 50, 50);
-            using (MemoryStream memory = new MemoryStream())
-            {
-                bmp.Save(memory, ImageFormat.Png);
-                memory.Position = 0;
-                IconBmp = new Avalonia.Media.Imaging.Bitmap(memory);
-            }
-        }
-        else
-        {
-            if (iconPath is not null)
-            {
-                FileStream fs = new FileStream(iconPath, FileMode.Open, FileAccess.Read);
-                System.Drawing.Image image = System.Drawing.Image.FromStream(fs);
-                System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(image, 50, 50);
-                using (MemoryStream memory = new MemoryStream())
-                {
-                    bmp.Save(memory, ImageFormat.Png);
-                    memory.Position = 0;
-                    IconBmp = new Avalonia.Media.Imaging.Bitmap(memory);
-                }
-            }
+            IconBmp = new Avalonia.Media.Imaging.Bitmap(fs);
         }
         _count++;
         SetMoveDirections(this);

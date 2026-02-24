@@ -3,8 +3,6 @@ using Armoire.Interfaces;
 using Avalonia.Controls;
 
 namespace Armoire;
-
-#if Mac
 public class MacCrossPlatform : ICrossPlatform
 {
     public bool IsOnBattery() => false;
@@ -26,4 +24,3 @@ public class MacCrossPlatform : ICrossPlatform
         throw new System.NotImplementedException();
     }
 }
-#endif
