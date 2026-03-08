@@ -84,10 +84,10 @@ namespace Armoire.ViewModels
             var notif = new NotificationAreaViewModel(dockSource.Id, 0);
             ActiveDockViewModel.Contents.Add(notif);
 
-            var bat = new BatteryPercentageViewModel(notif.Id, 1, notif.GeneratedDrawer);
+            //var bat = new BatteryPercentageViewModel(notif.Id, 1, notif.GeneratedDrawer);
             var sound = new SoundItemViewModel(notif.Id, 1, notif.GeneratedDrawer);
             var wifi = new WifiItemViewModel(notif.Id, 1, notif.GeneratedDrawer);
-            notif.GeneratedDrawer.Contents.Add(bat);
+            //notif.GeneratedDrawer.Contents.Add(bat);
             notif.GeneratedDrawer.Contents.Add(sound);
             notif.GeneratedDrawer.Contents.Add(wifi);
 
