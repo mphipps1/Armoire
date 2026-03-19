@@ -38,19 +38,11 @@ public partial class RunningItemViewModel : ItemViewModel
         // the process name is used to identify unique processes such as two sepereate command prompts
         Name = process.MainWindowTitle;
         ProcessName = process.ProcessName + process.MainWindowHandle;
-        Icon icon;
-
+        
         // Getting the icon of this app
-        icon = Icon.ExtractAssociatedIcon(process.MainModule.FileName);
         Avalonia.Controls.Image image = new Avalonia.Controls.Image();
-
-        var bmp = icon.ToBitmap();
-        using (MemoryStream memory = new MemoryStream())
-        {
-            bmp.Save(memory, ImageFormat.Png);
-            memory.Position = 0;
-            IconBmp = new Avalonia.Media.Imaging.Bitmap(memory);
-        }
+        var iconBitmap = GetCurrentProcessIcon(process);
+        image.Source = iconBitmap;
 
         //Special ID to prevent being added to the database
         Id = "RUNNING";
@@ -92,7 +84,79 @@ public partial class RunningItemViewModel : ItemViewModel
     {
         Name = RunningProcess.MainWindowTitle;
     }
+    
+    /*
+     * This function gets the icons of the currently running item the cross platform way.
+     */
+    private Avalonia.Media.Imaging.Bitmap? GetCurrentProcessIcon(Process process)
+    {
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            try
+            {
+                var fileName = process.MainModule?.FileName;
+                if (fileName == null) return null;
 
+                var icon = Icon.ExtractAssociatedIcon(fileName);
+                if (icon == null) return null;
+
+                using var bitmap = icon.ToBitmap();
+                using var memory = new MemoryStream();
+                bitmap.Save(memory, ImageFormat.Png);
+                memory.Seek(0, SeekOrigin.Begin);
+                return new Avalonia.Media.Imaging.Bitmap(memory);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+        else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+        {
+            try
+            {
+                var fileName = process.MainModule?.FileName;
+                if (fileName == null) return null;
+
+                /*
+                 * macOS .app bundles its icons within the .app file. So in order to get the icons we do the following:
+                 * We get the app bundle location then we can grab the icons out of the path that they live in which is nested in contens/resources/
+                 * from there we can just search for all .icns files to find one that matches the current fileName
+                 */
+                var appBundle = Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(fileName)));
+                var resourcesPath = Path.Combine(appBundle ?? "", "Contents", "Resources");
+                var icons = Directory.Exists(resourcesPath)
+                    ? Directory.GetFiles(resourcesPath, "*.icns").FirstOrDefault()
+                    : null;
+
+                return icons != null ? new Avalonia.Media.Imaging.Bitmap(icons) : null;
+            }
+            catch { return null; }
+        }
+        //If OS is Linux we have to try different paths for where applications live on linux until we find the currently running one.
+        else
+        {
+            try
+            {
+                var processName = process.ProcessName;
+                if (processName == null) return null;
+
+                // I found these filepaths on Ubuntu 24.04 I used the 3 most common icon sizes that I found on my system.
+                // add new filepaths for linux icons here if needed.
+                var possibleIconFilePaths = new[]
+                {
+                    $"/usr/share/icons/hicolor/256x256/apps/{processName}.png",
+                    $"/usr/share/icons/hicolor/128x128/apps/{processName}.png",
+                    $"/usr/share/icons/hicolor/48x48/apps/{processName}.png",
+                };
+
+                var iconFilePath = possibleIconFilePaths.FirstOrDefault(File.Exists);
+                return iconFilePath != null ? new Avalonia.Media.Imaging.Bitmap(iconFilePath) : null;
+            }
+            catch { return null; }
+        }
+    }
+    
     public void UpdateProcess(Process p)
     {
         RunningProcess = p;
