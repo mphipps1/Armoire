@@ -77,8 +77,7 @@ public partial class ItemViewModel : ContentsUnitViewModel
         DrawerHierarchy = itemModel.DrawerHierarchy;
         SetMoveDirections(this);
         IconBmp =
-            MiscHelper.GetAvaBmpFromExePath(itemModel.ExecutablePath)
-            ?? MiscHelper.GetAvaBmpFromAssets("exe_logo.png");
+            GetIconForExec(ExecutablePath);
     }
 
     public ItemViewModel(ItemViewModel orig)
@@ -92,8 +91,7 @@ public partial class ItemViewModel : ContentsUnitViewModel
         DrawerHierarchy = orig.DrawerHierarchy;
         SetMoveDirections(this);
         IconBmp =
-            MiscHelper.GetAvaBmpFromExePath(ExecutablePath)
-            ?? MiscHelper.GetAvaBmpFromAssets("exe_logo.png");
+            GetIconForExec(ExecutablePath);
     }
 
     public override void HandleContentsClick()
