@@ -20,6 +20,7 @@ using Avalonia.Media.Imaging;
 using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Maui.Graphics;
 
 namespace Armoire.ViewModels
 {
@@ -28,8 +29,7 @@ namespace Armoire.ViewModels
         public ObservableCollection<string> lnkDropCollection { get; set; } =
             new ObservableCollection<string>();
 
-        [ObservableProperty]
-        public IBrush _borderBackground = Avalonia.Media.Brushes.Transparent;
+        [ObservableProperty] public IBrush _borderBackground = Avalonia.Media.Brushes.Transparent;
 
         //the following are declared in GetExecutables() so they're populated before a user goes to add a new unit
         public static Dictionary<string, string>? Executables { get; set; }
@@ -38,31 +38,23 @@ namespace Armoire.ViewModels
 
         private static ObservableCollection<ContentsUnitViewModel>? Dock { get; set; }
 
-        [ObservableProperty]
-        public string _name;
+        [ObservableProperty] public string _name;
 
         public static string? NewExe;
 
-        [ObservableProperty]
-        public int _panelHeight;
+        [ObservableProperty] public int _panelHeight;
 
-        [ObservableProperty]
-        public int _panelWidth;
+        [ObservableProperty] public int _panelWidth;
 
-        [ObservableProperty]
-        public string _backgroundColor;
+        [ObservableProperty] public string _backgroundColor;
 
-        [ObservableProperty]
-        public string _fileDropText = "Drop lnk file here";
+        [ObservableProperty] public string _fileDropText = "Drop lnk file here";
 
-        [ObservableProperty]
-        public bool _isPopupRemoveButton;
+        [ObservableProperty] public bool _isPopupRemoveButton;
 
-        [ObservableProperty]
-        public bool _exePopUpOpen;
+        [ObservableProperty] public bool _exePopUpOpen;
 
-        [ObservableProperty]
-        public string _dropDownIcon;
+        [ObservableProperty] public string _dropDownIcon;
 
         private string TargetDrawerID;
 
@@ -95,89 +87,94 @@ namespace Armoire.ViewModels
         [RelayCommand]
         public void Update()
         {
-            var targetDrawer = GetTargetDrawer(MainWindowViewModel.ActiveDockViewModel);
-            if (targetDrawer != null)
+            if (OperatingSystem.IsWindows())
             {
-                //Checking first to see if any exes from the drop down menu were selected
-                if (NewExe != null && Executables.ContainsKey(NewExe))
+                var targetDrawer = GetTargetDrawer(MainWindowViewModel.ActiveDockViewModel);
+                if (targetDrawer != null)
                 {
-                    targetDrawer.RegisterEventHandlers();
-                    targetDrawer.Contents.Add(
-                        new ItemViewModel(
-                            Name ?? NewExe,
-                            Executables[NewExe],
-                            Icons[NewExe].ToBitmap(),
-                            TargetDrawerID,
-                            TargetDrawerHeirarchy + 1,
-                            ActiveContainerViewModel,
-                            NewExe
-                        )
-                    );
-                    // Moving items in the dock so that they arent below the custom drawers/items
-                    if (targetDrawer.SourceDrawer.DrawerHierarchy == -1)
+                    //Checking first to see if any exes from the drop down menu were selected
+                    if (NewExe != null && Executables.ContainsKey(NewExe))
                     {
-                        Debug.WriteLine("hi");
-                        targetDrawer.Contents.Move(
-                            targetDrawer.Contents.Count - 1,
-                            targetDrawer.Contents.Count - 4
-                        );
-                    }
-
-                    Name = NewExe;
-                }
-                // Now checking to see if something was drag and dropped
-                else if (NewExe != null)
-                {
-                    targetDrawer.RegisterEventHandlers();
-                    targetDrawer.Contents.Add(
-                        new ItemViewModel(
-                            Name ?? NewExe,
-                            NewExe,
-                            Icon.ExtractAssociatedIcon(NewExe).ToBitmap(),
-                            TargetDrawerID,
-                            TargetDrawerHeirarchy + 1,
-                            ActiveContainerViewModel,
-                            NewExe
-                        )
-                    );
-                    Name = NewExe;
-                }
-                // Checking last to see if something was selected through file dialog
-                else if (lnkDropCollection.Count > 0)
-                {
-                    if (lnkDropCollection.Count > 0)
-                    {
-                        var droppedFile = lnkDropCollection.ElementAt(0);
-                        var ExeFilePath = droppedFile;
-                        var IconLocation = droppedFile;
-                        var IconPath = ExeFilePath + IconLocation;
-                        var name = Path.GetFileName(droppedFile)
-                            .Substring(0, Path.GetFileName(droppedFile).IndexOf('.'));
-                        var icon = Icon.ExtractAssociatedIcon(ExeFilePath);
-
-                        System.Drawing.Bitmap bitmap = icon.ToBitmap();
-
                         targetDrawer.RegisterEventHandlers();
                         targetDrawer.Contents.Add(
                             new ItemViewModel(
-                                name,
-                                ExeFilePath,
-                                bitmap,
+                                Name ?? NewExe,
+                                Executables[NewExe], TODO,
                                 TargetDrawerID,
-                                TargetDrawerHeirarchy,
-                                ActiveContainerViewModel
+                                TargetDrawerHeirarchy + 1,
+                                ActiveContainerViewModel,
+                                NewExe
                             )
                         );
+                        // Moving items in the dock so that they arent below the custom drawers/items
+                        if (targetDrawer.SourceDrawer.DrawerHierarchy == -1)
+                        {
+                            Debug.WriteLine("hi");
+                            targetDrawer.Contents.Move(
+                                targetDrawer.Contents.Count - 1,
+                                targetDrawer.Contents.Count - 4
+                            );
+                        }
+
+                        Name = NewExe;
+                    }
+                    // Now checking to see if something was drag and dropped
+                    else if (NewExe != null)
+                    {
+                        targetDrawer.RegisterEventHandlers();
+                        targetDrawer.Contents.Add(
+                            new ItemViewModel(
+                                Name ?? NewExe,
+                                NewExe, TODO,
+                                TargetDrawerID,
+                                TargetDrawerHeirarchy + 1,
+                                ActiveContainerViewModel,
+                                NewExe
+                            )
+                        );
+                        Name = NewExe;
+                    }
+                    // Checking last to see if something was selected through file dialog
+                    else if (lnkDropCollection.Count > 0)
+                    {
+                        if (lnkDropCollection.Count > 0)
+                        {
+                            var droppedFile = lnkDropCollection.ElementAt(0);
+                            var ExeFilePath = droppedFile;
+                            var IconLocation = droppedFile;
+                            var IconPath = ExeFilePath + IconLocation;
+                            var name = Path.GetFileName(droppedFile)
+                                .Substring(0, Path.GetFileName(droppedFile).IndexOf('.'));
+                            var icon = Icon.ExtractAssociatedIcon(ExeFilePath);
+
+                            System.Drawing.Bitmap bitmap = icon.ToBitmap();
+
+                            targetDrawer.RegisterEventHandlers();
+                            targetDrawer.Contents.Add(
+                                new ItemViewModel(
+                                    name,
+                                    ExeFilePath, TODO,
+                                    TargetDrawerID,
+                                    TargetDrawerHeirarchy,
+                                    ActiveContainerViewModel
+                                )
+                            );
+                        }
                     }
                 }
             }
+            else if (OperatingSystem.IsWindows())
+            {
+
+            }
+
 
             //MainWindowViewModel._dialogIsOpen = false;
             MainWindowViewModel.CloseDialog();
             NewExe = null;
         }
 
-        //G etting the drawer that we want to add the new item to
+        // Getting the drawer that we want to add the new item to
         private ContainerViewModel? GetTargetDrawer(ContainerViewModel currentDrawer)
         {
             if (TargetDrawerID == "CONTENTS_1")
@@ -192,6 +189,7 @@ namespace Armoire.ViewModels
                     }
                 }
             }
+
             foreach (var unit in currentDrawer.Contents)
             {
                 if (unit is DrawerAsContentsViewModel dacvm)
@@ -201,6 +199,7 @@ namespace Armoire.ViewModels
                         return ret;
                 }
             }
+
             return null;
         }
 
@@ -210,16 +209,16 @@ namespace Armoire.ViewModels
             var desktop = await sp.MainWindow.StorageProvider.TryGetWellKnownFolderAsync(WellKnownFolder.Desktop);
             var result = await sp.MainWindow.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions()
             {
-                
+
                 Title = "Select application(s) or drag and drop...",
-                    FileTypeFilter = [FilePickerFileTypes.All],
- //               SuggestedStartLocation = desktop,
-  //              AllowMultiple = true
+                FileTypeFilter = [FilePickerFileTypes.All],
+                //               SuggestedStartLocation = desktop,
+                //              AllowMultiple = true
             });
             if (result.Count == 0)
                 return;
-            var filePaths = result.Select(x=>x.Path.ToString()).ToArray();
-            var fileNames = result.Select(x=>x.Name).ToArray();
+            var filePaths = result.Select(x => x.Path.ToString()).ToArray();
+            var fileNames = result.Select(x => x.Name).ToArray();
 
             var targetDrawer = GetTargetDrawer(MainWindowViewModel.ActiveDockViewModel);
 
@@ -237,11 +236,11 @@ namespace Armoire.ViewModels
             //    NewItemViewModel.NewExe = result[0];
         }
 
-        
+
         [RelayCommand]
         public void OnOpenFileDialogClick()
         {
-             GetFiles();
+            GetFiles();
         }
 
         public static void GetExecutables()
@@ -337,5 +336,6 @@ namespace Armoire.ViewModels
         {
             MainWindowViewModel.CloseDialog();
         }
+
     }
 }

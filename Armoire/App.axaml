@@ -16,7 +16,7 @@
     <Application.Styles>
         <themes:MaterialTheme
             BaseTheme="Dark"
-            PrimaryColor="Purple"
+            PrimaryColor="Blue"
             SecondaryColor="Lime" />
         <avalonia:MaterialIconStyles />
         <dialogHostAvalonia:DialogHostStyles />

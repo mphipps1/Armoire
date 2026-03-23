@@ -43,7 +43,7 @@ public partial class ApplicationMonitorViewModel : DrawerAsContentsViewModel
         Id = "MONITOR";
     }
 
-    // This function uses async and await to start the infinate loop of checking processes
+    // This function uses async and await to start the infinite loop of checking processes
     public async void GetInitialRunningApps()
     {
         var processes = Process.GetProcesses();
@@ -51,7 +51,7 @@ public partial class ApplicationMonitorViewModel : DrawerAsContentsViewModel
         await checkingApps;
     }
 
-    // CheckRunningApplication infinately loops to check for changes in the currentl running processes
+    // CheckRunningApplication infinitely loops to check for changes in the currently running processes
     public static async Task CheckRunningApplication(DrawerAsContentsViewModel dac)
     {
         ArrayList browserWindows = new ArrayList();

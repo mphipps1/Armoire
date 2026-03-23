@@ -25,12 +25,11 @@ public class MiscHelper
         var sampleItemName = exeNames[sampleItemIdx];
         return new ItemViewModel(
             sampleItemName,
-            exes[sampleItemName],
-            icons[sampleItemName].ToBitmap(),
+            exes[sampleItemName], TODO,
             container.SourceDrawerId
-                ?? throw new InvalidOperationException(
-                    "An `ItemViewModel` should not have a null `SourceDrawerId`."
-                ),
+            ?? throw new InvalidOperationException(
+                "An `ItemViewModel` should not have a null `SourceDrawerId`."
+            ),
             0,
             container,
             sampleItemName

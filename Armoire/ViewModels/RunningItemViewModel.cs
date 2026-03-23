@@ -36,8 +36,8 @@ public partial class RunningItemViewModel : ItemViewModel
 
         // The name is what is displayed as a tool tip to the user,
         // the process name is used to identify unique processes such as two sepereate command prompts
-        Name = process.MainWindowTitle;
-        ProcessName = process.ProcessName + process.MainWindowHandle;
+        Name = process.ProcessName;
+        ProcessName = process.ProcessName + process.MainWindowHandle.ToString();
         
         // Getting the icon of this app
         Avalonia.Controls.Image image = new Avalonia.Controls.Image();
@@ -88,7 +88,7 @@ public partial class RunningItemViewModel : ItemViewModel
     /*
      * This function gets the icons of the currently running item the cross platform way.
      */
-    private Avalonia.Media.Imaging.Bitmap? GetCurrentProcessIcon(Process process)
+    public Avalonia.Media.Imaging.Bitmap? GetCurrentProcessIcon(Process process)
     {
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
