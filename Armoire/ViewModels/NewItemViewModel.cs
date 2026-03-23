@@ -99,7 +99,7 @@ namespace Armoire.ViewModels
                         targetDrawer.Contents.Add(
                             new ItemViewModel(
                                 Name ?? NewExe,
-                                Executables[NewExe], TODO,
+                                Executables[NewExe], ItemViewModel.GetIconForExec(Executables[NewExe]),
                                 TargetDrawerID,
                                 TargetDrawerHeirarchy + 1,
                                 ActiveContainerViewModel,
@@ -125,7 +125,7 @@ namespace Armoire.ViewModels
                         targetDrawer.Contents.Add(
                             new ItemViewModel(
                                 Name ?? NewExe,
-                                NewExe, TODO,
+                                NewExe, ItemViewModel.GetIconFromExec(NewExe),
                                 TargetDrawerID,
                                 TargetDrawerHeirarchy + 1,
                                 ActiveContainerViewModel,
@@ -153,7 +153,7 @@ namespace Armoire.ViewModels
                             targetDrawer.Contents.Add(
                                 new ItemViewModel(
                                     name,
-                                    ExeFilePath, TODO,
+                                    ExeFilePath, GetIconFromExec(ExeFilePath),
                                     TargetDrawerID,
                                     TargetDrawerHeirarchy,
                                     ActiveContainerViewModel
