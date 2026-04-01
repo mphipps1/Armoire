@@ -114,7 +114,7 @@ public partial class ItemViewModel : ContentsUnitViewModel
      * This function is made to take an file path to an executable application and return an avalonia bitmap containing
      * the application's icon.
      */
-    public static Avalonia.Media.Imaging.Bitmap? GetIconForExec(string path)
+    public static Bitmap? GetIconForExec(string path)
     {
         if (OperatingSystem.IsWindows())
         {

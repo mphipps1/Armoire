@@ -46,6 +46,9 @@ public partial class ApplicationMonitorViewModel : DrawerAsContentsViewModel
     // This function uses async and await to start the infinite loop of checking processes
     public async void GetInitialRunningApps()
     {
+        Debug.WriteLine("GetInitialRunningApps called");
+        var processes1 = Process.GetProcesses();
+        Debug.WriteLine($"Total processes: {processes1.Length}");
         var processes = Process.GetProcesses();
         var checkingApps = CheckRunningApplication(this);
         await checkingApps;
@@ -54,9 +57,11 @@ public partial class ApplicationMonitorViewModel : DrawerAsContentsViewModel
     // CheckRunningApplication infinitely loops to check for changes in the currently running processes
     public static async Task CheckRunningApplication(DrawerAsContentsViewModel dac)
     {
+        Debug.WriteLine("CheckRunningApplication called");
         ArrayList browserWindows = new ArrayList();
         while (isMonitoring)
         {
+            Debug.WriteLine("In monitoring mode.");
             await Task.Delay(300);
             var processes = Process.GetProcesses();
 
@@ -113,6 +118,7 @@ public partial class ApplicationMonitorViewModel : DrawerAsContentsViewModel
                 RunningAppNames.Remove(appName);
                 foreach (var cuvm in dac.GeneratedDrawer.Contents.ToList())
                 {
+                    Debug.WriteLine($"Checking app: {appName}");
                     if (cuvm is RunningItemViewModel rivm)
                     {
                         if (
@@ -165,6 +171,8 @@ public partial class ApplicationMonitorViewModel : DrawerAsContentsViewModel
 
                 Debug.WriteLine("Adding " + appName + apps[appName].MainWindowHandle);
                 RunningAppNames.Add(appName + apps[appName].MainWindowHandle);
+                Debug.WriteLine("Added " + appName + apps[appName].MainWindowHandle);
+                Debug.WriteLine("Creating running item view model...");
                 dac.GeneratedDrawer.Contents.Add(
                     new RunningItemViewModel(
                         dac.Id,
@@ -173,6 +181,7 @@ public partial class ApplicationMonitorViewModel : DrawerAsContentsViewModel
                         apps[appName]
                     )
                 );
+                Debug.WriteLine("Running itemViewModel created");
             }
 
             // Updating the processes and names in each RunningItem

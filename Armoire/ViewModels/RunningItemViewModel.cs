@@ -31,6 +31,8 @@ public partial class RunningItemViewModel : ItemViewModel
     )
         : base(parentID, drawerHierarchy, container)
     {
+        Debug.WriteLine("RunningItemViewModel constructor called");
+        Debug.WriteLine($"Process: {process.ProcessName}");
         RunningProcess = process;
         ExecutablePath = "";
 
@@ -40,9 +42,7 @@ public partial class RunningItemViewModel : ItemViewModel
         ProcessName = process.ProcessName + process.MainWindowHandle.ToString();
         
         // Getting the icon of this app
-        Avalonia.Controls.Image image = new Avalonia.Controls.Image();
-        var iconBitmap = GetCurrentProcessIcon(process);
-        image.Source = iconBitmap;
+        IconBmp = GetCurrentProcessIcon(process)!;
 
         //Special ID to prevent being added to the database
         Id = "RUNNING";
@@ -90,6 +90,8 @@ public partial class RunningItemViewModel : ItemViewModel
      */
     public Avalonia.Media.Imaging.Bitmap? GetCurrentProcessIcon(Process process)
     {
+        Debug.WriteLine("GetCurrentProcessIcon called");
+        Debug.WriteLine($"OS: {RuntimeInformation.OSDescription}");
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
             try
@@ -117,7 +119,7 @@ public partial class RunningItemViewModel : ItemViewModel
             {
                 var fileName = process.MainModule?.FileName;
                 if (fileName == null) return null;
-
+                Debug.WriteLine($"Process: {process.ProcessName}, FileName: {fileName}");
                 /*
                  * macOS .app bundles its icons within the .app file. So in order to get the icons we do the following:
                  * We get the app bundle location then we can grab the icons out of the path that they live in which is nested in contens/resources/

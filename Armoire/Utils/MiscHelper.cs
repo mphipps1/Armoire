@@ -9,8 +9,8 @@ using Bitmap = Avalonia.Media.Imaging.Bitmap;
 namespace Armoire.Utils;
 
 public class MiscHelper
-{
-    public static ItemViewModel CreateRandomItem(ContainerViewModel container)
+{// void -> ItemViewModel TODO
+    public static void CreateRandomItem(ContainerViewModel container)
     {
         if (
             NewItemViewModel.ExecutableNames is not { } exeNames
@@ -23,17 +23,18 @@ public class MiscHelper
         var rnd = new Random();
         var sampleItemIdx = rnd.Next(exeNames.Count);
         var sampleItemName = exeNames[sampleItemIdx];
-        return new ItemViewModel(
-            sampleItemName,
-            exes[sampleItemName], TODO,
-            container.SourceDrawerId
-            ?? throw new InvalidOperationException(
-                "An `ItemViewModel` should not have a null `SourceDrawerId`."
-            ),
-            0,
-            container,
-            sampleItemName
-        );
+        //return new ItemViewModel(
+        //sampleItemName,
+        //exes[sampleItemName], TODO,
+        // container.SourceDrawerId
+        //?? throw new InvalidOperationException(
+        // "An `ItemViewModel` should not have a null `SourceDrawerId`."
+        // ),
+        // 0,
+        //  container,
+        //sampleItemName
+        //  );
+        //}
     }
 
     public static string GetAssetsPath()
