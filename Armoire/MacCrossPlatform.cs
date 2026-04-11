@@ -1,6 +1,13 @@
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Reflection.Metadata.Ecma335;
+using System.Threading.Tasks;
+using System.Threading.Tasks.Dataflow;
 using Armoire.Interfaces;
 using Avalonia.Controls;
+using Avalonia.Media.Imaging;
 
 namespace Armoire;
 public class MacCrossPlatform : ICrossPlatform
@@ -11,16 +18,83 @@ public class MacCrossPlatform : ICrossPlatform
     public ICrossPlatform.Location GetLocation() => new ICrossPlatform.Location();
     public void Restart()
     {
-        throw new System.NotImplementedException();
+        Process.Start("osascript", "-e 'tell app \"System Events\" to restart'");
     }
 
     public void LogOff()
     {
-        throw new System.NotImplementedException();
+        Process.Start("osascript", "-e 'tell app \"System Events\" to log out'");
     }
 
     public void Shutdown()
     {
+        Process.Start("osascript", "-e 'tell app \"System Events\" to shut down'");
+    }
+
+    public IReadOnlyList<ICrossPlatform.RunningApplicationInfo> GetRunningApplications()
+    {
+        var processStartInfo = new ProcessStartInfo
+        {
+            FileName = "osascript",
+            Arguments =
+                "-e 'tell application \"System Events\" to get {name, bundle identifier, unix id, path} of (processes where background only is false)'",
+            RedirectStandardOutput = true,
+            UseShellExecute = false
+        };
+        
+        using var process = Process.Start(processStartInfo);
+        string output = process.StandardOutput.ReadToEnd();
+        process.WaitForExit();
+        
+        List<ICrossPlatform.RunningApplicationInfo> runningApplicationsList = new List<ICrossPlatform.RunningApplicationInfo>();
+        
+        string[] runningApps = output.Split(new[] {", "}, StringSplitOptions.RemoveEmptyEntries);
+
+        for (int i = 0; i + 3 < runningApps.Length; i += 4)
+        {
+            string name = runningApps[i];
+            string bundleIdentifier = runningApps[i + 1];
+            int processId = int.TryParse(runningApps[i + 2], out var parsedProcessId) ? parsedProcessId : 0;
+            string appPath = runningApps[i + 3];
+            
+            // Using the bundleID and the process ID to create a stable ID for macOS
+            string stableId = $"{bundleIdentifier}-{processId}";
+            
+            runningApplicationsList.Add(new ICrossPlatform.RunningApplicationInfo
+            {
+                StableId = stableId,
+                ProcessId = processId,
+                DisplayName = name,
+                BundleIdentifier = bundleIdentifier,
+                ApplicationPath = appPath
+            });
+        }
+        return runningApplicationsList.AsReadOnly();
+    }
+
+    public Task BringApplicationToForegroundAsync(int processId)
+    {
         throw new System.NotImplementedException();
+    }
+
+    public Task CloseApplicationAsync(int processId)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public Bitmap GetAppIcon(string appID)
+    {
+        string bundleIdentifier = appID;
+        
+        //get the Application path from bundle ID
+        string appPath = $"/Applications/{bundleIdentifier}.app";
+        if (!Directory.Exists(appPath)) return null;
+        
+        // .icns file is in Contents/Resources
+        string iconPath = Path.Combine(appPath, "Conents", "Resources", "AppIcon.icns");
+        
+        if (File.Exists(iconPath))
+            return new Bitmap(iconPath);
+        return null;
     }
 }
