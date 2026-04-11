@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection.Metadata.Ecma335;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 using Armoire.Interfaces;
@@ -10,11 +11,45 @@ using Avalonia.Controls;
 using Avalonia.Media.Imaging;
 
 namespace Armoire;
+
 public class MacCrossPlatform : ICrossPlatform
 {
     public bool IsOnBattery() => false;
-    public int BatteryLevel() => 100;
-    public int BatteryLifeRemainingInSeconds() => 86400;
+
+    public int BatteryLevel()
+    {
+        try
+        {
+            var processStartInfo = new ProcessStartInfo
+            {
+                FileName = "pmset",
+                Arguments = "-g batt",
+                RedirectStandardOutput = true,
+                UseShellExecute = false,
+                CreateNoWindow = true
+            };
+
+            using var process = Process.Start(processStartInfo);
+            string output = process.StandardOutput.ReadToEnd();
+            process.WaitForExit();
+
+            //use Regex matching to get the battery level number from the pmset output
+            Match batteryLevelNumber = Regex.Match(output, @"(\d+)%");
+            if (batteryLevelNumber.Success)
+            {
+                int batteryLevel = int.Parse(batteryLevelNumber.Groups[1].Value);
+                return batteryLevel;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+
+        return -1;
+    }
+
+public int BatteryLifeRemainingInSeconds() => 86400;
     public ICrossPlatform.Location GetLocation() => new ICrossPlatform.Location();
     public void Restart()
     {
@@ -24,7 +59,7 @@ public class MacCrossPlatform : ICrossPlatform
     public void LogOff()
     {
         Process.Start("osascript", "-e 'tell app \"System Events\" to log out'");
-    }
+    }   
 
     public void Shutdown()
     {
