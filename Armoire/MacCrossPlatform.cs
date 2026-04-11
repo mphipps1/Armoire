@@ -51,10 +51,9 @@ public class MacCrossPlatform : ICrossPlatform
 
     public int BatteryLifeRemainingInSeconds()
     {
+        // initialize result
         int secondsRemaining = 0;
-        int minutesRemaining = 0;
-        int hoursRemaining = 0;
-        
+
         string output = GetBatteryInformation();    
         
         //check if on battery
@@ -66,8 +65,8 @@ public class MacCrossPlatform : ICrossPlatform
         //only works if on battery.
         if (timeMatch.Success && onBat.Equals(true))
         {
-            hoursRemaining = int.Parse(timeMatch.Groups[1].Value);
-            minutesRemaining = int.Parse(timeMatch.Groups[2].Value);
+            int hoursRemaining = int.Parse(timeMatch.Groups[1].Value);
+            int minutesRemaining = int.Parse(timeMatch.Groups[2].Value);
             secondsRemaining = (hoursRemaining * 60 + minutesRemaining) * 60;
         }
         else
@@ -76,7 +75,16 @@ public class MacCrossPlatform : ICrossPlatform
         }
         return secondsRemaining;
     }
-    public ICrossPlatform.Location GetLocation() => new ICrossPlatform.Location();
+
+    public ICrossPlatform.Location GetLocation()
+    {
+        ICrossPlatform.Location deviceLocation = new ICrossPlatform.Location();
+        
+        //TODO How accurate does the location need to be? Can I use IP based geolocation services?
+        
+        
+        return deviceLocation;
+    }
     public void Restart()
     {
         Process.Start("osascript", "-e 'tell app \"System Events\" to restart'");
