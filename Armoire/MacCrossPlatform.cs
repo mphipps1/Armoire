@@ -51,7 +51,30 @@ public class MacCrossPlatform : ICrossPlatform
 
     public int BatteryLifeRemainingInSeconds()
     {
-        throw new NotImplementedException();
+        int secondsRemaining = 0;
+        int minutesRemaining = 0;
+        int hoursRemaining = 0;
+        
+        string output = GetBatteryInformation();    
+        
+        //check if on battery
+        bool onBat = IsOnBattery();
+        
+        //use a regex match to check for the time remaining from the output.
+        var timeMatch = Regex.Match(output, @"(\d+):(\d+) remaining");
+        
+        //only works if on battery.
+        if (timeMatch.Success && onBat.Equals(true))
+        {
+            hoursRemaining = int.Parse(timeMatch.Groups[1].Value);
+            minutesRemaining = int.Parse(timeMatch.Groups[2].Value);
+            secondsRemaining = (hoursRemaining * 60 + minutesRemaining) * 60;
+        }
+        else
+        {
+            return -1;
+        }
+        return secondsRemaining;
     }
     public ICrossPlatform.Location GetLocation() => new ICrossPlatform.Location();
     public void Restart()
