@@ -12,8 +12,6 @@ public class RunningApplicationInfo
     public string? BundleIdentifier {get; set;}
     public string? ApplicationPath {get; set;}
     
-    public RunningApplicationInfo() {}
-    
     public RunningApplicationInfo(
         string stableId,
         int processId,
