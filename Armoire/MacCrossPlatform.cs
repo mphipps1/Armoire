@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 using Armoire.Interfaces;
+using Armoire.Utils;
 using Avalonia.Controls;
 using Avalonia.Media.Imaging;
 
@@ -14,7 +15,35 @@ namespace Armoire;
 
 public class MacCrossPlatform : ICrossPlatform
 {
-    public bool IsOnBattery() => false;
+    public bool IsOnBattery()
+    {
+        bool result = false;
+        
+        var processStartInfo = new ProcessStartInfo
+        {
+            FileName = "pmset",
+            Arguments = "-g batt",
+            RedirectStandardOutput = true,
+            UseShellExecute = false,
+            CreateNoWindow = true
+        };
+
+        using var process = Process.Start(processStartInfo);
+        string output = process.StandardOutput.ReadToEnd();
+        process.WaitForExit();
+            
+        //check if device is on battery or not
+        if (output.Contains("AC Power"))
+        {
+            result = false;
+                
+        } else if (output.Contains("Battery Power"))
+        {
+            result = true;
+        }
+
+        return result;
+    }
 
     public int BatteryLevel()
     {
