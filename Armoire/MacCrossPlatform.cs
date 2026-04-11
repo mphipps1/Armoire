@@ -19,18 +19,7 @@ public class MacCrossPlatform : ICrossPlatform
     {
         bool result = false;
         
-        var processStartInfo = new ProcessStartInfo
-        {
-            FileName = "pmset",
-            Arguments = "-g batt",
-            RedirectStandardOutput = true,
-            UseShellExecute = false,
-            CreateNoWindow = true
-        };
-
-        using var process = Process.Start(processStartInfo);
-        string output = process.StandardOutput.ReadToEnd();
-        process.WaitForExit();
+        string output = GetBatteryInformation();
             
         //check if device is on battery or not
         if (output.Contains("AC Power"))
@@ -47,38 +36,23 @@ public class MacCrossPlatform : ICrossPlatform
 
     public int BatteryLevel()
     {
-        try
+        int batteryLevel = 0;
+        string output = GetBatteryInformation();
+        
+        //use Regex matching to get the battery level number from the pmset output
+        Match batteryLevelNumber = Regex.Match(output, @"(\d+)%");
+        if (batteryLevelNumber.Success)
         {
-            var processStartInfo = new ProcessStartInfo
-            {
-                FileName = "pmset",
-                Arguments = "-g batt",
-                RedirectStandardOutput = true,
-                UseShellExecute = false,
-                CreateNoWindow = true
-            };
-
-            using var process = Process.Start(processStartInfo);
-            string output = process.StandardOutput.ReadToEnd();
-            process.WaitForExit();
-
-            //use Regex matching to get the battery level number from the pmset output
-            Match batteryLevelNumber = Regex.Match(output, @"(\d+)%");
-            if (batteryLevelNumber.Success)
-            {
-                int batteryLevel = int.Parse(batteryLevelNumber.Groups[1].Value);
-                return batteryLevel;
-            }
+            batteryLevel = int.Parse(batteryLevelNumber.Groups[1].Value);
+            
         }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
-        }
-
-        return -1;
+        return batteryLevel;
     }
 
-public int BatteryLifeRemainingInSeconds() => 86400;
+    public int BatteryLifeRemainingInSeconds()
+    {
+        throw new NotImplementedException();
+    }
     public ICrossPlatform.Location GetLocation() => new ICrossPlatform.Location();
     public void Restart()
     {
@@ -160,5 +134,23 @@ public int BatteryLifeRemainingInSeconds() => 86400;
         if (File.Exists(iconPath))
             return new Bitmap(iconPath);
         return null;
+    }
+
+    private static string GetBatteryInformation()
+    {
+        var processStartInfo = new ProcessStartInfo
+        {
+            FileName = "/bin/bash",
+            Arguments = "-c \"pmset -g batt\"",
+            RedirectStandardOutput = true,
+            UseShellExecute = false,
+            CreateNoWindow = true
+        };
+
+        using var process = Process.Start(processStartInfo);
+        string output = process.StandardOutput.ReadToEnd();
+        process.WaitForExit();
+        
+        return output;
     }
 }
