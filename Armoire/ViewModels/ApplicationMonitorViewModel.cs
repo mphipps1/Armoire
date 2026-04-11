@@ -32,7 +32,7 @@ public partial class ApplicationMonitorViewModel : DrawerAsContentsViewModel
     //Used so that we dont need to manually check each RunningItems Processes MainWindowTitle every time
     public static List<string> RunningAppNames { get; set; } = new List<string>();
 
-    //Boolean used to infinately loop
+    //Boolean used to infinitely loop
     private static bool isMonitoring = true;
 
     public ApplicationMonitorViewModel(string? parentID, int drawerHierarchy)
