@@ -9,35 +9,8 @@ using Bitmap = Avalonia.Media.Imaging.Bitmap;
 namespace Armoire.Utils;
 
 public class MiscHelper
-{// void -> ItemViewModel TODO
-    public static void CreateRandomItem(ContainerViewModel container)
-    {
-        if (
-            NewItemViewModel.ExecutableNames is not { } exeNames
-            || NewItemViewModel.Executables is not { } exes
-            || NewItemViewModel.Icons is not { } icons
-        )
-            throw new InvalidOperationException(
-                "Initialize `NewItemViewModel` static members before calling this method."
-            );
-        var rnd = new Random();
-        var sampleItemIdx = rnd.Next(exeNames.Count);
-        var sampleItemName = exeNames[sampleItemIdx];
-        //return new ItemViewModel(
-        //sampleItemName,
-        //exes[sampleItemName], TODO,
-        // container.SourceDrawerId
-        //?? throw new InvalidOperationException(
-        // "An `ItemViewModel` should not have a null `SourceDrawerId`."
-        // ),
-        // 0,
-        //  container,
-        //sampleItemName
-        //  );
-        //}
-    }
-
-    public static string GetAssetsPath()
+{
+    private static string GetAssetsPath()
     {
         var workingDirectory = AppDomain.CurrentDomain.BaseDirectory;
 
@@ -55,22 +28,12 @@ public class MiscHelper
         return assetsPath;
     }
 
-    public static void PrepopulateDatabase() { }
-
-    public static Bitmap ConvertSysBmpToAvaBmp(System.Drawing.Bitmap bmp)
+    private static Bitmap ConvertSysBmpToAvaBmp(System.Drawing.Bitmap bmp)
     {
         using var memory = new MemoryStream();
         bmp.Save(memory, ImageFormat.Png);
         memory.Position = 0;
         return new Bitmap(memory);
-    }
-
-    public static Bitmap? GetAvaBmpFromExePath(string exePath)
-    {
-        if (string.IsNullOrEmpty(exePath))
-            return null;
-        var icon = Icon.ExtractAssociatedIcon(exePath);
-        return icon == null ? null : ConvertSysBmpToAvaBmp(icon.ToBitmap());
     }
 
     public static Bitmap? GetAvaBmpFromImgPath(string imgPath)
@@ -84,15 +47,5 @@ public class MiscHelper
     {
         var assetsPath = GetAssetsPath();
         return new Bitmap(assetsPath + Path.DirectorySeparatorChar + assetFilename);
-        /*
-        var fs = new FileStream(
-            Path.Combine(assetsPath, assetFilename),
-            FileMode.Open,
-            FileAccess.Read
-        );
-        var image = Image.FromStream(fs);
-        var bmp = new System.Drawing.Bitmap(image, 50, 50);
-        return ConvertSysBmpToAvaBmp(bmp);
-        */
     }
 }

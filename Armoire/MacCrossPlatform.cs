@@ -12,7 +12,7 @@ using Avalonia.Controls;
 using Avalonia.Media.Imaging;
 
 namespace Armoire;
-
+#if Mac
 public class MacCrossPlatform : ICrossPlatform
 {
     public bool IsOnBattery()
@@ -185,3 +185,4 @@ public class MacCrossPlatform : ICrossPlatform
         return output;
     }
 }
+#endif

@@ -29,10 +29,10 @@ namespace Armoire.ViewModels
 
         public BatteryPercentageViewModel(
             string parentID,
-            int drawerHeirarchy,
+            int drawerHierarchy,
             ContainerViewModel? container
         )
-            : base(parentID, drawerHeirarchy, container)
+            : base(parentID, drawerHierarchy, container)
         {
             UpdateNotificationArea();
             Name = "Battery life remaining: ";

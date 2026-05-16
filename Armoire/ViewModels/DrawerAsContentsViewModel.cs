@@ -30,10 +30,13 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
 
     [ObservableProperty]
     private Avalonia.Media.Imaging.Bitmap _iconBmp;
+    
+    public bool ShouldBeSavedToDB { get; init; }
 
     // Dock source constructor (leaves some properties null on purpose).
     public DrawerAsContentsViewModel(string? parentID, int? drawerHierarchy)
     {
+        ShouldBeSavedToDB = true;
         Name = "dock";
         Id = "CONTENTS_1";
         IconBmp = MiscHelper.GetAvaBmpFromAssets("tempDrawer.jpg");
@@ -49,8 +52,9 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
         SetMoveDirections(this);
     }
 
-    public DrawerAsContentsViewModel(string? parentID, int? drawerHierarchy, bool notDock)
+    protected DrawerAsContentsViewModel(string? parentID, int? drawerHierarchy, bool notDock)
     {
+        ShouldBeSavedToDB = false;
         Name = "drawer " + _count++;
         IconBmp = MiscHelper.GetAvaBmpFromAssets("table.png");
         GeneratedDrawer = new DrawerViewModel(this);
@@ -68,6 +72,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
         string iconPath
     )
     {
+        ShouldBeSavedToDB = true;
         IconPath = iconPath;
         GeneratedDrawer = new DrawerViewModel(this);
         Name = name;
@@ -96,6 +101,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
         ContainerViewModel? cvm = null
     )
     {
+        ShouldBeSavedToDB = true;
         GeneratedDrawer = new DrawerViewModel(this);
         Name = name;
         ParentId = parentID;
@@ -114,6 +120,7 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
     // Load-from-db constructor.
     public DrawerAsContentsViewModel(Drawer model, ContainerViewModel? container)
     {
+        ShouldBeSavedToDB = true;
         Id = model.Id;
         Name = model.Name;
         LoadPosition = model.Position;
@@ -130,8 +137,9 @@ public partial class DrawerAsContentsViewModel : ContentsUnitViewModel
         _count++;
     }
 
-    public DrawerAsContentsViewModel(DrawerAsContentsViewModel orig)
+    private DrawerAsContentsViewModel(DrawerAsContentsViewModel orig)
     {
+        ShouldBeSavedToDB = orig.ShouldBeSavedToDB;
         Id = orig.Id;
         Name = orig.Name;
         GeneratedDrawer = new DrawerViewModel(this);

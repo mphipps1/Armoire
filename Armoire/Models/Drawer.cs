@@ -11,7 +11,7 @@ public class Drawer
     // See: https://stackoverflow.com/a/43503578/16458003
     [MaxLength(100)]
     [Key]
-    public string Id { get; set; } = "default";
+    public string Id { get; init; } = "default";
 
     [MaxLength(100)]
     public string? IconPath { get; set; } = "default";

@@ -12,7 +12,7 @@ public class DbHelper
 {
     public static void SaveDrawer(DrawerAsContentsViewModel dacVm)
     {
-        if (dacVm.Id is "NOTIFICATIONS" or "MONITOR")
+        if (!dacVm.ShouldBeSavedToDB)
             return;
         using var context = new AppDbContext();
         var drawerToAdd = dacVm.CreateDrawer();
@@ -22,7 +22,7 @@ public class DbHelper
 
     public static void SaveItem(ItemViewModel iVm)
     {
-        if (iVm.Id is "BATTERY" or "START_MENU" or "RUNNING" or "SOUND" or "WIFI" or "WEATHER")
+        if (!iVm.ShouldBeSavedToDB)
             return;
         using var context = new AppDbContext();
         var itemToAdd = iVm.CreateItem();
@@ -52,10 +52,6 @@ public class DbHelper
             var y = new DrawerAsContentsViewModel(null, -1);
             return y;
         }
-
-        //return dockModel != null
-        //    ? LoadRecurse(dockModel, null, context)
-        //    : new DrawerAsContentsViewModel(null, -1);
     }
 
     public static DrawerAsContentsViewModel LoadRecurse(

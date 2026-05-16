@@ -25,30 +25,21 @@ public partial class ItemViewModel : ContentsUnitViewModel
     [ObservableProperty]
     public Avalonia.Media.Imaging.Bitmap _iconBmp;
 
-    public ItemViewModel(string executablePath)
-    {
-        _iconBmp = GetIconForExec(executablePath);
-        ExecutablePath = executablePath;
-    }
+    public bool ShouldBeSavedToDB { get; init; }
 
-    public ItemViewModel(string parentID, int? drawerHierarchy, ContainerViewModel? container)
+    protected ItemViewModel(string parentID, int? drawerHierarchy, ContainerViewModel? container)
     {
+        ShouldBeSavedToDB = false;
         ParentId = parentID;
         DrawerHierarchy = drawerHierarchy;
         Container = container;
         SetMoveDirections(this);
     }
 
-    public ItemViewModel(
-        string name,
-        string executablePath,
-        Avalonia.Media.Imaging.Bitmap bmp,
-        string parentID,
-        int? drawerHierarchy,
-        ContainerViewModel? container,
-        string? bmpName = null
-    )
+    public ItemViewModel(string name, string executablePath, string parentID,
+        int? drawerHierarchy, ContainerViewModel? container, string? bmpName = null)
     {
+        ShouldBeSavedToDB = true;
         ExecutablePath = executablePath;
         Model = new Item(name, executablePath, parentID.ToString(), Position);
         Name = name;
@@ -64,6 +55,7 @@ public partial class ItemViewModel : ContentsUnitViewModel
 
     public ItemViewModel(Item itemModel, ContainerViewModel container)
     {
+        ShouldBeSavedToDB = true;
         Id = itemModel.Id;
         //var modelIdCountStr = itemModel.Id[9..];
         //if (int.TryParse(modelIdCountStr, out var modelIdCount))
@@ -82,6 +74,7 @@ public partial class ItemViewModel : ContentsUnitViewModel
 
     public ItemViewModel(ItemViewModel orig)
     {
+        ShouldBeSavedToDB = true;
         Id = orig.Id;
         ExecutablePath = orig.ExecutablePath;
         Model = orig.Model;

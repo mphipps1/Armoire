@@ -24,7 +24,6 @@ namespace Armoire.ViewModels
         private int _contentsUnitCount;
         private int _drawerCount;
         private int _itemCount;
-        private DevDrawerView? _devDrawerView;
         private NewItemViewModel? currentEntry;
         private System.Timers.Timer _timer;
         private string _currentTime;
